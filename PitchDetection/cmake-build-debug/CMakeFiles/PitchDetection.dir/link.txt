@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/PitchDetection.dir/main.cpp.o CMakeFiles/PitchDetection.dir/processing_utilities.cpp.o  -o PitchDetection  -lasound 

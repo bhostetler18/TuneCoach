@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/jhostetler/Desktop/PitchDetection/main.cpp
+alsa/asoundlib.h
+-
+iostream
+-
+cmath
+-
+processing_utilities.h
+/home/jhostetler/Desktop/PitchDetection/processing_utilities.h
+typeinfo
+-
+
+/home/jhostetler/Desktop/PitchDetection/processing_utilities.h
+cstring
+-
+cmath
+-
+iostream
+-
+
