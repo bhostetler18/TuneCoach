@@ -43,10 +43,10 @@ RM = /home/jhostetler/JetBrains/clion-2020.1.1/bin/cmake/linux/bin/cmake -E remo
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/jhostetler/Desktop/PitchDetection
+CMAKE_SOURCE_DIR = /home/jhostetler/Desktop/TuneCoach/PitchDetection
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/jhostetler/Desktop/PitchDetection/cmake-build-debug
+CMAKE_BINARY_DIR = /home/jhostetler/Desktop/TuneCoach/PitchDetection/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/PitchDetection.dir/depend.make
@@ -59,29 +59,29 @@ include CMakeFiles/PitchDetection.dir/flags.make
 
 CMakeFiles/PitchDetection.dir/main.cpp.o: CMakeFiles/PitchDetection.dir/flags.make
 CMakeFiles/PitchDetection.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jhostetler/Desktop/PitchDetection/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/PitchDetection.dir/main.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/PitchDetection.dir/main.cpp.o -c /home/jhostetler/Desktop/PitchDetection/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jhostetler/Desktop/TuneCoach/PitchDetection/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/PitchDetection.dir/main.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/PitchDetection.dir/main.cpp.o -c /home/jhostetler/Desktop/TuneCoach/PitchDetection/main.cpp
 
 CMakeFiles/PitchDetection.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/PitchDetection.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jhostetler/Desktop/PitchDetection/main.cpp > CMakeFiles/PitchDetection.dir/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jhostetler/Desktop/TuneCoach/PitchDetection/main.cpp > CMakeFiles/PitchDetection.dir/main.cpp.i
 
 CMakeFiles/PitchDetection.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/PitchDetection.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jhostetler/Desktop/PitchDetection/main.cpp -o CMakeFiles/PitchDetection.dir/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jhostetler/Desktop/TuneCoach/PitchDetection/main.cpp -o CMakeFiles/PitchDetection.dir/main.cpp.s
 
 CMakeFiles/PitchDetection.dir/processing_utilities.cpp.o: CMakeFiles/PitchDetection.dir/flags.make
 CMakeFiles/PitchDetection.dir/processing_utilities.cpp.o: ../processing_utilities.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jhostetler/Desktop/PitchDetection/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/PitchDetection.dir/processing_utilities.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/PitchDetection.dir/processing_utilities.cpp.o -c /home/jhostetler/Desktop/PitchDetection/processing_utilities.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jhostetler/Desktop/TuneCoach/PitchDetection/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/PitchDetection.dir/processing_utilities.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/PitchDetection.dir/processing_utilities.cpp.o -c /home/jhostetler/Desktop/TuneCoach/PitchDetection/processing_utilities.cpp
 
 CMakeFiles/PitchDetection.dir/processing_utilities.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/PitchDetection.dir/processing_utilities.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jhostetler/Desktop/PitchDetection/processing_utilities.cpp > CMakeFiles/PitchDetection.dir/processing_utilities.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jhostetler/Desktop/TuneCoach/PitchDetection/processing_utilities.cpp > CMakeFiles/PitchDetection.dir/processing_utilities.cpp.i
 
 CMakeFiles/PitchDetection.dir/processing_utilities.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/PitchDetection.dir/processing_utilities.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jhostetler/Desktop/PitchDetection/processing_utilities.cpp -o CMakeFiles/PitchDetection.dir/processing_utilities.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jhostetler/Desktop/TuneCoach/PitchDetection/processing_utilities.cpp -o CMakeFiles/PitchDetection.dir/processing_utilities.cpp.s
 
 # Object files for target PitchDetection
 PitchDetection_OBJECTS = \
@@ -95,7 +95,7 @@ PitchDetection: CMakeFiles/PitchDetection.dir/main.cpp.o
 PitchDetection: CMakeFiles/PitchDetection.dir/processing_utilities.cpp.o
 PitchDetection: CMakeFiles/PitchDetection.dir/build.make
 PitchDetection: CMakeFiles/PitchDetection.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jhostetler/Desktop/PitchDetection/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable PitchDetection"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jhostetler/Desktop/TuneCoach/PitchDetection/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable PitchDetection"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/PitchDetection.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -108,6 +108,6 @@ CMakeFiles/PitchDetection.dir/clean:
 .PHONY : CMakeFiles/PitchDetection.dir/clean
 
 CMakeFiles/PitchDetection.dir/depend:
-	cd /home/jhostetler/Desktop/PitchDetection/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/jhostetler/Desktop/PitchDetection /home/jhostetler/Desktop/PitchDetection /home/jhostetler/Desktop/PitchDetection/cmake-build-debug /home/jhostetler/Desktop/PitchDetection/cmake-build-debug /home/jhostetler/Desktop/PitchDetection/cmake-build-debug/CMakeFiles/PitchDetection.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/jhostetler/Desktop/TuneCoach/PitchDetection/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/jhostetler/Desktop/TuneCoach/PitchDetection /home/jhostetler/Desktop/TuneCoach/PitchDetection /home/jhostetler/Desktop/TuneCoach/PitchDetection/cmake-build-debug /home/jhostetler/Desktop/TuneCoach/PitchDetection/cmake-build-debug /home/jhostetler/Desktop/TuneCoach/PitchDetection/cmake-build-debug/CMakeFiles/PitchDetection.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/PitchDetection.dir/depend
 

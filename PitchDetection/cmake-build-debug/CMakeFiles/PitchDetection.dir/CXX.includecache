@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/jhostetler/Desktop/PitchDetection/main.cpp
+/home/jhostetler/Desktop/TuneCoach/PitchDetection/main.cpp
 alsa/asoundlib.h
 -
 iostream
@@ -14,11 +14,11 @@ iostream
 cmath
 -
 processing_utilities.h
-/home/jhostetler/Desktop/PitchDetection/processing_utilities.h
-typeinfo
+/home/jhostetler/Desktop/TuneCoach/PitchDetection/processing_utilities.h
+pulse/simple.h
 -
 
-/home/jhostetler/Desktop/PitchDetection/processing_utilities.h
+/home/jhostetler/Desktop/TuneCoach/PitchDetection/processing_utilities.h
 cstring
 -
 cmath

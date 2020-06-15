@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/jhostetler/Desktop/PitchDetection/main.cpp" "/home/jhostetler/Desktop/PitchDetection/cmake-build-debug/CMakeFiles/PitchDetection.dir/main.cpp.o"
-  "/home/jhostetler/Desktop/PitchDetection/processing_utilities.cpp" "/home/jhostetler/Desktop/PitchDetection/cmake-build-debug/CMakeFiles/PitchDetection.dir/processing_utilities.cpp.o"
+  "/home/jhostetler/Desktop/TuneCoach/PitchDetection/main.cpp" "/home/jhostetler/Desktop/TuneCoach/PitchDetection/cmake-build-debug/CMakeFiles/PitchDetection.dir/main.cpp.o"
+  "/home/jhostetler/Desktop/TuneCoach/PitchDetection/processing_utilities.cpp" "/home/jhostetler/Desktop/TuneCoach/PitchDetection/cmake-build-debug/CMakeFiles/PitchDetection.dir/processing_utilities.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

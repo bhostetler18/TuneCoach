@@ -1,4 +1,4 @@
-/home/jhostetler/JetBrains/clion-2020.1.1/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/jhostetler/Desktop/PitchDetection
+/home/jhostetler/JetBrains/clion-2020.1.1/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/jhostetler/Desktop/TuneCoach/PitchDetection
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/jhostetler/Desktop/PitchDetection/cmake-build-debug
+-- Build files have been written to: /home/jhostetler/Desktop/TuneCoach/PitchDetection/cmake-build-debug
