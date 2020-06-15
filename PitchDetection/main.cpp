@@ -4,6 +4,7 @@
 #include <cmath>
 #include "processing_utilities.h"
 #include <pulse/simple.h>
+#include <chrono>
 
 int main() //initial ALSA setup based on https://www.linuxjournal.com/article/6735
 {
@@ -89,6 +90,8 @@ int main() //initial ALSA setup based on https://www.linuxjournal.com/article/67
     double lowest_freq = 65.406;
     const int nsdf_size = hertz_to_lag(lowest_freq, sample_rate);
     auto* nsdf = new float[nsdf_size]; //allocate memory for nsdf results to avoid constant reallocation
+    // TODO: potentially put this back on the stack and hardcode nsdf_size for efficiency
+
     int maxima[64]; //For now 64 seems fine (see the find_peaks function)
 
     while (true) {
@@ -99,7 +102,7 @@ int main() //initial ALSA setup based on https://www.linuxjournal.com/article/67
         rc = pa_simple_read(s, buffer, 2048, nullptr);
         assert(rc == 0);
 
-        normalized_square_difference(buffer, 2048, 0, nsdf_size, nsdf);
+        normalized_square_difference_optimized(buffer, 2048, nsdf_size, nsdf);
         find_peaks(nsdf, nsdf_size, maxima, 64);
         double detected_hz = choose_fundamental(nsdf, maxima, 64, sample_rate, 0.8);
         if (detected_hz != 0) {

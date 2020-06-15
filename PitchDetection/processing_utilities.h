@@ -87,6 +87,40 @@ void normalized_square_difference(T* buffer, int length, int lag_start, int lag_
 }
 
 template <typename T>
+void normalized_square_difference_optimized(T* buffer, int length, int lag_stop, T* output) {
+    std::memset(output, 0.0, lag_stop * sizeof(output[0]));
+    T ac = 0;
+    T m1 = 0;
+    T m2 = 0;
+    T n = 0;
+    int offset;
+    int lag;
+    //Initial population with tau/lag = 0
+    for (offset = 0; offset < length; ++offset)
+    {
+        ac += buffer[offset] * buffer[offset];
+    }
+    m1 = ac;
+    m2 = ac;
+    n = 2 * ac / (m1 + m2); //should always be 1
+    output[0] = n;
+
+    for (lag = 1; lag < lag_stop; ++lag)
+    {
+        ac = 0;
+        for (offset = 0; offset < length - lag; ++offset)
+        {
+            ac += buffer[offset] * buffer[offset + lag];
+        }
+        m1 -= buffer[length - lag] * buffer[length - lag];
+        m2 -= buffer[lag - 1] * buffer[lag - 1];
+        n = 2 * ac / (m1 + m2);
+        if (std::isnan(n)) output[lag] = 0;
+        else output[lag] = n;
+    }
+}
+
+template <typename T>
 void find_peaks(T* arr, int length, int* peaks, int psize)
 {
     //Clear any peaks from previous calls
