@@ -102,8 +102,7 @@ void normalized_square_difference_optimized(T* buffer, int length, int lag_stop,
     }
     m1 = ac;
     m2 = ac;
-    n = 2 * ac / (m1 + m2); //should always be 1
-    output[0] = n;
+    output[0] = 1;
 
     for (lag = 1; lag < lag_stop; ++lag)
     {
