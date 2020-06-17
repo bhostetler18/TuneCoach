@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/PitchDetection.dir/PitchDetector.cpp.o"
   "CMakeFiles/PitchDetection.dir/main.cpp.o"
   "CMakeFiles/PitchDetection.dir/processing_utilities.cpp.o"
   "PitchDetection"

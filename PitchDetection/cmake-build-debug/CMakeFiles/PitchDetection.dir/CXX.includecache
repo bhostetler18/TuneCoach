@@ -6,23 +6,27 @@
 
 #IncludeRegexTransform: 
 
+/home/jhostetler/Desktop/TuneCoach/PitchDetection/PitchDetector.cpp
+PitchDetector.h
+/home/jhostetler/Desktop/TuneCoach/PitchDetection/PitchDetector.h
+processing_utilities.h
+/home/jhostetler/Desktop/TuneCoach/PitchDetection/processing_utilities.h
+
+/home/jhostetler/Desktop/TuneCoach/PitchDetection/PitchDetector.h
+
 /home/jhostetler/Desktop/TuneCoach/PitchDetection/main.cpp
-alsa/asoundlib.h
--
 iostream
 -
 cmath
 -
-processing_utilities.h
-/home/jhostetler/Desktop/TuneCoach/PitchDetection/processing_utilities.h
 pulse/simple.h
 -
 chrono
 -
-
-/home/jhostetler/Desktop/TuneCoach/PitchDetection/processing_utilities.cpp
 processing_utilities.h
 /home/jhostetler/Desktop/TuneCoach/PitchDetection/processing_utilities.h
+PitchDetector.h
+/home/jhostetler/Desktop/TuneCoach/PitchDetection/PitchDetector.h
 
 /home/jhostetler/Desktop/TuneCoach/PitchDetection/processing_utilities.h
 cstring

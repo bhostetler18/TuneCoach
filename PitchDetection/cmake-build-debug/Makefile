@@ -123,6 +123,33 @@ PitchDetection/fast:
 	$(MAKE) -f CMakeFiles/PitchDetection.dir/build.make CMakeFiles/PitchDetection.dir/build
 .PHONY : PitchDetection/fast
 
+PitchDetector.o: PitchDetector.cpp.o
+
+.PHONY : PitchDetector.o
+
+# target to build an object file
+PitchDetector.cpp.o:
+	$(MAKE) -f CMakeFiles/PitchDetection.dir/build.make CMakeFiles/PitchDetection.dir/PitchDetector.cpp.o
+.PHONY : PitchDetector.cpp.o
+
+PitchDetector.i: PitchDetector.cpp.i
+
+.PHONY : PitchDetector.i
+
+# target to preprocess a source file
+PitchDetector.cpp.i:
+	$(MAKE) -f CMakeFiles/PitchDetection.dir/build.make CMakeFiles/PitchDetection.dir/PitchDetector.cpp.i
+.PHONY : PitchDetector.cpp.i
+
+PitchDetector.s: PitchDetector.cpp.s
+
+.PHONY : PitchDetector.s
+
+# target to generate assembly for a file
+PitchDetector.cpp.s:
+	$(MAKE) -f CMakeFiles/PitchDetection.dir/build.make CMakeFiles/PitchDetection.dir/PitchDetector.cpp.s
+.PHONY : PitchDetector.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -186,6 +213,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... PitchDetection"
+	@echo "... PitchDetector.o"
+	@echo "... PitchDetector.i"
+	@echo "... PitchDetector.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

@@ -82,6 +82,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/jhostetler/Desktop/TuneCoach/PitchDetection/PitchDetector.cpp">
+			<Option target="PitchDetection"/>
+		</Unit>
+		<Unit filename="/home/jhostetler/Desktop/TuneCoach/PitchDetection/PitchDetector.h">
+			<Option target="PitchDetection"/>
+		</Unit>
 		<Unit filename="/home/jhostetler/Desktop/TuneCoach/PitchDetection/main.cpp">
 			<Option target="PitchDetection"/>
 		</Unit>
