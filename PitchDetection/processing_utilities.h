@@ -66,6 +66,8 @@ double midi_to_hz(int midi);
  */
 double cents(double target, double actual);
 
+// Returns the closest (equal tempered) in-tune frequency to 'hz'
+double closest_in_tune_frequency(double hz);
 
 template <typename T>
 //TODO: this can definitely be optimized, even without the FFT trick

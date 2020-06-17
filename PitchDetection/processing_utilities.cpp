@@ -24,3 +24,9 @@ double cents(double target, double actual)
 {
     return 1200.0 * log2(actual/target);
 }
+
+double closest_in_tune_frequency(double hz)
+{
+    int closest_note = (int)round(hz_to_midi(hz));
+    return midi_to_hz(closest_note);
+}

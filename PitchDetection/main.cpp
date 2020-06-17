@@ -40,10 +40,9 @@ int main()
 
         double detected_hz = p.get_frequency(buffer);
         if (detected_hz != 0) {
-            double note = hz_to_midi(detected_hz);
-            int midi = (int) round(note);
+            int midi = (int)round(hz_to_midi(detected_hz));
             std::string name = notes[midi % 12];
-            double desired_hz = midi_to_hz(midi);
+            double desired_hz = closest_in_tune_frequency(detected_hz);
             double cent = cents(desired_hz, detected_hz);
             std::cout << name << "    " << detected_hz << "    " << cent << "  cents" << std::endl;
         }
