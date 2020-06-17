@@ -5,8 +5,6 @@
 #include "processing_utilities.h"
 #include "PitchDetector.h"
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "EndlessLoop"
 int main()
 {
     int rc;
@@ -38,9 +36,7 @@ int main()
     while (true)
     {
         rc = pa_simple_read(server, buffer, buffer_size*4, nullptr);
-        if (rc) {
-
-        }        // TODO error checking for underrun and other issues
+        if (rc) break; // TODO error checking for underrun and other issues
 
         double detected_hz = p.get_frequency(buffer);
         if (detected_hz != 0) {
@@ -54,6 +50,5 @@ int main()
     }
 
     pa_simple_free(server);
-
     return 0;
 }
