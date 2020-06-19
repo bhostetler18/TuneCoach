@@ -1,5 +1,7 @@
 #include "processing_utilities.h"
 
+//NOTE: many of the more useful templated functions are only present in processing_utilities.h
+
 double lag_to_hertz(double lag, double sample_rate)
 {
     return sample_rate/lag;

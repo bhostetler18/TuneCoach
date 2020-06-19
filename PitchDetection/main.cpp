@@ -2,8 +2,10 @@
 #include <cmath>
 #include <pulse/simple.h>
 #include <chrono>
+#include <thread>
 #include "processing_utilities.h"
 #include "PitchDetector.h"
+#include "CircularBuffer.h"
 
 int main()
 {
@@ -33,12 +35,30 @@ int main()
 
     std::string notes[12] = {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
 
+//    CircularBuffer<double, 256> c;
+//    std::thread read_thread( [&] () {
+//        while(true) {
+//            std::this_thread::sleep_for(std::chrono::milliseconds(15));
+//            double a = 7;
+//            while (!c.read(a)) {
+//                //std::cout << "NO DATA" << std::endl;
+//            }
+//            std::cout << a << std::endl;
+//        }
+//    });
+
+    int count = 0;
     while (true)
     {
         rc = pa_simple_read(server, buffer, buffer_size*4, nullptr);
         if (rc) break; // TODO error checking for underrun and other issues
 
         double detected_hz = p.get_frequency(buffer);
+//        if (!c.write(detected_hz)) {
+//            std::cout << "OVERFLOW" << std::endl;
+//        }
+//        count++;
+//        std::cout << "written " << count << std::endl;
         if (detected_hz != 0) {
             int midi = (int)round(hz_to_midi(detected_hz));
             std::string name = notes[midi % 12];
