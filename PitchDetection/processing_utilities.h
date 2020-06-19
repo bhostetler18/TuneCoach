@@ -49,6 +49,13 @@ template <typename T>
 double parabolic_interpolation(T* arr, int peak);
 
 
+// Calculates the root mean square of values in arr in [0, length)
+template <typename T>
+double rms(T* arr, int length);
+
+//Calculates dBFS (decibels full scale) from an rms value
+double dbfs_from_rms(double rms);
+
 // Converts a sample number/lag amount to the pitch in Hz it represents.
 double lag_to_hertz(double lag, double sample_rate);
 
@@ -58,10 +65,8 @@ int hertz_to_lag(double hertz, double sample_rate);
 // Converts a frequency to the corresponding MIDI note designation (unrounded).
 double hz_to_midi(double hz);
 
-
 // Converts a MIDI note # to the corresponding frequency
 double midi_to_hz(int midi);
-
 
 /* Returns the difference in cents between the 'target' frequency and 'actual' (Hz).
  * Positive indicates sharp, negative flat.
@@ -70,6 +75,7 @@ double cents(double target, double actual);
 
 // Returns the closest (equal tempered) in-tune frequency to 'hz'
 double closest_in_tune_frequency(double hz);
+
 
 template <typename T>
 //TODO: this can definitely be optimized, even without the FFT trick
@@ -181,4 +187,16 @@ double parabolic_interpolation(T* arr, int peak)
     double offset = (a - c) / (2.0 * (a - 2.0 * b + c));
     if (std::isnan(offset)) return peak;
     return peak + offset;
+}
+
+
+template<typename T>
+double rms(T* arr, int length)
+{
+    double sum = 0;
+    for (int i = 0; i < length; ++i)
+    {
+        sum += arr[i] * arr[i];
+    }
+    return sqrt(sum/(double)length);
 }
