@@ -10,11 +10,13 @@
  * For example, output[52] will contain the NSDF with tau of 52 once this is run.
  * Ensure 'output' has allocated space for (lag_stop - lag_start) values.
  * 'buffer' of size 'length' should contain the audio samples
+ * The optimized version always runs with lag_start = 0
  * See https://www.researchgate.net/publication/230554927_A_smarter_way_to_find_pitch
  */
 template <typename T>
 void normalized_square_difference(T* buffer, int length, int lag_start, int lag_stop, T* output);
-
+template <typename T>
+void normalized_square_difference_optimized(T* buffer, int length, int lag_stop, T* output);
 
 /* Populates 'peaks' with the sample location [0, length) of local maxima in arr (if any).
  * Pass in the length of 'arr' with 'length'. Only the highest local maximum between zero crossings
