@@ -76,11 +76,12 @@ int main()
                                     &sample_rate, &dir);
     std::cout << "SAMPLE RATE: " << sample_rate << std::endl;
 
-    /* Set period size near 2048 frames. */
-    snd_pcm_uframes_t frames = 2048;
+    /* Set period size near buffer_size frames. */
+    snd_pcm_uframes_t frames = buffer_size;
     snd_pcm_hw_params_set_period_size_near(handle,
                                            params, &frames, &dir);
     std::cout << "BUFFER LENGTH: " << frames << std::endl;
+    buffer_size = frames;
 
     /* Write the parameters to the driver */
     rc = snd_pcm_hw_params(handle, params);
@@ -135,6 +136,7 @@ int main()
             std::cout << name << "    " << detected_hz << "    " << cent << "  cents" << std::endl;
         }
     }
+
 
 #ifdef USE_PULSE
     pa_simple_free(server);
