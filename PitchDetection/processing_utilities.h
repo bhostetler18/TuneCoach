@@ -170,15 +170,15 @@ double choose_fundamental(T* nsdf, int* peaks, int psize, double sample_rate, do
     return 0;
 }
 
-//TODO: iterative interpolation instead of a single shot?
+
 template <typename T>
 double parabolic_interpolation(T* arr, int peak)
 {
+    double a = arr[peak - 1];
     double b = arr[peak];
-    double an = arr[peak - 1];
     double c = arr[peak + 1];
 
-    double offset = (an - c) / (2.0 * (an - 2.0 * b + c));
+    double offset = (a - c) / (2.0 * (a - 2.0 * b + c));
     if (std::isnan(offset)) return peak;
     return peak + offset;
 }
