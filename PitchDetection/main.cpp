@@ -23,6 +23,7 @@ int main()
 
     FeedbackSystem data;
 
+
     std::thread reader([&]{
         while(t.isAlive()) {
             double freq;
