@@ -86,7 +86,6 @@ void TunerStream::start()
 {
     paused = false;
     int rc;
-    std::string notes[12] = {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
 #ifdef USE_ALSA
     snd_pcm_uframes_t frames = audio_buffer_size;
 #endif
@@ -103,14 +102,7 @@ void TunerStream::start()
             if (rc != audio_buffer_size) break;
 #endif
             double detected_hz = p->get_frequency(audio_buffer);
-
-            if (detected_hz != 0) {
-                int midi = (int) round(hz_to_midi(detected_hz));
-                std::string name = notes[midi % 12];
-                double desired_hz = closest_in_tune_frequency(detected_hz);
-                double cent = cents(desired_hz, detected_hz);
-                std::cout << name << "    " << detected_hz << "    " << cent << "  cents" << std::endl;
-            }
+            this->buffer.write(detected_hz);
         }
     }
 }
@@ -131,6 +123,11 @@ void TunerStream::kill()
     this->alive = false;
 }
 
+bool TunerStream::isAlive()
+{
+    return alive;
+}
+
 bool TunerStream::fetch_freq(double &hz)
 {
     return this->buffer.read(hz);
@@ -149,4 +146,6 @@ TunerStream::~TunerStream()
     delete[] this->audio_buffer;
     delete p;
 }
+
+
 

@@ -19,6 +19,7 @@ public:
     void pause();
     void resume();
     void kill();
+    bool isAlive();
     bool fetch_freq(double& hz);
 
     ~TunerStream();

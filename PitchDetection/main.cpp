@@ -167,8 +167,25 @@ int main()
         std::cout << "KILLING" << std::endl;
         t.kill();
     });
+
+    std::thread reader([&]{
+        while(t.isAlive()) {
+            double freq;
+            std::string notes[12] = {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
+            while(!t.fetch_freq(freq));
+            if (freq != 0) {
+                int midi = (int)round(hz_to_midi(freq));
+                std::string name = notes[midi % 12];
+                double desired_hz = closest_in_tune_frequency(freq);
+                double cent = cents(desired_hz, freq);
+                std::cout << name << "    " << freq << "    " << cent << "  cents" << std::endl;
+            }
+        }
+    });
+
     t.start();
     stopper.join();
+    reader.join();
 
     return 0;
 }
