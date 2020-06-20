@@ -15,6 +15,11 @@ void pause_stream(TunerStream* handle)
     handle->pause();
 }
 
+void resume_stream(TunerStream* handle)
+{
+    handle->resume();
+}
+
 void stop_stream(TunerStream* handle)
 {
     handle->kill();
