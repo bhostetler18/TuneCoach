@@ -4,6 +4,7 @@
 #include <thread>
 #include "processing_utilities.h"
 #include "TunerStream.h"
+#include "FeedbackSystem.h"
 
 int main()
 {
@@ -20,6 +21,8 @@ int main()
         t.kill();
     });
 
+    FeedbackSystem data;
+
     std::thread reader([&]{
         while(t.isAlive()) {
             double freq;
@@ -30,6 +33,7 @@ int main()
                 std::string name = notes[midi % 12];
                 double desired_hz = closest_in_tune_frequency(freq);
                 double cent = cents(desired_hz, freq);
+                data.collectData(name, freq, desired_hz, cent);
                 std::cout << name << "    " << freq << "    " << cent << "  cents" << std::endl;
             }
         }
@@ -46,6 +50,6 @@ int main()
     stopper.join();
     reader.join();
     gui.join();
-
+    data.displayData();
     return 0;
 }
