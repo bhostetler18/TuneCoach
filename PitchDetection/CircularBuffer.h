@@ -11,10 +11,9 @@ public:
     bool read(T& out);
     CircularBuffer& operator=(const CircularBuffer&) = delete;
     CircularBuffer(const CircularBuffer&) = delete;
-    ~CircularBuffer();
 
 private:
-    T* _buff;
+    T _buff[size];
     uint32_t capacity;
     uint32_t mask;
     std::atomic_uint32_t read_idx;
@@ -26,7 +25,6 @@ template <typename T, uint32_t size>
 CircularBuffer<T, size>::CircularBuffer() : capacity(size), mask(size-1), read_idx(0), write_idx(0)
 {
     static_assert(size && !(size & (size - 1)), "Buffer size must be a power of 2");
-    _buff = new T[size];
 }
 
 template<typename T, uint32_t size>
@@ -44,11 +42,5 @@ bool CircularBuffer<T, size>::read(T& out) {
     out = _buff[read_idx];
     read_idx = (read_idx + 1) & mask;
     return true;
-}
-
-template<typename T, uint32_t size>
-CircularBuffer<T, size>::~CircularBuffer()
-{
-    delete[] _buff;
 }
 
