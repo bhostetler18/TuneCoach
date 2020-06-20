@@ -1,4 +1,5 @@
 #include "FeedbackSystem.h"
+#include <cmath>
 
 FeedbackSystem::FeedbackSystem() {
     cents = 0.0;
@@ -40,8 +41,17 @@ void FeedbackSystem::displayData() {
     cout << "Here are the results of this session:" << endl;
     cout << endl;
     cout << "These are your accuracies for each pitch class:" << endl;
+
     for(int i = 0; i < 11; i++){
-        cout << notes[i] << " was in tune for " << pitchError[i] << "% of the time." << endl;
+        if(isnan(pitchError[i])){
+            cout << notes[i] << " was not played/sung in the session." << endl;
+        }
+        else{
+            cout << notes[i] << " was in tune for " << pitchError[i] << "% of the time." << endl;
+        }
     }
-    cout << "Overall, you were in tune for " << overall_err << "% of the time, and you were off by " << avgCents << " cents." << endl;
+    cout << endl;
+    cout << "Overall:" << endl;
+    cout << "You were in tune for " << overall_err << "% of the time." << endl;
+    cout << "You were off by an average of " << avgCents << " cents." << endl;
 }
