@@ -9,6 +9,9 @@ public:
     CircularBuffer();
     bool write(T data);
     bool read(T& out);
+    CircularBuffer& operator=(const CircularBuffer&) = delete;
+    CircularBuffer(const CircularBuffer&) = delete;
+    ~CircularBuffer();
 
 private:
     T* _buff;
@@ -41,5 +44,11 @@ bool CircularBuffer<T, size>::read(T& out) {
     out = _buff[read_idx];
     read_idx = (read_idx + 1) & mask;
     return true;
+}
+
+template<typename T, uint32_t size>
+CircularBuffer<T, size>::~CircularBuffer()
+{
+    delete[] _buff;
 }
 
