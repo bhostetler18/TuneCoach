@@ -27,6 +27,7 @@ public:
 private:
     std::atomic_bool alive;
     std::atomic_bool paused;
+    std::atomic_bool was_started;
     CircularBuffer<double, 4096> buffer;
     PitchDetector* p;
 

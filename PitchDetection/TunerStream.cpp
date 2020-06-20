@@ -84,6 +84,12 @@ TunerStream::TunerStream(int sample_rate)
 
 void TunerStream::start()
 {
+    if (was_started)
+    {
+        std::cout << "Don't do that" << std::endl;
+        return;
+    }
+    was_started = true;
     paused = false;
     int rc;
 #ifdef USE_ALSA
