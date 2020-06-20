@@ -34,7 +34,7 @@ int main()
                 std::string name = notes[midi % 12];
                 double desired_hz = closest_in_tune_frequency(freq);
                 double cent = cents(desired_hz, freq);
-                data.collectData(name, freq, desired_hz, cent);
+                data.collectData(midi % 12, freq, desired_hz, cent);
                 std::cout << name << "    " << freq << "    " << cent << "  cents" << std::endl;
             }
         }
