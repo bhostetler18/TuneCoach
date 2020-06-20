@@ -6,6 +6,7 @@ TunerStream::TunerStream(int sample_rate)
 {
     this->alive = true;
     this->paused = true;
+    this->was_started = false;
     this->sample_rate = sample_rate;
 #ifdef USE_PULSE
     pa_sample_spec sample_format;
