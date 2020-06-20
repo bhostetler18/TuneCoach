@@ -34,3 +34,8 @@ bool read_stream(TunerStream* handle, double* val)
 {
     return handle->fetch_freq(*val);
 }
+
+double peek_stream(TunerStream* handle)
+{
+    return handle->peek();
+}

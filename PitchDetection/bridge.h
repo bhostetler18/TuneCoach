@@ -10,4 +10,5 @@ extern "C"
     void kill_stream(TunerStream* handle);
     bool is_alive(TunerStream* handle);
     bool read_stream(TunerStream* handle, double* val);
+    double peek_stream(TunerStream* handle);
 }

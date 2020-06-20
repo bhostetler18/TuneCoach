@@ -4,10 +4,12 @@
 
 TunerStream::TunerStream(int sample_rate)
 {
+    this->sample_rate = sample_rate;
     this->alive = true;
     this->paused = true;
     this->was_started = false;
-    this->sample_rate = sample_rate;
+    this->most_recent = 0.0;
+
 #ifdef USE_PULSE
     pa_sample_spec sample_format;
     sample_format.format = PA_SAMPLE_FLOAT32LE;
@@ -110,13 +112,16 @@ void TunerStream::start()
 #endif
             double detected_hz = p->get_frequency(audio_buffer);
             this->buffer.write(detected_hz);
+            this->most_recent = detected_hz;
         }
+        this->most_recent = 0.0;
     }
 }
 
 void TunerStream::pause()
 {
     this->paused = true;
+    this->most_recent = 0.0;
 }
 
 void TunerStream::resume()
@@ -140,6 +145,12 @@ bool TunerStream::fetch_freq(double &hz)
     return this->buffer.read(hz);
 }
 
+double TunerStream::peek()
+{
+    return most_recent;
+}
+
+
 TunerStream::~TunerStream()
 {
     std::cout << "DESTROYED TUNER STREAM" << std::endl;
@@ -153,6 +164,7 @@ TunerStream::~TunerStream()
     delete[] this->audio_buffer;
     delete p;
 }
+
 
 
 

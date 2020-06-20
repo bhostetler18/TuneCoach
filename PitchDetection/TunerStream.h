@@ -21,6 +21,7 @@ public:
     void kill();
     bool isAlive();
     bool fetch_freq(double& hz);
+    double peek();
 
     ~TunerStream();
 
@@ -29,6 +30,7 @@ private:
     std::atomic_bool paused;
     std::atomic_bool was_started;
     CircularBuffer<double, 4096> buffer;
+    std::atomic<double> most_recent;
     PitchDetector* p;
 
     unsigned int sample_rate;
