@@ -20,9 +20,14 @@ void resume_stream(TunerStream* handle)
     handle->resume();
 }
 
-void stop_stream(TunerStream* handle)
+void kill_stream(TunerStream* handle)
 {
     handle->kill();
+}
+
+bool is_alive(TunerStream* handle)
+{
+    return handle->isAlive();
 }
 
 bool read_stream(TunerStream* handle, double* val)
