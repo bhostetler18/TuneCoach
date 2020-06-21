@@ -21,22 +21,28 @@ int main(){
     clock_t clk;
 
     TunerStream t(44100);
+
     std::thread stopper([&]{
-        if(cin.get() == ' '){
-            if(!t.isPaused()){
-                t.pause();
-                cout << "PAUSING" << endl;
+        char in;
+        while(t.isAlive()){
+            cin.get(in);
+            if(in == ' '){
+                if(!t.isPaused()){
+                    t.pause();
+                    cout << "PAUSING" << endl;
+                }
+                else{
+                    t.resume();
+                    cout << "RESUMING" << endl;
+                }
             }
-            else{
-                t.resume();
-                cout << "RESUMING" << endl;
+            if(in == 'q'){
+                clk = clock() - clk;
+                t.kill();
+                cout << "KILLING" << endl;
             }
         }
-        if(cin.get() == 'q'){
-            clk = clock() - clk;
-            t.kill();
-            cout << "KILLING" << endl;
-        }
+
     });
 
 
@@ -59,12 +65,6 @@ int main(){
         }
     });
 
-    std::thread gui([&]{
-        while(t.isAlive()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(150));
-            std::cout << "PEEK: " << t.peek() << std::endl;
-        }
-    });
     //clk = clock() - clk;
     int minutes = int(clk) / 60;
     int seconds = int(clk) % 60;
@@ -72,7 +72,6 @@ int main(){
     t.start();
     stopper.join();
     reader.join();
-    gui.join();
     cout << "This session lasted " << minutes << " and " << seconds << " seconds" << endl;
     data.displayData();
     return 0;
