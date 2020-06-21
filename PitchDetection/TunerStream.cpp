@@ -1,6 +1,5 @@
 #include <iostream>
 #include "TunerStream.h"
-#include "processing_utilities.h"
 
 TunerStream::TunerStream(int sample_rate)
 {
