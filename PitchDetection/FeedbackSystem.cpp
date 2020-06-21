@@ -1,23 +1,34 @@
 #include "FeedbackSystem.h"
 
-FeedbackSystem::FeedbackSystem() {
+FeedbackSystem::FeedbackSystem(int range) {
     cents = 0.0;
     overall = 0;
     overallCount = 0;
+    threshold = range;
 }
 
 void FeedbackSystem::collectData(int index, double cent) {
-    if(abs(cent) <= 5){
+    if(abs(cent) <= threshold){
         pitchClass[index]++;
         overall++;
     }
     pitchCount[index]++;
     overallCount++;
     cents += abs(cent);
+
+    // For recent notes
+    recentNotes.push(notes[index]);
+    if(recentNotes.size() <= 8){
+        recentNotes.pop();
+    }
 }
 
-double FeedbackSystem::getOverall() {
-    return (100.0 * overall)/overallCount;
+double FeedbackSystem::getOverall() const{
+    return (100.0 * overall) / overallCount;
+}
+
+queue<string> FeedbackSystem::getRecentNotes() {
+    return recentNotes;
 }
 
 void FeedbackSystem::displayData() {
@@ -25,7 +36,7 @@ void FeedbackSystem::displayData() {
     for(int i = 0; i < 11; i++){
         pitchError[i] = (100.0 * pitchClass[i]) / pitchCount[i];
     }
-    double avgCents = cents/overallCount;
+    double avgCents = cents / overallCount;
 
     cout << "Here are the results of this session:" << endl;
     cout << endl;
@@ -40,7 +51,12 @@ void FeedbackSystem::displayData() {
         }
     }
     cout << endl;
-    cout << "Overall:" << endl;
-    cout << "You were in tune for " << getOverall() << "% of the time." << endl;
-    cout << "You were off by an average of " << avgCents << " cents." << endl;
+    if(isnan(getOverall())){
+        cout << "There was no audio input." << endl;
+    }
+    else{
+        cout << "Overall:" << endl;
+        cout << "You were in tune for " << getOverall() << "% of the time." << endl;
+        cout << "You were off by an average of " << avgCents << " cents." << endl;
+    }
 }

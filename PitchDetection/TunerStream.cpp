@@ -149,6 +149,10 @@ double TunerStream::peek()
     return most_recent;
 }
 
+bool TunerStream::isPaused()
+{
+    return this->paused;
+}
 
 TunerStream::~TunerStream()
 {

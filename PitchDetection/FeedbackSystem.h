@@ -3,14 +3,17 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <queue>
 using namespace std;
 
 class FeedbackSystem {
 public:
-    FeedbackSystem();
+    explicit FeedbackSystem(int threshold);
     void collectData(int index, double cent);
-    double getOverall();
+    double getOverall() const;
+    queue<string> getRecentNotes();
     void displayData();
+
 
 private:
     string notes[12] = {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
@@ -19,6 +22,8 @@ private:
     double cents;
     int overall;
     int overallCount;
+    int threshold;
+    queue<string> recentNotes;
 };
 
 
