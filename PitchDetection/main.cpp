@@ -8,8 +8,8 @@
 #include "FeedbackSystem.h"
 
 /* TODO:
- Octave numbers
-
+ * Octave numbers
+ * Fix input interrupt
 */
 
 int main(){
@@ -18,41 +18,33 @@ int main(){
     cin >> threshold;
     cout << endl;
     FeedbackSystem data(threshold);
+    clock_t clk;
 
     TunerStream t(44100);
     std::thread stopper([&]{
-        std::this_thread::sleep_for(std::chrono::milliseconds(1200));
-        std::cout << "PAUSING" << std::endl;
-        t.pause();
-        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-        std::cout << "RESUMING" << std::endl;
-        t.resume();
-        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-        std::cout << "KILLING" << std::endl;
-        t.kill();
+        if(cin.get() == ' '){
+            if(!t.isPaused()){
+                t.pause();
+                cout << "PAUSING" << endl;
+            }
+            else{
+                t.resume();
+                cout << "RESUMING" << endl;
+            }
+        }
+        if(cin.get() == 'q'){
+            clk = clock() - clk;
+            t.kill();
+            cout << "KILLING" << endl;
+        }
     });
-    clock_t clk;
+
 
     std::thread reader([&]{
-        clk = clock();
+        if(t.isAlive()){
+            clk = clock();
+        }
         while(t.isAlive()) {
-            // Pauses, resumes, and stops program based on input
-            if(cin.get() == ' '){
-                if(!t.isPaused()){
-                    t.pause();
-                    cout << "PAUSING" << endl;
-                }
-                else{
-                    t.resume();
-                    cout << "RESUMING" << endl;
-                }
-            }
-            if(cin.get() == 'q'){
-                clk = clock() - clk;
-                t.kill();
-                cout << "KILLING" << endl;
-            }
-
             double freq;
             std::string notes[12] = {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
             while(!t.fetch_freq(freq));
@@ -73,7 +65,7 @@ int main(){
             std::cout << "PEEK: " << t.peek() << std::endl;
         }
     });
-
+    //clk = clock() - clk;
     int minutes = int(clk) / 60;
     int seconds = int(clk) % 60;
 

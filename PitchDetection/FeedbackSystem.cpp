@@ -27,6 +27,7 @@ double FeedbackSystem::getOverall() const{
     return (100.0 * overall) / overallCount;
 }
 
+// TODO: Connect with the GUI
 queue<string> FeedbackSystem::getRecentNotes() {
     return recentNotes;
 }
