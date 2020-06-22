@@ -2,7 +2,6 @@
 #include <cmath>
 #include <chrono>
 #include <thread>
-#include <ctime>
 #include "processing_utilities.h"
 #include "TunerStream.h"
 #include "FeedbackSystem.h"
@@ -18,7 +17,7 @@ int main(){
     cin >> threshold;
     cout << endl;
     FeedbackSystem data(threshold);
-    clock_t clk;
+    auto start = chrono::steady_clock::now();
 
     TunerStream t(44100);
 
@@ -37,7 +36,7 @@ int main(){
                 }
             }
             if(in == 'q'){
-                clk = clock() - clk;
+                //auto end = chrono::steady_clock::now();
                 t.kill();
                 cout << "KILLING" << endl;
             }
@@ -48,7 +47,7 @@ int main(){
 
     std::thread reader([&]{
         if(t.isAlive()){
-            clk = clock();
+            //auto start = chrono::steady_clock::now();
         }
         while(t.isAlive()) {
             double freq;
@@ -65,14 +64,15 @@ int main(){
         }
     });
 
-    //clk = clock() - clk;
-    int minutes = int(clk) / 60;
-    int seconds = int(clk) % 60;
+    auto end = chrono::steady_clock::now();
+    int time = chrono::duration_cast<chrono::seconds>(end - start).count();
+    int minutes = time / 60;
+    int seconds = time % 60;
 
     t.start();
     stopper.join();
     reader.join();
-    cout << "This session lasted " << minutes << " and " << seconds << " seconds" << endl;
+    cout << "This session lasted " << minutes << " minutes and " << seconds << " seconds" << endl;
     data.displayData();
     return 0;
 }
