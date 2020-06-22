@@ -36,7 +36,6 @@ int main(){
                 }
             }
             if(in == 'q'){
-                //auto end = chrono::steady_clock::now();
                 t.kill();
                 cout << "KILLING" << endl;
             }
@@ -46,9 +45,6 @@ int main(){
 
 
     std::thread reader([&]{
-        if(t.isAlive()){
-            //auto start = chrono::steady_clock::now();
-        }
         while(t.isAlive()) {
             double freq;
             std::string notes[12] = {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
@@ -64,15 +60,27 @@ int main(){
         }
     });
 
+
+
+    t.start();
+    stopper.join();
+    reader.join();
+
     auto end = chrono::steady_clock::now();
     int time = chrono::duration_cast<chrono::seconds>(end - start).count();
     int minutes = time / 60;
     int seconds = time % 60;
 
-    t.start();
-    stopper.join();
-    reader.join();
-    cout << "This session lasted " << minutes << " minutes and " << seconds << " seconds" << endl;
+    cout << "Here are the results of this session:" << endl;
+    cout << "-------------------------------------" << endl;
+    if(minutes == 0){
+        cout << "This session lasted " << seconds << " seconds." << endl;
+    }
+    else{
+        cout << "This session lasted " << minutes << " minutes and " << seconds << " seconds." << endl;
+    }
+    cout << endl;
+
     data.displayData();
     return 0;
 }

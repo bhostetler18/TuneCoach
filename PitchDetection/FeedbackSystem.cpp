@@ -39,8 +39,6 @@ void FeedbackSystem::displayData() {
     }
     double avgCents = cents / overallCount;
 
-    cout << "Here are the results of this session:" << endl;
-    cout << endl;
     cout << "These are your accuracies for each pitch class:" << endl;
 
     for(int i = 0; i < 11; i++){
