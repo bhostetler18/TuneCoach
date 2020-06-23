@@ -1,5 +1,6 @@
 from ctypes import *
 import threading
+from pitch_utilities import *
 
 def load_library():
     lib = cdll.LoadLibrary("./libPitchDetection.so")
@@ -35,11 +36,16 @@ class Reader(threading.Thread):
     def run(self):
         print("Starting")
         while(True):
-            val = c_double()
-            res = lib.read_stream(handle, byref(val))
-            if res and val:
-                print(val)
-
+            response = c_double()
+            success = lib.read_stream(handle, byref(response))
+            if success and response:
+                hz = response.value
+                midi = hz_to_midi(hz) 
+                pitch_class = midi_to_pitch_class(midi)
+                desired_hz = closest_in_tune_frequency(hz)
+                cent = cents(desired_hz, hz)
+                name = pitch_class_to_name(pitch_class, Accidental.SHARP)
+                print(f"{name}: {round(hz, 2)} Hz ({round(cent)} cents)")
 
 if __name__ == "__main__":
     lib = load_library()
