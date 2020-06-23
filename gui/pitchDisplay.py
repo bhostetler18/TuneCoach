@@ -36,8 +36,8 @@ class PitchDisplay:
         self.screen_height = master.winfo_screenheight()
         master.geometry(f'{self.screen_width}x{self.screen_height}')
 
-        # self.update_data() # call to update pitch / hertz/ cents data all at once
 
+        # self.update_data() # call to update pitch / hertz/ cents data all at once
         self.canvas = Canvas(master, width=self.screen_width, height=self.screen_height)
         self.canvas.pack()
         print(master.winfo_screenheight(), master.winfo_screenwidth())
@@ -77,11 +77,13 @@ class PitchDisplay:
         right_red_arc = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4, 3*self.screen_height/4)
         self.canvas.itemconfig(right_red_arc, start=45, width=5, fill="#ffbfbf", extent=15, outline='')
 
+
     def update_pitch(self, value): # event as parameter
         self._pitchValue = value
 
     def update_hertz(self):
         self._hertzValue = 0
+
 
     def update_cents(self, value):
         self._centsValue = value # perfectly in tune hardcoded - str(event.char)
@@ -132,39 +134,14 @@ class AudioThread(threading.Thread):
         print("Starting")
         self.lib.start_stream(self.handle)
 
-
-# class Reader(threading.Thread):
-#     def __init__(self, handle, lib):
-#         super().__init__()
-#         self.handle = handle
-#         self.lib = lib
-#
-#     def run(self):
-#         print("Starting")
-#         while (True):
-#             response = c_double()
-#             success = lib.read_stream(handle, byref(response))
-#             if success and response:
-#                 hz = response.value
-#                 midi = hz_to_midi(hz)
-#                 pitch_class = midi_to_pitch_class(midi)
-#                 desired_hz = closest_in_tune_frequency(hz)
-#                 cent = cents(desired_hz, hz)
-#                 name = pitch_class_to_name(pitch_class, Accidental.SHARP)
-#                 print(f"{name}: {round(hz, 2)} Hz ({round(cent)} cents)")
-
-###HERE
-
 if __name__ == "__main__":
     root = Tk()
     root.title("TuneCoach")
     pitch = PitchDisplay(root)
-
     lib = load_library()
     handle = lib.create_stream(44100)
     audio = AudioThread(handle, lib)
     # pitch.update_data(handle, lib)
     audio.start()
     root.after(0, pitch.update_data, handle, lib)
-
     root.mainloop()
