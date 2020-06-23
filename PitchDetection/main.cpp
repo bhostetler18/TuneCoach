@@ -38,6 +38,7 @@ int main(){
             if(in == 'q'){
                 t.kill();
                 cout << "KILLING" << endl;
+                cout << endl;
             }
         }
 
