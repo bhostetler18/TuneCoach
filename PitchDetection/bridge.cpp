@@ -7,41 +7,43 @@ TunerStream *create_stream(int sample_rate)
 
 void start_stream(TunerStream *handle)
 {
-    handle->start();
+    if (handle) handle->start();
 }
 
 void pause_stream(TunerStream* handle)
 {
-    handle->pause();
+    if (handle) handle->pause();
 }
 
 void resume_stream(TunerStream* handle)
 {
-    handle->resume();
+    if (handle) handle->resume();
 }
 
 void kill_stream(TunerStream* handle)
 {
-    handle->kill();
+    if (handle) handle->kill();
     delete handle;
 }
 
 bool is_alive(TunerStream* handle)
 {
-    return handle->isAlive();
+    return handle && handle->isAlive();
 }
 
 bool is_paused(TunerStream* handle)
 {
-    return handle->isPaused();
+    return handle && handle->isPaused();
 }
 
 bool read_stream(TunerStream* handle, double* val)
 {
-    return handle->fetch_freq(*val);
+    if (handle) return handle->fetch_freq(*val);
+    return false;
 }
 
 double peek_stream(TunerStream* handle)
 {
-    return handle->peek();
+    if (handle) return handle->peek();
+    return 0;
 }
