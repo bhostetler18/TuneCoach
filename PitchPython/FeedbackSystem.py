@@ -1,16 +1,17 @@
 from queue import Queue
+from processing_utilities import *
 import math
 
 
 class FeedbackSystem:
-    def __init__(self, range):
+    def __init__(self, cent_range):
         self._notes = ("C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B")
         self._pitch_class = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self._pitch_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self._cents = 0.0
         self._overall = 0
         self._overallCount = 0
-        self._threshold = range
+        self._threshold = cent_range
         self._recent_notes = Queue(maxsize=8)
 
     def get_overall(self):
@@ -19,7 +20,13 @@ class FeedbackSystem:
     def get_recent_notes(self):
         return self._recent_notes
 
-    def _collect_data(self, index, cent):
+    def collect_data(self, freq):
+        midi = int(round(hz_to_midi(freq)))
+        index = midi % 12
+        name = self._notes[index]
+        desired_hz = closest_in_tune_frequency(freq)
+        cent = cents(desired_hz, freq)
+
         if abs(cent) <= self._threshold:
             self._pitch_class[index] += 1
             self._overall += 1
@@ -27,14 +34,15 @@ class FeedbackSystem:
         self._overallCount += 1
         self._cents += abs(cent)
 
-        # May need to put an if statement for when the current note is the same as the last note
+        print(name, "   ", freq, "   ", cent, "  cents   ", self.get_overall())
+
+        # Put an if statement for when the current note is the same as the last note
+        
         self._recent_notes.put(self._notes[index])
         if self._recent_notes.full():
             self._recent_notes.get()
 
-
-
-    def _display_data(self):
+    def display_all_data(self):
         avg_cents = self._cents / self._overallCount
 
         print("These are your accuracies for each pitch class:")
