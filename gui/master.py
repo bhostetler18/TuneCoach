@@ -6,7 +6,7 @@ sys.path.insert(1, '../python_bridge')
 from AudioManager import *
 
 def space_pressed(event, audio_manager):
-	if audio_manager.paused:
+	if audio_manager.is_paused():
 		print("Resuming")
 		audio_manager.resume()
 	else:
