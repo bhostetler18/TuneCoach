@@ -2,7 +2,6 @@
 
 import tkinter as tk
 import tkinter.ttk as ttk
-# from PIL import Image, ImageTk
 import PIL.Image
 import PIL.ImageTk
 from datetime import date
@@ -12,7 +11,6 @@ from matplotlib.figure import Figure
 from pitchDisplay import *
 
 #constants, will move to appriate constants file.
-
 background_color = "#575759"
 #just made it the halfway point for default, can change to what you guys think is best
 acceptable_pitch_range = 25
@@ -97,6 +95,7 @@ class session_history:
         new_height = int(height/2.75)
         largeImage = largeImage.resize((new_width,new_height), PIL.Image.ANTIALIAS)
         pianoImage = PIL.ImageTk.PhotoImage(largeImage)
+
         canvas.create_image(5, 5, anchor = tk.NW, image = pianoImage)
         
         noteDict = {
@@ -416,8 +415,6 @@ class main_window(tk.Frame):
         help_menu.add_separator
         #creating frames to organize the screen.
     
-
-
     def layout_frames(self, master):
         bottomFrame = tk.Frame(master, bd = 5, relief = tk.RAISED, bg = background_color)
         leftFrame = tk.Frame(master, bd = 5, relief = tk.RAISED ,bg =  background_color)
