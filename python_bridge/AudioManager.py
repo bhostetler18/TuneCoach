@@ -1,7 +1,7 @@
 from ctypes import *
 import threading
 from pitch_utilities import *
-from feedback_system import *
+from FeedbackSystem import *
 
 
 def load_library():
@@ -42,13 +42,13 @@ class Reader(threading.Thread):
 
     def run(self):
         threshold = int(input("Please enter cents threshold: "))
-        feedback_system(threshold)
+        data = FeedbackSystem(threshold)
         while(True):
             response = c_double()
             success = lib.read_stream(handle, byref(response))
             if success and response:
                 hz = response.value
-                feedback_system.collect_data(hz)
+                data.collect_data(hz)
 
 
 class AudioManager:
@@ -61,7 +61,7 @@ class AudioManager:
         self._background_audio.start()
 
     def is_paused(self):
-    	return self._lib.is_paused(self._handle)
+        return self._lib.is_paused(self._handle)
 
     def pause(self):
         self._lib.pause_stream(self._handle)
