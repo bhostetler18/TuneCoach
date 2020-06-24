@@ -354,10 +354,10 @@ class tuner_settings_window(tk.Toplevel):
 #main gui
 class main_window(tk.Frame):
 
-    def __init__(self, master):
+    def __init__(self, master, manager):
         tk.Frame.__init__(self, master)
         self.master = master
-
+        self.audio_manager = manager
         screen_width = master.winfo_screenwidth()
         screen_height = master.winfo_screenheight()
         
@@ -438,10 +438,5 @@ class main_window(tk.Frame):
         myHistoryObject = session_history(bottomFrame, screen_width, screen_height)
         myDiagnosticObject = session_diagnostics(leftFrame)
 
-        pitch = PitchDisplay(master, rightFrame)
-
-        lib = load_library()
-        handle = lib.create_stream(44100)
-        audio = AudioThread(handle, lib)
-        audio.start()
-        master.after(10, pitch.update_data, handle, lib)
+        pitch = PitchDisplay(master, rightFrame, self.audio_manager)
+        master.after(10, pitch.update_data)

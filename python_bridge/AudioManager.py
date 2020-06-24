@@ -61,7 +61,7 @@ class AudioManager:
         self._background_audio.start()
 
     def is_paused(self):
-        return self._lib.is_paused(self._handle)
+    	return self._lib.is_paused(self._handle)
 
     def pause(self):
         self._lib.pause_stream(self._handle)
