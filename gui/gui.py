@@ -86,52 +86,49 @@ class session_history:
         y1 = y + r
         return canvasName.create_oval(x0, y0, x1, y1, fill = fillColor)
     
-    def __init__(self, workingFrame):
-        canvas = tk.Canvas(workingFrame,width = 800, height = 294, relief = tk.RIDGE, bd = 5, bg = "#bdd0df")
-        canvas.pack(side = tk.LEFT, padx = 300)
+    def __init__(self, workingFrame, width, height):
+        canvas = tk.Canvas(workingFrame,width = width/2, height = height/4, relief = tk.RIDGE, bd = 5, bg = "#bdd0df")
+        canvas.pack(side = tk.LEFT, padx = width/4)
         largeImage = PIL.Image.open("piano.jpeg")
-        width, height = largeImage.size
-        new_width = int(width/2.7)
-        new_height = int(height/2.75)
-        largeImage = largeImage.resize((new_width,new_height), PIL.Image.ANTIALIAS)
+        largeImage = largeImage.resize((int(width/10),int(height/3.9)), PIL.Image.ANTIALIAS)
         pianoImage = PIL.ImageTk.PhotoImage(largeImage)
 
-        canvas.create_image(5, 5, anchor = tk.NW, image = pianoImage)
+        canvas.create_image(0, 0, anchor = tk.NW, image = pianoImage)
         
         noteDict = {
-            "C" : 24,
-            "C#" : 47,
-            "D" : 69,
-            "D#" : 91,
-            "E" : 114,
-            "F" : 148,
-            "F#" : 175,
-            "G" : 196,
-            "G#" : 217,
-            "A" : 238,
-            "A#" : 259,
-            "B" : 280
+            "C" : height/3.9/15,
+            "C#" : height/3.9/15*2.1,
+            "D" : height/3.9/15*3.2,
+            "D#" : height/3.9/15*4.3,
+            "E" : height/3.9/15*5.6,
+            "F" : height/3.9/15*7.1,
+            "F#" : height/3.9/15*8.4,
+            "G" : height/3.9/15*9.5,
+            "G#" : height/3.9/15*10.6,
+            "A" : height/3.9/15*11.7,
+            "A#" : height/3.9/15*12.7,
+            "B" : height/3.9/15*14
 
         }
-        canvas.create_line(220, noteDict["C"], 800, noteDict["C"], width = 3)
-        canvas.create_line(220, noteDict["C#"], 800, noteDict["C#"], width = 3)
-        canvas.create_line(220, noteDict["D"], 800, noteDict["D"], width = 3)
-        canvas.create_line(220, noteDict["D#"], 800, noteDict["D#"], width = 3)
-        canvas.create_line(220, noteDict["E"], 800, noteDict["E"], width = 3)
-        canvas.create_line(220, noteDict["F"], 800, noteDict["F"], width = 3)
-        canvas.create_line(220, noteDict["F#"], 800, noteDict["F#"], width = 3)
-        canvas.create_line(220, noteDict["G"], 800, noteDict["G"], width = 3)
-        canvas.create_line(220, noteDict["G#"], 800, noteDict["G#"], width = 3)
-        canvas.create_line(220, noteDict["A"], 800, noteDict["A"], width = 3)
-        canvas.create_line(220, noteDict["A#"], 800, noteDict["A#"], width = 3)
-        canvas.create_line(220, noteDict["B"], 800, noteDict["B"], width = 3)
+        canvas.create_line(width/10, noteDict["C"], width/2, noteDict["C"], width = 3)
+        canvas.create_line(width/10, noteDict["C#"], width/2, noteDict["C#"], width = 3)
+        canvas.create_line(width/10, noteDict["D"], width/2, noteDict["D"], width = 3)
+        canvas.create_line(width/10, noteDict["D#"], width/2, noteDict["D#"], width = 3)
+        canvas.create_line(width/10, noteDict["E"], width/2, noteDict["E"], width = 3)
+        canvas.create_line(width/10, noteDict["F"], width/2, noteDict["F"], width = 3)
+        canvas.create_line(width/10, noteDict["F#"], width/2, noteDict["F#"], width = 3)
+        canvas.create_line(width/10, noteDict["G"], width/2, noteDict["G"], width = 3)
+        canvas.create_line(width/10, noteDict["G#"], width/2, noteDict["G#"], width = 3)
+        canvas.create_line(width/10, noteDict["A"], width/2, noteDict["A"], width = 3)
+        canvas.create_line(width/10, noteDict["A#"], width/2, noteDict["A#"], width = 3)
+        canvas.create_line(width/10, noteDict["B"], width/2, noteDict["B"], width = 3)
 
 
         noteArray = ["F#", "A", "B", "A", "F#","F#", "A", "B", "A","B","F#", "F#", "A", "B", "C#", "D", "A", "F#", "D", "F#", "G", "F#", "E"]
         colorArray = ["green", "red", "green", "green", "red", "green", "green", "red", "blue", "green", "green", "green", "blue", "green", "green", "red", "green", "red", "blue", "green", "green", "red", "blue", "green"]
         i = 0
         while i < len(noteArray):
-            self.create_circle(240 + i*20, noteDict[noteArray[i]], 10, canvas,colorArray[i])
+            self.create_circle(width/10 + (i+1)*20, noteDict[noteArray[i]], 10, canvas,colorArray[i])
             i = i+1
 
         canvas.image = pianoImage
@@ -186,8 +183,6 @@ class session_diagnostics:
         canvas.get_tk_widget().configure(relief = tk.RIDGE, bd = 5)
         canvas.get_tk_widget().pack()
         canvas.draw()
-        
-        
 
 
 #settings window to create a new session
@@ -371,7 +366,7 @@ class main_window(tk.Frame):
         master.geometry(f'{screen_width}x{screen_height}')
     
         self.create_menubar(self.master)
-        self.layout_frames(self.master)
+        self.layout_frames(self.master, screen_width, screen_height)
 
     #adding menu options to the top of the screen.
     
@@ -415,7 +410,7 @@ class main_window(tk.Frame):
         help_menu.add_separator
         #creating frames to organize the screen.
     
-    def layout_frames(self, master):
+    def layout_frames(self, master, screen_width, screen_height):
         bottomFrame = tk.Frame(master, bd = 5, relief = tk.RAISED, bg = background_color)
         leftFrame = tk.Frame(master, bd = 5, relief = tk.RAISED ,bg =  background_color)
         rightFrame = tk.Frame(master, bd = 5, relief = tk.RAISED, bg = background_color)
@@ -440,7 +435,7 @@ class main_window(tk.Frame):
         tuner_header.config(bg = background_color, fg = "white")
         tuner_header.pack()
 
-        myHistoryObject = session_history(bottomFrame)
+        myHistoryObject = session_history(bottomFrame, screen_width, screen_height)
         myDiagnosticObject = session_diagnostics(leftFrame)
 
         pitch = PitchDisplay(master, rightFrame)
