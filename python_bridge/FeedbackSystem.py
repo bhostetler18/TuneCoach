@@ -3,7 +3,7 @@ from processing_utilities import *
 import math
 
 
-class feedback_system:
+class FeedbackSystem:
     def __init__(self, cent_range):
         self._notes = ("C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B")
         self._pitch_class = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
