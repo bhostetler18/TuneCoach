@@ -22,10 +22,12 @@ class AudioThread(threading.Thread):
         super().__init__()
         self.handle = handle
         self.lib = lib
+        self.daemon = True
       
     def run(self):
-        print("Starting")
+        print("Starting background audio thread")
         self.lib.start_stream(self.handle)
+
 
 class Reader(threading.Thread):
     def __init__(self, handle, lib):
@@ -47,10 +49,29 @@ class Reader(threading.Thread):
                 name = pitch_class_to_name(pitch_class, Accidental.SHARP)
                 print(f"{name}: {round(hz, 2)} Hz ({round(cent)} cents)")
 
-if __name__ == "__main__":
-    lib = load_library()
-    handle = lib.create_stream(44100)
-    audio = AudioThread(handle, lib)
-    reader = Reader(handle, lib)
-    audio.start()
-    reader.start()
+
+class AudioManager:
+    def __init__(self):
+        self._lib = load_library()
+        self._handle = self._lib.create_stream(44100)
+        self._background_audio= AudioThread(self._handle, self._lib)
+
+    def start_capture(self):
+        self._background_audio.start()
+
+    def pause(self):
+        self._lib.pause_stream(self._handle)
+
+    def resume(self):
+        self._lib.resume_stream(self._handle)
+
+    def peek(self):
+        return self._lib.peek_stream(self._handle)
+
+    def read(self):
+        response = c_double()
+        success = self._lib.read_stream(self._handle, byref(response))
+        return success, response.value
+
+    def destroy(self):
+        self._lib.kill_stream(self._handle)
