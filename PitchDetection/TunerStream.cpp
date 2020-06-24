@@ -139,6 +139,11 @@ bool TunerStream::isAlive()
     return alive;
 }
 
+bool TunerStream::isPaused()
+{
+    return paused;
+}
+
 bool TunerStream::fetch_freq(double &hz)
 {
     return this->buffer.read(hz);
@@ -163,7 +168,6 @@ TunerStream::~TunerStream()
     delete[] this->audio_buffer;
     delete p;
 }
-
 
 
 
