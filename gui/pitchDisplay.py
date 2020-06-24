@@ -7,7 +7,10 @@ import threading
 from pitch_utilities import *
 
 class PitchDisplay:
-    def __init__(self, master, pitch=None, hertz=None, cents=None):
+    def __init__(self, grandparent, master, pitch=None, hertz=None, cents=None):
+        print("constructor for PitchDisplay has been called")
+        self.grandparent = grandparent
+        self.master = master
         self.right_red = None
         self.right_yellow = None
         self.green = None
@@ -32,23 +35,17 @@ class PitchDisplay:
 
         self._default_cents_bound = 100 # 50 cents below and above is allowed
         super().__init__()
-        self.frame = Frame(master)
-        self.frame.pack()
-
-        self.title = 'Pitch Information'
-        self.label = Label(master, text="Hello World")
-        self.label.pack()
+        #
+        # self.title = 'Pitch Information'
+        # self.label = Label(master, text="Hello World")
 
         self.screen_width = (4/7) * master.winfo_screenwidth()
         self.screen_height = (1/2) * master.winfo_screenheight()
-        # master.geometry(f'{self.screen_width}x{self.screen_height}')
 
         self.canvas = Canvas(master, width=self.screen_width, height=self.screen_height)
         self.canvas.pack()
-        # print(master.winfo_screenheight(), master.winfo_screenwidth())
 
         self.display_default_gui()
-        # self.current_needle_display = self.canvas.create_text(self.screen_width/2, self.screen_height/2, text=self._pitchValue)
         self.display_current_gui()
 
     def display_current_gui(self):
@@ -160,7 +157,7 @@ class PitchDisplay:
             self.update_pitch(name)
             self.display_current_gui()
 
-        root.after(10, self.update_data, handle, lib)
+        self.grandparent.after(10, self.update_data, handle, lib)
 
 def load_library():
     lib = cdll.LoadLibrary("../python_bridge/libPitchDetection.so")
@@ -186,15 +183,3 @@ class AudioThread(threading.Thread):
     def run(self):
         print("Starting")
         self.lib.start_stream(self.handle)
-
-# if __name__ == "__main__":
-#     root = Tk()
-#     root.title("TuneCoach")
-#     pitch = PitchDisplay(root)
-#
-#     lib = load_library()
-#     handle = lib.create_stream(44100)
-#     audio = AudioThread(handle, lib)
-#     audio.start()
-#     root.after(10, pitch.update_data, handle, lib)
-#     root.mainloop()

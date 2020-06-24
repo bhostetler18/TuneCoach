@@ -2,12 +2,14 @@
 
 import tkinter as tk
 import tkinter.ttk as ttk
-from PIL import Image, ImageTk
+# from PIL import Image, ImageTk
+import PIL.Image
+import PIL.ImageTk
 from datetime import date
 import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-import pitchDisplay
+from pitchDisplay import *
 
 #constants, will move to appriate constants file.
 
@@ -89,12 +91,12 @@ class session_history:
     def __init__(self, workingFrame):
         canvas = tk.Canvas(workingFrame,width = 800, height = 294, relief = tk.RIDGE, bd = 5, bg = "#bdd0df")
         canvas.pack(side = tk.LEFT, padx = 300)
-        largeImage = Image.open("piano.jpeg")
+        largeImage = PIL.Image.open("piano.jpeg")
         width, height = largeImage.size
         new_width = int(width/2.7)
         new_height = int(height/2.75)
-        largeImage = largeImage.resize((new_width,new_height),Image.ANTIALIAS)
-        pianoImage = ImageTk.PhotoImage(largeImage)
+        largeImage = largeImage.resize((new_width,new_height), PIL.Image.ANTIALIAS)
+        pianoImage = PIL.ImageTk.PhotoImage(largeImage)
         canvas.create_image(5, 5, anchor = tk.NW, image = pianoImage)
         
         noteDict = {
@@ -416,7 +418,7 @@ class main_window(tk.Frame):
     
 
 
-    def layout_frames(self,master):
+    def layout_frames(self, master):
         bottomFrame = tk.Frame(master, bd = 5, relief = tk.RAISED, bg = background_color)
         leftFrame = tk.Frame(master, bd = 5, relief = tk.RAISED ,bg =  background_color)
         rightFrame = tk.Frame(master, bd = 5, relief = tk.RAISED, bg = background_color)
@@ -444,10 +446,10 @@ class main_window(tk.Frame):
         myHistoryObject = session_history(bottomFrame)
         myDiagnosticObject = session_diagnostics(leftFrame)
 
-        # PitchDisplay(rightFrame)
+        pitch = PitchDisplay(master, rightFrame)
 
-
-# root = tk.Tk()
-# ourWindow = main_window(root)
-#
-# root.mainloop()
+        lib = load_library()
+        handle = lib.create_stream(44100)
+        audio = AudioThread(handle, lib)
+        audio.start()
+        master.after(10, pitch.update_data, handle, lib)
