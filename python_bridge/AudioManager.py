@@ -34,32 +34,50 @@ class AudioThread(threading.Thread):
 class Reader(threading.Thread):
     def __init__(self, handle, lib):
         super().__init__()
-        self.handle = handle
-        self.lib = lib
+        self._handle = handle
+        self._lib = lib
+        self.daemon = True
       
     def run(self):
-        print("Starting")
+        print("Starting reader")
         while(True):
             response = c_double()
-            success = lib.read_stream(handle, byref(response))
+            success = self._lib.read_stream(self._handle, byref(response))
             if success and response:
                 hz = response.value
-                midi = hz_to_midi(hz) 
-                pitch_class = midi_to_pitch_class(midi)
-                desired_hz = closest_in_tune_frequency(hz)
-                cent = cents(desired_hz, hz)
-                name = pitch_class_to_name(pitch_class, Accidental.SHARP)
-                print(f"{name}: {round(hz, 2)} Hz ({round(cent)} cents)")
+                self.handle_data(hz)
+
+    def handle_data(self, hz):
+        midi = hz_to_midi(hz) 
+        pitch_class = midi_to_pitch_class(midi)
+        desired_hz = closest_in_tune_frequency(hz)
+        cent = cents(desired_hz, hz)
+        name = pitch_class_to_name(pitch_class, Accidental.SHARP)
+        print(f"{name}: {round(hz, 2)} Hz ({round(cent)} cents)")
+
+
+#Change how incoming data is dealt with in handle_data
+class ExampleCustomReader(Reader):
+    def __init__(self, handle, lib):
+        super().__init__(handle, lib) 
+
+    def handle_data(self, hz):
+        print(hz)
 
 
 class AudioManager:
     def __init__(self):
         self._lib = load_library()
         self._handle = self._lib.create_stream(44100)
-        self._background_audio= AudioThread(self._handle, self._lib)
+        self._background_audio = AudioThread(self._handle, self._lib)
+        self._background_reader = ExampleCustomReader(self._handle, self._lib)
+        self.daemon = True
 
     def start_capture(self):
         self._background_audio.start()
+
+    def start_reader(self):
+        self._background_reader.start()
 
     def is_paused(self):
     	return self._lib.is_paused(self._handle)

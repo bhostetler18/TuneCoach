@@ -19,6 +19,7 @@ def main():
     root.title("TuneCoach")
     manager = AudioManager()
     manager.start_capture()
+    manager.start_reader()
     ourWindow = main_window(root, manager)
     root.bind('<space>', lambda event, arg=manager: space_pressed(event, arg))
     root.mainloop()
