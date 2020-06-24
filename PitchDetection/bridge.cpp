@@ -31,6 +31,11 @@ bool is_alive(TunerStream* handle)
     return handle->isAlive();
 }
 
+bool is_paused(TunerStream* handle)
+{
+    return handle->isPaused();
+}
+
 bool read_stream(TunerStream* handle, double* val)
 {
     return handle->fetch_freq(*val);
