@@ -20,6 +20,7 @@ public:
     void resume();
     void kill();
     bool isAlive();
+    bool isPaused();
     bool fetch_freq(double& hz);
     double peek();
     bool isPaused();

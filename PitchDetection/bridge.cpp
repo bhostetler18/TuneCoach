@@ -23,11 +23,17 @@ void resume_stream(TunerStream* handle)
 void kill_stream(TunerStream* handle)
 {
     handle->kill();
+    delete handle;
 }
 
 bool is_alive(TunerStream* handle)
 {
     return handle->isAlive();
+}
+
+bool is_paused(TunerStream* handle)
+{
+    return handle->isPaused();
 }
 
 bool read_stream(TunerStream* handle, double* val)

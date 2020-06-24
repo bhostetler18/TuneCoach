@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(PitchDetection)
 
 set(CMAKE_CXX_STANDARD 14)
-link_libraries(asound)
+#link_libraries(asound)
 link_libraries(pulse-simple)
 SET(CMAKE_CXX_FLAGS -pthread)
 add_definitions(-DUSE_PULSE)
