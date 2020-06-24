@@ -8,4 +8,4 @@ SET(CMAKE_CXX_FLAGS -pthread)
 add_definitions(-DUSE_PULSE)
 
 add_executable(PitchDetection main.cpp processing_utilities.h processing_utilities.cpp PitchDetector.cpp PitchDetector.h
-        CircularBuffer.h bridge.h TunerStream.cpp TunerStream.h bridge.cpp FeedbackSystem.cpp FeedbackSystem.h)
+        CircularBuffer.h bridge.h TunerStream.cpp TunerStream.h bridge.cpp)
