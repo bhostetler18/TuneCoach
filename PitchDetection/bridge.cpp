@@ -23,6 +23,7 @@ void resume_stream(TunerStream* handle)
 void kill_stream(TunerStream* handle)
 {
     handle->kill();
+    delete handle;
 }
 
 bool is_alive(TunerStream* handle)
