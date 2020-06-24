@@ -1,5 +1,5 @@
 from tkinter import *
-# from math import sin, cos, radians
+from math import sin, cos, radians
 import sys
 sys.path.insert(1, '../python_bridge')
 from ctypes import *
@@ -8,6 +8,7 @@ from pitch_utilities import *
 
 class PitchDisplay:
     def __init__(self, master, pitch=None, hertz=None, cents=None):
+        self.NEEDLE = None
         if not pitch:
             self._pitchValue = 'C' # default display
             self.current_pitch_display = 'C'
@@ -47,6 +48,7 @@ class PitchDisplay:
         self.display_current_gui()
 
     def display_current_gui(self):
+        self.canvas.delete(self.NEEDLE)
         self.canvas.delete(self.current_needle_display)
         temp = (self._default_cents_bound/2) - self._centsValue
         offset = (temp / self._default_cents_bound) * 90 #90 degrees, 45 offset from start +x
@@ -56,8 +58,31 @@ class PitchDisplay:
         self.canvas.delete(self.current_pitch_display)
         self.current_pitch_display = self.canvas.create_text(self.screen_width/2, self.screen_height/2, text=self._pitchValue)
 
-        self.current_needle_display = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4, 3*self.screen_height/4)
-        self.canvas.itemconfig(self.current_needle_display, fill="black", style=PIESLICE, start=startValue, outline='', extent=extentValue)
+        # if startValue > 120:
+        #     self.current_needle_display = self.canvas.create_arc(self.screen_width/4,self.screen_height/4, 3*self.screen_width/4, 3*self.screen_height/4)
+        #     self.canvas.itemconfig(self.current_needle_display, fill='red', start=startValue, outline='',extent = extentValue)
+        # else if startValue >
+
+        #THIS
+        self.current_needle_display = self.canvas.create_arc(self.screen_width / 4, self.screen_height/4, 3*self.screen_width/4, 3*self.screen_height/4)
+        #THIS
+        self.canvas.itemconfig(self.current_needle_display, fill="black", style=PIESLICE, start = startValue, outline = '', extent = extentValue)
+
+        # startAngle = offset + 45
+        #
+        # center_x = self.screen_width / 2
+        # center_y = self.screen_height / 2
+        #
+        # other_x = center_x + (center_x / 2) * cos(startAngle)
+        # other_y = center_y - (center_y / 2) * sin(startAngle)
+        #
+        # if startAngle < 135 and startAngle > 45:
+        #     self.NEEDLE = self.canvas.create_line(center_x, center_y, other_x, other_y)
+        # else:
+        #     print("Not in cents range")
+        # self.canvas.itemconfig(self.NEEDLE, )
+        # self.current_needle_display = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4, 3*self.screen_height/4)
+        # self.canvas.itemconfig(self.current_needle_display, fill="black", style=PIESLICE, start=startValue, outline='', extent=extentValue)
     def display_default_gui(self):
         pitch_arc = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
         self.canvas.itemconfig(pitch_arc, fill="lightgrey", style=PIESLICE, stipple="gray25", start=45, outline='')
