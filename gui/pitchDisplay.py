@@ -39,13 +39,13 @@ class PitchDisplay:
         self.label = Label(master, text="Hello World")
         self.label.pack()
 
-        self.screen_width = master.winfo_screenwidth()
-        self.screen_height = master.winfo_screenheight()
-        master.geometry(f'{self.screen_width}x{self.screen_height}')
+        self.screen_width = (4/7) * master.winfo_screenwidth()
+        self.screen_height = (1/2) * master.winfo_screenheight()
+        # master.geometry(f'{self.screen_width}x{self.screen_height}')
 
         self.canvas = Canvas(master, width=self.screen_width, height=self.screen_height)
         self.canvas.pack()
-        print(master.winfo_screenheight(), master.winfo_screenwidth())
+        # print(master.winfo_screenheight(), master.winfo_screenwidth())
 
         self.display_default_gui()
         # self.current_needle_display = self.canvas.create_text(self.screen_width/2, self.screen_height/2, text=self._pitchValue)
@@ -187,14 +187,14 @@ class AudioThread(threading.Thread):
         print("Starting")
         self.lib.start_stream(self.handle)
 
-if __name__ == "__main__":
-    root = Tk()
-    root.title("TuneCoach")
-    pitch = PitchDisplay(root)
-
-    lib = load_library()
-    handle = lib.create_stream(44100)
-    audio = AudioThread(handle, lib)
-    audio.start()
-    root.after(10, pitch.update_data, handle, lib)
-    root.mainloop()
+# if __name__ == "__main__":
+#     root = Tk()
+#     root.title("TuneCoach")
+#     pitch = PitchDisplay(root)
+#
+#     lib = load_library()
+#     handle = lib.create_stream(44100)
+#     audio = AudioThread(handle, lib)
+#     audio.start()
+#     root.after(10, pitch.update_data, handle, lib)
+#     root.mainloop()
