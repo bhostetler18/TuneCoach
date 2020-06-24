@@ -8,7 +8,11 @@ from pitch_utilities import *
 
 class PitchDisplay:
     def __init__(self, master, pitch=None, hertz=None, cents=None):
-        self.NEEDLE = None
+        self.right_red = None
+        self.right_yellow = None
+        self.green = None
+        self.left_red = None
+        self.left_yellow = None
         if not pitch:
             self._pitchValue = 'C' # default display
             self.current_pitch_display = 'C'
@@ -44,12 +48,16 @@ class PitchDisplay:
         print(master.winfo_screenheight(), master.winfo_screenwidth())
 
         self.display_default_gui()
-        self.current_needle_display = self.canvas.create_text(self.screen_width/2, self.screen_height/2, text=self._pitchValue)
+        # self.current_needle_display = self.canvas.create_text(self.screen_width/2, self.screen_height/2, text=self._pitchValue)
         self.display_current_gui()
 
     def display_current_gui(self):
-        self.canvas.delete(self.NEEDLE)
-        self.canvas.delete(self.current_needle_display)
+        self.canvas.delete(self.left_red)
+        self.canvas.delete(self.left_yellow)
+        self.canvas.delete(self.green)
+        self.canvas.delete(self.right_yellow)
+        self.canvas.delete(self.right_red)
+
         temp = (self._default_cents_bound/2) - self._centsValue
         offset = (temp / self._default_cents_bound) * 90 #90 degrees, 45 offset from start +x
         startValue = offset + 45
@@ -58,31 +66,57 @@ class PitchDisplay:
         self.canvas.delete(self.current_pitch_display)
         self.current_pitch_display = self.canvas.create_text(self.screen_width/2, self.screen_height/2, text=self._pitchValue)
 
-        # if startValue > 120:
-        #     self.current_needle_display = self.canvas.create_arc(self.screen_width/4,self.screen_height/4, 3*self.screen_width/4, 3*self.screen_height/4)
-        #     self.canvas.itemconfig(self.current_needle_display, fill='red', start=startValue, outline='',extent = extentValue)
-        # else if startValue >
+        if startValue > 120:
+            self.left_red = self.canvas.create_arc(self.screen_width/4,self.screen_height/4, 3*self.screen_width/4, 3*self.screen_height/4)
+            self.canvas.itemconfig(self.left_red, fill='red', start=startValue, outline='',extent = extentValue)
+        elif startValue > 95:
+            self.left_red = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
+                                                   3 * self.screen_width / 4, 3 * self.screen_height / 4)
+            self.canvas.itemconfig(self.left_red, fill='red', start=120, outline='', extent=15)
+            self.left_yellow = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
+                                                   3 * self.screen_width / 4, 3 * self.screen_height / 4)
+            self.canvas.itemconfig(self.left_yellow, fill='yellow', start=startValue, outline='', extent=extentValue-15)
+        elif startValue > 85:
+            self.left_red = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
+                                                   3 * self.screen_width / 4, 3 * self.screen_height / 4)
+            self.canvas.itemconfig(self.left_red, fill='red', start=120, outline='', extent=15)
+            self.left_yellow = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
+                                                      3 * self.screen_width / 4, 3 * self.screen_height / 4)
+            self.canvas.itemconfig(self.left_yellow, fill='yellow', start=95, outline='', extent=25)
+            self.green = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
+                                                      3 * self.screen_width / 4, 3 * self.screen_height / 4)
+            self.canvas.itemconfig(self.green, fill='green', start=startValue, outline='', extent=extentValue-40)
+        elif startValue > 60:
+            self.left_red = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
+                                                   3 * self.screen_width / 4, 3 * self.screen_height / 4)
+            self.canvas.itemconfig(self.left_red, fill='red', start=120, outline='', extent=15)
+            self.left_yellow = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
+                                                      3 * self.screen_width / 4, 3 * self.screen_height / 4)
+            self.canvas.itemconfig(self.left_yellow, fill='yellow', start=95, outline='', extent=25)
+            self.green = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
+                                                3 * self.screen_width / 4, 3 * self.screen_height / 4)
+            self.canvas.itemconfig(self.green, fill='green', start=85, outline='', extent=10)
+            self.right_yellow = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
+                                                3 * self.screen_width / 4, 3 * self.screen_height / 4)
+            self.canvas.itemconfig(self.right_yellow, fill='yellow', start=startValue, outline='', extent=extentValue-50)
+        elif startValue > 45:
+            self.left_red = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
+                                                   3 * self.screen_width / 4, 3 * self.screen_height / 4)
+            self.canvas.itemconfig(self.left_red, fill='red', start=120, outline='', extent=15)
+            self.left_yellow = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
+                                                      3 * self.screen_width / 4, 3 * self.screen_height / 4)
+            self.canvas.itemconfig(self.left_yellow, fill='yellow', start=95, outline='', extent=25)
+            self.green = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
+                                                3 * self.screen_width / 4, 3 * self.screen_height / 4)
+            self.canvas.itemconfig(self.green, fill='green', start=85, outline='', extent=10)
+            self.right_yellow = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
+                                                       3 * self.screen_width / 4, 3 * self.screen_height / 4)
+            self.canvas.itemconfig(self.right_yellow, fill='yellow', start=60, outline='',
+                                   extent=25)
+            self.right_red = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
+                                                3 * self.screen_width / 4, 3 * self.screen_height / 4)
+            self.canvas.itemconfig(self.right_red, fill='red', start=startValue, outline='', extent=extentValue-75)
 
-        #THIS
-        self.current_needle_display = self.canvas.create_arc(self.screen_width / 4, self.screen_height/4, 3*self.screen_width/4, 3*self.screen_height/4)
-        #THIS
-        self.canvas.itemconfig(self.current_needle_display, fill="black", style=PIESLICE, start = startValue, outline = '', extent = extentValue)
-
-        # startAngle = offset + 45
-        #
-        # center_x = self.screen_width / 2
-        # center_y = self.screen_height / 2
-        #
-        # other_x = center_x + (center_x / 2) * cos(startAngle)
-        # other_y = center_y - (center_y / 2) * sin(startAngle)
-        #
-        # if startAngle < 135 and startAngle > 45:
-        #     self.NEEDLE = self.canvas.create_line(center_x, center_y, other_x, other_y)
-        # else:
-        #     print("Not in cents range")
-        # self.canvas.itemconfig(self.NEEDLE, )
-        # self.current_needle_display = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4, 3*self.screen_height/4)
-        # self.canvas.itemconfig(self.current_needle_display, fill="black", style=PIESLICE, start=startValue, outline='', extent=extentValue)
     def display_default_gui(self):
         pitch_arc = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
         self.canvas.itemconfig(pitch_arc, fill="lightgrey", style=PIESLICE, stipple="gray25", start=45, outline='')
@@ -112,7 +146,6 @@ class PitchDisplay:
         self._centsValue = value # perfectly in tune hardcoded - str(event.char)
 
     def update_data(self, handle, lib): #event
-        # print("updating data based on realtime changes")
         response = c_double()
         success = lib.read_stream(handle, byref(response))
         if success and response:
