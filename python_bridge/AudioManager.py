@@ -1,6 +1,8 @@
 from ctypes import *
 import threading
 from pitch_utilities import *
+from feedback_system import *
+
 
 def load_library():
     lib = cdll.LoadLibrary("./libPitchDetection.so")
@@ -19,6 +21,7 @@ def load_library():
     lib.peek_stream.restype = c_double
     return lib
 
+
 class AudioThread(threading.Thread):
     def __init__(self, handle, lib):
         super().__init__()
@@ -36,33 +39,29 @@ class Reader(threading.Thread):
         super().__init__()
         self.handle = handle
         self.lib = lib
-      
+
     def run(self):
-        print("Starting")
+        threshold = int(input("Please enter cents threshold: "))
+        feedback_system(threshold)
         while(True):
             response = c_double()
             success = lib.read_stream(handle, byref(response))
             if success and response:
                 hz = response.value
-                midi = hz_to_midi(hz) 
-                pitch_class = midi_to_pitch_class(midi)
-                desired_hz = closest_in_tune_frequency(hz)
-                cent = cents(desired_hz, hz)
-                name = pitch_class_to_name(pitch_class, Accidental.SHARP)
-                print(f"{name}: {round(hz, 2)} Hz ({round(cent)} cents)")
+                feedback_system.collect_data(hz)
 
 
 class AudioManager:
     def __init__(self):
         self._lib = load_library()
         self._handle = self._lib.create_stream(44100)
-        self._background_audio= AudioThread(self._handle, self._lib)
+        self._background_audio = AudioThread(self._handle, self._lib)
 
     def start_capture(self):
         self._background_audio.start()
 
     def is_paused(self):
-    	return self._lib.is_paused(self._handle)
+        return self._lib.is_paused(self._handle)
 
     def pause(self):
         self._lib.pause_stream(self._handle)
