@@ -7,10 +7,11 @@ import threading
 from pitch_utilities import *
 
 class PitchDisplay:
-    def __init__(self, grandparent, master, pitch=None, hertz=None, cents=None):
+    def __init__(self, grandparent, master, manager, pitch=None, hertz=None, cents=None):
         print("constructor for PitchDisplay has been called")
         self.grandparent = grandparent
         self.master = master
+        self.audio_manager = manager
         self.right_red = None
         self.right_yellow = None
         self.green = None
@@ -142,11 +143,9 @@ class PitchDisplay:
     def update_cents(self, value):
         self._centsValue = value # perfectly in tune hardcoded - str(event.char)
 
-    def update_data(self, handle, lib): #event
-        response = c_double()
-        success = lib.read_stream(handle, byref(response))
-        if success and response:
-            hz = response.value
+    def update_data(self): #event
+        hz = self.audio_manager.peek()
+        if hz != 0:
             midi = hz_to_midi(hz)
             pitch_class = midi_to_pitch_class(midi)
             desired_hz = closest_in_tune_frequency(hz)
@@ -157,29 +156,4 @@ class PitchDisplay:
             self.update_pitch(name)
             self.display_current_gui()
 
-        self.grandparent.after(10, self.update_data, handle, lib)
-
-def load_library():
-    lib = cdll.LoadLibrary("../python_bridge/libPitchDetection.so")
-    lib.create_stream.argtypes = [c_int]
-    lib.create_stream.restype = c_void_p
-    lib.pause_stream.argtypes = [c_void_p]
-    lib.resume_stream.argtypes = [c_void_p]
-    lib.kill_stream.argtypes = [c_void_p]
-    lib.is_alive.argtypes = [c_void_p]
-    lib.is_alive.restype = c_bool
-    lib.read_stream.restype = c_bool
-    lib.read_stream.argtypes = [c_void_p, POINTER(c_double)]
-    lib.peek_stream.argtypes = [c_void_p]
-    lib.peek_stream.restype = c_double
-    return lib
-
-class AudioThread(threading.Thread):
-    def __init__(self, handle, lib):
-        super().__init__()
-        self.handle = handle
-        self.lib = lib
-
-    def run(self):
-        print("Starting")
-        self.lib.start_stream(self.handle)
+        self.grandparent.after(10, self.update_data)

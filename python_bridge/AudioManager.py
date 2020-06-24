@@ -55,15 +55,18 @@ class AudioManager:
         self._lib = load_library()
         self._handle = self._lib.create_stream(44100)
         self._background_audio= AudioThread(self._handle, self._lib)
+        self.paused = False
 
     def start_capture(self):
         self._background_audio.start()
 
     def pause(self):
         self._lib.pause_stream(self._handle)
+        self.paused = True
 
     def resume(self):
         self._lib.resume_stream(self._handle)
+        self.paused = False
 
     def peek(self):
         return self._lib.peek_stream(self._handle)
