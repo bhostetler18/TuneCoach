@@ -4,21 +4,46 @@
 #include <thread>
 #include "processing_utilities.h"
 #include "TunerStream.h"
+#include "FeedbackSystem.h"
 
-int main()
-{
+/* TODO:
+ * Octave numbers
+ * Fix input interrupt
+*/
+
+int main(){
+    cout << "Please enter a threshold for intonation forgiveness in cents: ";
+    int threshold;
+    cin >> threshold;
+    cout << endl;
+    FeedbackSystem data(threshold);
+    auto start = chrono::steady_clock::now();
+
     TunerStream t(44100);
+
     std::thread stopper([&]{
-        std::this_thread::sleep_for(std::chrono::milliseconds(1200));
-        std::cout << "PAUSING" << std::endl;
-        t.pause();
-        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-        std::cout << "RESUMING" << std::endl;
-        t.resume();
-        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-        std::cout << "KILLING" << std::endl;
-        t.kill();
+        char in;
+        while(t.isAlive()){
+            cin.get(in);
+            if(in == ' '){
+                if(!t.isPaused()){
+                    t.pause();
+                    cout << "PAUSING" << endl;
+                }
+                else{
+                    t.resume();
+                    cout << "RESUMING" << endl;
+                }
+            }
+            if(in == 'q'){
+                t.kill();
+                cout << "KILLING" << endl;
+                cout << endl;
+            }
+        }
+
     });
+
 
     std::thread reader([&]{
         while(t.isAlive()) {
@@ -30,22 +55,33 @@ int main()
                 std::string name = notes[midi % 12];
                 double desired_hz = closest_in_tune_frequency(freq);
                 double cent = cents(desired_hz, freq);
-                std::cout << name << "    " << freq << "    " << cent << "  cents" << std::endl;
+                data.collectData(midi % 12, cent);
+                std::cout << name << "    " << freq << "    " << cent << "  cents" << "    " << data.getOverall() << std::endl;
             }
         }
     });
 
-    std::thread gui([&]{
-        while(t.isAlive()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(150));
-            std::cout << "PEEK: " << t.peek() << std::endl;
-        }
-    });
+
 
     t.start();
     stopper.join();
     reader.join();
-    gui.join();
 
+    auto end = chrono::steady_clock::now();
+    int time = chrono::duration_cast<chrono::seconds>(end - start).count();
+    int minutes = time / 60;
+    int seconds = time % 60;
+
+    cout << "Here are the results of this session:" << endl;
+    cout << "-------------------------------------" << endl;
+    if(minutes == 0){
+        cout << "This session lasted " << seconds << " seconds." << endl;
+    }
+    else{
+        cout << "This session lasted " << minutes << " minutes and " << seconds << " seconds." << endl;
+    }
+    cout << endl;
+
+    data.displayData();
     return 0;
 }
