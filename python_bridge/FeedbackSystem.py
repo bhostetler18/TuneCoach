@@ -24,7 +24,7 @@ class FeedbackSystem:
         index = midi_to_pitch_class(midi)
         desired_hz = closest_in_tune_frequency(hz)
         cent = cents(desired_hz, hz)
-        name = pitch_class_to_name(pitch_class, Accidental.SHARP)
+        name = pitch_class_to_name(index, Accidental.SHARP)
         print(f"{name}: {round(hz, 2)} Hz ({round(cent)} cents)")
 
         if abs(cent) <= self._threshold:
@@ -34,12 +34,12 @@ class FeedbackSystem:
         self._overall_count += 1
         self._cents += abs(cent)
 
-        # If queue is full, pop
+        # If deque is full, pop
         if len(self._recent_notes) >= 8:
             self._recent_notes.pop()
 
         # Only inserts a note if it's different than the last
-        if name != self._recent_notes[0]:
+        if len(self._recent_notes) != 0 and name != self._recent_notes[0]:
             self._recent_notes.append(self._notes[index])
 
     def display_all_data(self):
