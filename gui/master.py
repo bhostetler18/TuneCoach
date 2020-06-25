@@ -36,7 +36,7 @@ def kill_pressed(event, audio_manager, data, start):
 
 
 def main():
-    start = time.time()
+    threshold = 15
     data = FeedbackSystem(threshold)
     start = time.time()
     root = Tk()

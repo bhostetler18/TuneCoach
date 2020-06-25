@@ -13,8 +13,7 @@ from FeedbackSystem import *
 
 #constants, will move to appriate constants file.
 background_color = "#575759"
-#just made it the halfway point for default, can change to what you guys think is best
-threshold = 25
+
 #not sure what this number will mean, but we should be able to filter how loud of noises we account for.
 noise_filter_level = 20
 
@@ -29,8 +28,7 @@ def tuner_settings(self, master, obj):
     settingsWindow = tuner_settings_window(master, obj)
 
 def update_pitch_settings(newPitch, newFilterLevel, oldSettingsView, obj):
-    threshold = newPitch
-    obj.update_threshold(threshold)
+    obj.update_threshold(newPitch)
     noise_filter_level = newFilterLevel
     oldSettingsView.destroy()
     
@@ -137,7 +135,7 @@ class session_history:
 
 
 class session_diagnostics:
-    def __init__(self, workingFrame):
+    def __init__(self, workingFrame, obj):
         #testLabel = tk.Label(workingFrame, text = "testing", bg = background_color, fg = "white")
         #testLabel.pack()
         topestFrame = tk.Frame(workingFrame, bd = 5, bg = background_color)
@@ -162,7 +160,9 @@ class session_diagnostics:
         #will sub out these stand-ins for values once we get set up how and where we will store practice sessions.
         titleLabel = tk.Label(topestFrame, text = "Session Diagnostics", bg = background_color, fg = "white", font = ("calibri", 20))
         titleLabel.pack(side = tk.TOP)
-        overallScoreLabel = tk.Label(topFrame, text = "overall score: 90", bg = background_color, fg = "white")
+        v = tk.StringVar()
+        v.set("Overall Score: %.2f" % obj.get_overall())
+        overallScoreLabel = tk.Label(topFrame, textvariable = v, bg = background_color, fg = "white")
         overallScoreLabel.pack()
         mostMissedLabel = tk.Label(middleFrame,text = "most missed note: A", bg = background_color, fg = "white")
         mostMissedLabel.pack()
@@ -369,7 +369,7 @@ class main_window(tk.Frame):
         master.geometry(f'{screen_width}x{screen_height}')
     
         self.create_menubar(self.master, obj)
-        self.layout_frames(self.master, screen_width, screen_height)
+        self.layout_frames(self.master, screen_width, screen_height, obj)
 
     #adding menu options to the top of the screen.
     
@@ -413,7 +413,7 @@ class main_window(tk.Frame):
         help_menu.add_separator
         #creating frames to organize the screen.
     
-    def layout_frames(self, master, screen_width, screen_height):
+    def layout_frames(self, master, screen_width, screen_height, obj):
         bottomFrame = tk.Frame(master, bd = 5, relief = tk.RAISED, bg = background_color)
         leftFrame = tk.Frame(master, bd = 5, relief = tk.RAISED ,bg =  background_color)
         rightFrame = tk.Frame(master, bd = 5, relief = tk.RAISED, bg = background_color)
@@ -439,7 +439,7 @@ class main_window(tk.Frame):
         tuner_header.pack()
 
         myHistoryObject = session_history(bottomFrame, screen_width, screen_height)
-        myDiagnosticObject = session_diagnostics(leftFrame)
+        myDiagnosticObject = session_diagnostics(leftFrame, obj)
 
         pitch = PitchDisplay(master, rightFrame, self.audio_manager)
         master.after(10, pitch.update_data)
