@@ -5,6 +5,7 @@ from tkinter import *
 from FeedbackSystem import *
 from AudioManager import *
 import time
+import tkinter as tk
 sys.path.insert(1, '../python_bridge')
 
 
@@ -34,8 +35,12 @@ def kill_pressed(event, audio_manager, data, start):
     data.display_all_data()
     audio_manager.destroy()
 
-
 def main():
+    def score_update(mainWindow, data):
+        mainWindow.myDiagnosticObject.overallScoreLabel.config(text="Overall Score: %.2f" % data.get_overall())
+        print("hello")
+        root.after(500, lambda: score_update(mainWindow, data))
+        
     threshold = 15
     data = FeedbackSystem(threshold)
     start = time.time()
@@ -47,8 +52,8 @@ def main():
     ourWindow = main_window(root, manager, data)
     root.bind('<space>', lambda event, arg=manager: space_pressed(event, arg))
     root.bind('q', lambda event, arg=manager: kill_pressed(event, arg, data, start))
+    score_update(ourWindow, data)
     root.mainloop()
-
 
 if __name__ == "__main__":
     main()

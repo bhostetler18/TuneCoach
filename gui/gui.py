@@ -160,10 +160,10 @@ class session_diagnostics:
         #will sub out these stand-ins for values once we get set up how and where we will store practice sessions.
         titleLabel = tk.Label(topestFrame, text = "Session Diagnostics", bg = background_color, fg = "white", font = ("calibri", 20))
         titleLabel.pack(side = tk.TOP)
-        v = tk.StringVar()
-        v.set("Overall Score: %.2f" % obj.get_overall())
-        overallScoreLabel = tk.Label(topFrame, textvariable = v, bg = background_color, fg = "white")
-        overallScoreLabel.pack()
+        #v = tk.StringVar()
+        v = "Overall Score: %.2f" % obj.get_overall()
+        self.overallScoreLabel = tk.Label(topFrame, text = v, bg = background_color, fg = "white")
+        self.overallScoreLabel.pack()
         mostMissedLabel = tk.Label(middleFrame,text = "most missed note: A", bg = background_color, fg = "white")
         mostMissedLabel.pack()
         mostMissedTransition = tk.Label(bottomFrame, text = "most missed jump: D to A", bg = background_color, fg = "white")
@@ -439,7 +439,7 @@ class main_window(tk.Frame):
         tuner_header.pack()
 
         myHistoryObject = session_history(bottomFrame, screen_width, screen_height)
-        myDiagnosticObject = session_diagnostics(leftFrame, obj)
+        self.myDiagnosticObject = session_diagnostics(leftFrame, obj)
 
         pitch = PitchDisplay(master, rightFrame, self.audio_manager)
         master.after(10, pitch.update_data)
