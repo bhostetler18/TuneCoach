@@ -20,6 +20,7 @@ def space_pressed(event, audio_manager):
 
 def kill_pressed(event, audio_manager, data, start):
     print("Killing")
+    print("")
     end = time.time()
     elapsed_time = end - start
     minutes = int(elapsed_time) // 60
@@ -29,6 +30,8 @@ def kill_pressed(event, audio_manager, data, start):
     print("-------------------------------------")
     if minutes == 0:
         print("This session lasted", seconds, "seconds.")
+    elif minutes == 1:
+        print("This session lasted", minutes, "minute and", seconds, "seconds.")
     else:
         print("This session lasted", minutes, "minutes and", seconds, "seconds.")
     print("")
@@ -38,7 +41,7 @@ def kill_pressed(event, audio_manager, data, start):
 def main():
     def score_update(mainWindow, data):
         mainWindow.myDiagnosticObject.overallScoreLabel.config(text="Overall Score: %.2f" % data.get_overall())
-        print("hello")
+        #print("hello")
         root.after(500, lambda: score_update(mainWindow, data))
         
     threshold = 15

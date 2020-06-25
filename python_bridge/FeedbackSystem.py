@@ -1,5 +1,6 @@
 import collections
 from pitch_utilities import *
+import math
 
 
 class FeedbackSystem:
@@ -32,8 +33,11 @@ class FeedbackSystem:
         desired_hz = closest_in_tune_frequency(hz)
         cent = cents(desired_hz, hz)
         name = pitch_class_to_name(index, Accidental.SHARP)
-        print(f"{name}: {round(hz, 2)} Hz ({round(cent)} cents)")
+        octave = 2 + math.floor(math.log2(desired_hz / 65.4))
 
+        print(f"{name}{octave}: {round(hz, 2)} Hz ({round(cent)} cents)")
+
+        # Gets counts of everything to calculate accuracy
         if abs(cent) <= self._threshold:
             self._pitch_class[index] += 1
             self._overall += 1
@@ -58,12 +62,12 @@ class FeedbackSystem:
                 print(self._notes[i], "was not played/sung in the session.")
             else:
                 pitch_error = (100.0 * self._pitch_class[i]) / self._pitch_count[i]
-                print("%s was in tune for %.4f %% of the time." % (self._notes[i], pitch_error))
+                print("%s was in tune for %.2f %% of the time." % (self._notes[i], pitch_error))
 
         print("")
         if self._overall_count == 0:
             print("There was no audio input.")
         else:
             print("Overall:")
-            print("You were in tune for %.4f %% of the time." % self.get_overall())
-            print("You were off by an an average of %.4f cents." % avg_cents)
+            print("You were in tune for %.2f %% of the time." % self.get_overall())
+            print("You were off by an an average of %.2f cents." % avg_cents)
