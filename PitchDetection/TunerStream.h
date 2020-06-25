@@ -15,10 +15,11 @@ class TunerStream
 {
 public:
     TunerStream(int sample_rate);
-    void start(); //DO NOT CALL TWICE!!!!!!!!!
+    void start();
     void pause();
     void resume();
     void kill();
+    bool isSafeToDelete();
     bool isAlive();
     bool isPaused();
     bool fetch_freq(double& hz);
@@ -30,6 +31,7 @@ private:
     std::atomic_bool alive;
     std::atomic_bool paused;
     std::atomic_bool was_started;
+    std::atomic_bool safe_to_delete;
     CircularBuffer<double, 4096> buffer;
     std::atomic<double> most_recent;
     PitchDetector* p;

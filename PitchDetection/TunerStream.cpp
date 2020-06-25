@@ -7,6 +7,7 @@ TunerStream::TunerStream(int sample_rate)
     this->alive = true;
     this->paused = true;
     this->was_started = false;
+    this->safe_to_delete = false;
     this->most_recent = 0.0;
 
 #ifdef USE_PULSE
@@ -86,11 +87,7 @@ TunerStream::TunerStream(int sample_rate)
 
 void TunerStream::start()
 {
-    if (was_started)
-    {
-        std::cout << "Don't do that" << std::endl;
-        return;
-    }
+    if (was_started) return;
     was_started = true;
     paused = false;
     int rc;
@@ -115,6 +112,14 @@ void TunerStream::start()
         }
         this->most_recent = 0.0;
     }
+#ifdef USE_PULSE
+    pa_simple_free(server);
+#endif
+#ifdef USE_ALSA
+    snd_pcm_drain(handle);
+    snd_pcm_close(handle);
+#endif
+    safe_to_delete = true;
 }
 
 void TunerStream::pause()
@@ -132,6 +137,11 @@ void TunerStream::kill()
 {
     this->paused = true;
     this->alive = false;
+}
+
+bool TunerStream::isSafeToDelete()
+{
+    return this->safe_to_delete;
 }
 
 bool TunerStream::isAlive()
@@ -154,17 +164,8 @@ double TunerStream::peek()
     return most_recent;
 }
 
-
 TunerStream::~TunerStream()
 {
-    std::cout << "DESTROYED TUNER STREAM" << std::endl;
-#ifdef USE_PULSE
-    pa_simple_free(server);
-#endif
-#ifdef USE_ALSA
-    snd_pcm_drain(handle);
-    snd_pcm_close(handle);
-#endif
     delete[] this->audio_buffer;
     delete p;
 }

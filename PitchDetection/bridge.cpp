@@ -1,3 +1,4 @@
+#include <iostream>
 #include "bridge.h"
 
 TunerStream *create_stream(int sample_rate)
@@ -23,6 +24,7 @@ void resume_stream(TunerStream* handle)
 void kill_stream(TunerStream* handle)
 {
     if (handle) handle->kill();
+    while (!handle->isSafeToDelete());
     delete handle;
 }
 
