@@ -19,6 +19,7 @@ class FeedbackSystem:
     def get_recent_notes(self):
         return self._recent_notes
 
+    # Takes in frequency and calculates and stores all data
     def collect_data(self, hz):
         midi = hz_to_midi(hz)
         index = midi_to_pitch_class(midi)

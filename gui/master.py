@@ -16,11 +16,12 @@ def space_pressed(event, audio_manager):
         print("Pausing")
         audio_manager.pause()
 
+
 def kill_pressed(event, audio_manager, data, start):
     print("Killing")
     end = time.time()
     elapsed_time = end - start
-    minutes = int(elapsed_time) / 60
+    minutes = int(elapsed_time) // 60
     seconds = int(elapsed_time) % 60
 
     print("Here are the results of this session:")
@@ -45,10 +46,10 @@ def main():
     manager.start_capture()
     manager.start_reader()
     ourWindow = main_window(root, manager)
-
     root.bind('<space>', lambda event, arg=manager: space_pressed(event, arg))
     root.bind('q', lambda event, arg=manager: kill_pressed(event, arg, data, start))
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()
