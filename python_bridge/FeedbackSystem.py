@@ -1,6 +1,5 @@
-from queue import Queue
+import collections
 from pitch_utilities import *
-import math
 
 
 class FeedbackSystem:
@@ -10,12 +9,12 @@ class FeedbackSystem:
         self._pitch_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self._cents = 0.0
         self._overall = 0
-        self._overallCount = 0
+        self._overall_count = 0
         self._threshold = cent_range
-        self._recent_notes = Queue(maxsize=8)
+        self._recent_notes = collections.deque([])
 
     def get_overall(self):
-        return (100.0 * self._overall) / self._overall
+        return (100.0 * self._overall) / self._overall_count
 
     def get_recent_notes(self):
         return self._recent_notes
@@ -32,31 +31,30 @@ class FeedbackSystem:
             self._pitch_class[index] += 1
             self._overall += 1
         self._pitch_count[index] += 1
-        self._overallCount += 1
+        self._overall_count += 1
         self._cents += abs(cent)
 
         # If queue is full, pop
-        if self._recent_notes.full():
-            self._recent_notes.get()
+        if len(self._recent_notes) >= 8:
+            self._recent_notes.pop()
 
         # Only inserts a note if it's different than the last
-        d = self._recent_notes.queue
-        if name != d[0]:
-            self._recent_notes.put(self._notes[index])
+        if name != self._recent_notes[0]:
+            self._recent_notes.append(self._notes[index])
 
     def display_all_data(self):
-        avg_cents = self._cents / self._overallCount
+        avg_cents = self._cents / self._overall_count
 
         print("These are your accuracies for each pitch class:")
         for i in range(12):
-            pitch_error = (100.0 * self._pitch_class[i]) / self._pitch_count[i]
-            if math.isnan(pitch_error):
+            if self._pitch_count[i] == 0:
                 print(self._notes[i], "was not played/sung in the session.")
             else:
+                pitch_error = (100.0 * self._pitch_class[i]) / self._pitch_count[i]
                 print("%s was in tune for %.4f %% of the time." % (self._notes[i], pitch_error))
 
         print("")
-        if math.isnan(self.get_overall()):
+        if self._overall_count == 0:
             print("There was no audio input.")
         else:
             print("Overall:")
