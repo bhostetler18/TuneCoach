@@ -14,7 +14,10 @@ class FeedbackSystem:
         self._recent_notes = collections.deque([])
 
     def get_overall(self):
-        return (100.0 * self._overall) / self._overall_count
+        if self._overall_count == 0:
+            return 0
+        else:
+            return (100.0 * self._overall) / self._overall_count
 
     def get_recent_notes(self):
         return self._recent_notes
