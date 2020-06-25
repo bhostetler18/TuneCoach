@@ -36,7 +36,6 @@ def kill_pressed(event, audio_manager, data, start):
 
 
 def main():
-    threshold = int(input("Enter threshold in cents: "))
     start = time.time()
     data = FeedbackSystem(threshold)
     start = time.time()
@@ -45,7 +44,7 @@ def main():
     manager = AudioManager(data)
     manager.start_capture()
     manager.start_reader()
-    ourWindow = main_window(root, manager)
+    ourWindow = main_window(root, manager, data)
     root.bind('<space>', lambda event, arg=manager: space_pressed(event, arg))
     root.bind('q', lambda event, arg=manager: kill_pressed(event, arg, data, start))
     root.mainloop()

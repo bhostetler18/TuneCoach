@@ -9,11 +9,12 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from pitchDisplay import *
+from FeedbackSystem import *
 
 #constants, will move to appriate constants file.
 background_color = "#575759"
 #just made it the halfway point for default, can change to what you guys think is best
-acceptable_pitch_range = 25
+threshold = 25
 #not sure what this number will mean, but we should be able to filter how loud of noises we account for.
 noise_filter_level = 20
 
@@ -24,11 +25,12 @@ session_history_list = []
 #open the tuner settings window
 #wrapper functions to create settings windows
 
-def tuner_settings(self, master):
-    settingsWindow = tuner_settings_window(master)
+def tuner_settings(self, master, obj):
+    settingsWindow = tuner_settings_window(master, obj)
 
-def update_pitch_settings(newPitch, newFilterLevel, oldSettingsView):
-    acceptable_pitch_range = newPitch
+def update_pitch_settings(newPitch, newFilterLevel, oldSettingsView, obj):
+    threshold = newPitch
+    obj.update_threshold(threshold)
     noise_filter_level = newFilterLevel
     oldSettingsView.destroy()
     
@@ -282,7 +284,7 @@ class end_session_window(tk.Toplevel):
 
 #tuner settings window
 class tuner_settings_window(tk.Toplevel):
-    def __init__(self, master):
+    def __init__(self, master, obj):
         self.master = master
         tuner_settings_window = tk.Toplevel(master)
         tuner_settings_window.geometry("500x300")
@@ -346,7 +348,7 @@ class tuner_settings_window(tk.Toplevel):
         inCents.config(bg = background_color, fg = "white")
         inCents.pack()
         
-        doneButton = ttk.Button(bottomestFrame, text = "Apply", command = lambda: update_pitch_settings(pitch_sensitivity_scale.get(), outside_noise_scale.get(),tuner_settings_window))
+        doneButton = ttk.Button(bottomestFrame, text = "Apply", command = lambda: update_pitch_settings(pitch_sensitivity_scale.get(), outside_noise_scale.get(),tuner_settings_window, obj))
         doneButton.pack()
 
         tuner_settings_window.lift(master)
@@ -354,23 +356,24 @@ class tuner_settings_window(tk.Toplevel):
 #main gui
 class main_window(tk.Frame):
 
-    def __init__(self, master, manager):
+    def __init__(self, master, manager, obj):
         tk.Frame.__init__(self, master)
         self.master = master
         self.audio_manager = manager
         screen_width = master.winfo_screenwidth()
         screen_height = master.winfo_screenheight()
+
         
         
         master.title("TuneCoach")
         master.geometry(f'{screen_width}x{screen_height}')
     
-        self.create_menubar(self.master)
+        self.create_menubar(self.master, obj)
         self.layout_frames(self.master, screen_width, screen_height)
 
     #adding menu options to the top of the screen.
     
-    def create_menubar(self, master):    
+    def create_menubar(self, master, obj):
         menubar = tk.Menu(master)
 
         master.config(menu=menubar)
@@ -390,7 +393,7 @@ class main_window(tk.Frame):
         #settings menubar
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
-        settings_menu.add_command(label="Tuner Settings", command = lambda: tuner_settings(self, master))
+        settings_menu.add_command(label="Tuner Settings", command = lambda: tuner_settings(self, master, obj))
         settings_menu.add_separator
         settings_menu.add_command(label="User Settings", command = user_settings)
         settings_menu.add_separator

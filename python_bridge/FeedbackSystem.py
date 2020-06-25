@@ -19,6 +19,9 @@ class FeedbackSystem:
     def get_recent_notes(self):
         return self._recent_notes
 
+    def update_threshold(self, new_threshold):
+        self._threshold = new_threshold
+
     # Takes in frequency and calculates and stores all data
     def collect_data(self, hz):
         midi = hz_to_midi(hz)
