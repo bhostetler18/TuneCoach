@@ -45,13 +45,13 @@ class FeedbackSystem:
         self._overall_count += 1
         self._cents += abs(cent)
 
+        # Only inserts a note if it's different than the last
+        if len(self._recent_notes) == 0 or name != self._recent_notes[-1]:
+            self._recent_notes.append(name)
+
         # If deque is full, pop
         if len(self._recent_notes) >= 8:
-            self._recent_notes.pop()
-
-        # Only inserts a note if it's different than the last
-        if len(self._recent_notes) != 0 and name != self._recent_notes[0]:
-            self._recent_notes.append(self._notes[index])
+            self._recent_notes.popleft()
 
     def display_all_data(self):
         print("These are your accuracies for each pitch class:")
