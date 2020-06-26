@@ -1,5 +1,6 @@
 import collections
 from pitch_utilities import *
+from gui import *
 import math
 
 
@@ -11,15 +12,18 @@ class FeedbackSystem:
         self._cents = 0.0
         self._overall = 0
         self._overall_count = 0
+        self._practice_session = None
         self._threshold = cent_range
         self._recent_notes = collections.deque([])
         self.display_buffer = collections.deque([])
 
     def get_overall(self):
-        if self._overall_count == 0:
+        if self._practice_session is None:
+            return 0
+        if self._practice_session._total_count == 0:
             return 0
         else:
-            return (100.0 * self._overall) / self._overall_count
+            return (100.0 * self._practice_session._overall) / self._practice_session._total_count
 
     def get_recent_notes(self):
         return self._recent_notes
@@ -45,6 +49,15 @@ class FeedbackSystem:
         self._pitch_count[index] += 1
         self._overall_count += 1
         self._cents += abs(cent)
+
+        #for updating the score information for each practice session
+        if self._practice_session is not None:
+            if abs(cent) <= self._threshold:
+                self._practice_session._pitch_class[index] += 1
+                self._practice_session._overall += 1
+            self._practice_session._total_count += 1
+            self._practice_session._pitch_count[index] += 1
+            self._practice_session._cents += abs(cent)
 
         self.display_buffer.append((name, cent))
         if len(self.display_buffer) > 64:
