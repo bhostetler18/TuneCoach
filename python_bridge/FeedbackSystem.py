@@ -57,18 +57,15 @@ class FeedbackSystem:
             self._practice_session._total_count += 1
             self._practice_session._pitch_count[index] += 1
             self._practice_session._cents += abs(cent)
+        # Only inserts a note if it's different than the last
+        if len(self._recent_notes) == 0 or name != self._recent_notes[-1]:
+            self._recent_notes.append(name)
 
         # If deque is full, pop
         if len(self._recent_notes) >= 8:
-            self._recent_notes.pop()
-
-        # Only inserts a note if it's different than the last
-        if len(self._recent_notes) != 0 and name != self._recent_notes[0]:
-            self._recent_notes.append(self._notes[index])
+            self._recent_notes.popleft()
 
     def display_all_data(self):
-        avg_cents = self._cents / self._overall_count
-
         print("These are your accuracies for each pitch class:")
         for i in range(12):
             if self._pitch_count[i] == 0:
@@ -83,4 +80,5 @@ class FeedbackSystem:
         else:
             print("Overall:")
             print("You were in tune for %.2f %% of the time." % self.get_overall())
+            avg_cents = self._cents / self._overall_count
             print("You were off by an an average of %.2f cents." % avg_cents)

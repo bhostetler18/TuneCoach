@@ -26,6 +26,7 @@ void kill_stream(TunerStream* handle)
     if (handle) handle->kill();
     while (!handle->isSafeToDelete());
     delete handle;
+    handle = nullptr;
 }
 
 bool is_alive(TunerStream* handle)

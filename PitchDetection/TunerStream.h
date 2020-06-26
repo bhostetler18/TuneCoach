@@ -24,7 +24,6 @@ public:
     bool isPaused();
     bool fetch_freq(double& hz);
     double peek();
-    bool isPaused();
 
     ~TunerStream();
 

@@ -44,12 +44,13 @@ class Reader(threading.Thread):
       
     def run(self):
         print("Starting reader")
-        while(True):
+        while(self._lib.is_alive(self._handle)):
             response = c_double()
             success = self._lib.read_stream(self._handle, byref(response))
             if success and response:
                 hz = response.value
                 self.feedback_obj.collect_data(hz)
+        print("Reader stopped")
 
 
 class AudioManager:
@@ -85,3 +86,4 @@ class AudioManager:
 
     def destroy(self):
         self._lib.kill_stream(self._handle)
+        print("Successfully killed audio stream")
