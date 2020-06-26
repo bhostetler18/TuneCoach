@@ -38,6 +38,10 @@ def kill_pressed(event, audio_manager, data, start):
     data.display_all_data()
     audio_manager.destroy()
 
+def cleanup(root, audio_manager):
+	audio_manager.destroy()
+	root.destroy()
+
 def main():
     def score_update(mainWindow, data):
         mainWindow.myDiagnosticObject.overallScoreLabel.config(text="Overall Score: %.2f" % data.get_overall())
@@ -55,6 +59,7 @@ def main():
     ourWindow = main_window(root, manager, data)
     root.bind('<space>', lambda event, arg=manager: space_pressed(event, arg))
     root.bind('q', lambda event, arg=manager: kill_pressed(event, arg, data, start))
+    root.wm_protocol("WM_DELETE_WINDOW", lambda r=root, m=manager: cleanup(r, m))
     score_update(ourWindow, data)
     root.mainloop()
 
