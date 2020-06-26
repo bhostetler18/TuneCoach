@@ -54,8 +54,6 @@ class FeedbackSystem:
             self._recent_notes.append(self._notes[index])
 
     def display_all_data(self):
-        avg_cents = self._cents / self._overall_count
-
         print("These are your accuracies for each pitch class:")
         for i in range(12):
             if self._pitch_count[i] == 0:
@@ -70,4 +68,5 @@ class FeedbackSystem:
         else:
             print("Overall:")
             print("You were in tune for %.2f %% of the time." % self.get_overall())
+            avg_cents = self._cents / self._overall_count
             print("You were off by an an average of %.2f cents." % avg_cents)
