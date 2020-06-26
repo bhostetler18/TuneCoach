@@ -49,15 +49,8 @@ class PitchDisplay:
         self.current_pitch_display = self.canvas.create_text(self.screen_width/2, self.screen_height/2 + self.pitchOffset, font=self.font, text='---')
 
         self.display_default_gui()
-        self.display_current_gui()
 
     def display_current_gui(self):
-        self.canvas.delete(self.left_red)
-        self.canvas.delete(self.left_yellow)
-        self.canvas.delete(self.green)
-        self.canvas.delete(self.right_yellow)
-        self.canvas.delete(self.right_red)
-
         temp = (self._default_cents_bound/2) - self._centsValue
         offset = (temp / self._default_cents_bound) * 90 #90 degrees, 45 offset from start +x
         startValue = offset + 45
@@ -65,75 +58,59 @@ class PitchDisplay:
 
         self.canvas.itemconfig(self.current_pitch_display, text=self._pitchValue)
 
+        self.canvas.itemconfig(self.left_red, start=0, extent=0)
+        self.canvas.itemconfig(self.left_yellow, start=0, extent=0)
+        self.canvas.itemconfig(self.green, start=0, extent=0)
+        self.canvas.itemconfig(self.right_yellow, start=0, extent=0)
+        self.canvas.itemconfig(self.right_red, start=0, extent=0)
+
         if startValue > 120:
-            self.left_red = self.canvas.create_arc(self.screen_width/4,self.screen_height/4, 3*self.screen_width/4, 3*self.screen_height/4)
-            self.canvas.itemconfig(self.left_red, fill='red', start=startValue, outline='',extent = extentValue)
+            self.canvas.itemconfig(self.left_red, start=startValue, extent=extentValue)
         elif startValue > 95:
-            self.left_red = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
-                                                   3 * self.screen_width / 4, 3 * self.screen_height / 4)
-            self.canvas.itemconfig(self.left_red, fill='red', start=120, outline='', extent=15)
-            self.left_yellow = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
-                                                   3 * self.screen_width / 4, 3 * self.screen_height / 4)
-            self.canvas.itemconfig(self.left_yellow, fill='yellow', start=startValue, outline='', extent=extentValue-15)
+            self.canvas.itemconfig(self.left_red, start=120, extent=15)
+            self.canvas.itemconfig(self.left_yellow, start=startValue, extent=extentValue-15)
         elif startValue > 85:
-            self.left_red = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
-                                                   3 * self.screen_width / 4, 3 * self.screen_height / 4)
-            self.canvas.itemconfig(self.left_red, fill='red', start=120, outline='', extent=15)
-            self.left_yellow = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
-                                                      3 * self.screen_width / 4, 3 * self.screen_height / 4)
-            self.canvas.itemconfig(self.left_yellow, fill='yellow', start=95, outline='', extent=25)
-            self.green = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
-                                                      3 * self.screen_width / 4, 3 * self.screen_height / 4)
-            self.canvas.itemconfig(self.green, fill='green', start=startValue, outline='', extent=extentValue-40)
+            self.canvas.itemconfig(self.left_red, start=120, extent=15)
+            self.canvas.itemconfig(self.left_yellow, start=95, extent=25)
+            self.canvas.itemconfig(self.green, start=startValue, extent=extentValue-40)
         elif startValue > 60:
-            self.left_red = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
-                                                   3 * self.screen_width / 4, 3 * self.screen_height / 4)
-            self.canvas.itemconfig(self.left_red, fill='red', start=120, outline='', extent=15)
-            self.left_yellow = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
-                                                      3 * self.screen_width / 4, 3 * self.screen_height / 4)
-            self.canvas.itemconfig(self.left_yellow, fill='yellow', start=95, outline='', extent=25)
-            self.green = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
-                                                3 * self.screen_width / 4, 3 * self.screen_height / 4)
-            self.canvas.itemconfig(self.green, fill='green', start=85, outline='', extent=10)
-            self.right_yellow = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
-                                                3 * self.screen_width / 4, 3 * self.screen_height / 4)
-            self.canvas.itemconfig(self.right_yellow, fill='yellow', start=startValue, outline='', extent=extentValue-50)
+            self.canvas.itemconfig(self.left_red, start=120, extent=15)
+            self.canvas.itemconfig(self.left_yellow, start=95, extent=25)
+            self.canvas.itemconfig(self.green, start=85, extent=10)
+            self.canvas.itemconfig(self.right_yellow, start=startValue, extent=extentValue-50)
         elif startValue > 45:
-            self.left_red = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
-                                                   3 * self.screen_width / 4, 3 * self.screen_height / 4)
-            self.canvas.itemconfig(self.left_red, fill='red', start=120, outline='', extent=15)
-            self.left_yellow = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
-                                                      3 * self.screen_width / 4, 3 * self.screen_height / 4)
-            self.canvas.itemconfig(self.left_yellow, fill='yellow', start=95, outline='', extent=25)
-            self.green = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
-                                                3 * self.screen_width / 4, 3 * self.screen_height / 4)
-            self.canvas.itemconfig(self.green, fill='green', start=85, outline='', extent=10)
-            self.right_yellow = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
-                                                       3 * self.screen_width / 4, 3 * self.screen_height / 4)
-            self.canvas.itemconfig(self.right_yellow, fill='yellow', start=60, outline='',
-                                   extent=25)
-            self.right_red = self.canvas.create_arc(self.screen_width / 4, self.screen_height / 4,
-                                                3 * self.screen_width / 4, 3 * self.screen_height / 4)
-            self.canvas.itemconfig(self.right_red, fill='red', start=startValue, outline='', extent=extentValue-75)
+            self.canvas.itemconfig(self.left_red, start=120, extent=15)
+            self.canvas.itemconfig(self.left_yellow, start=95, extent=25)
+            self.canvas.itemconfig(self.green, start=85, extent=10)
+            self.canvas.itemconfig(self.right_yellow, start=60, extent=25)
+            self.canvas.itemconfig(self.right_red, start=startValue, extent=extentValue-75)
 
     def display_default_gui(self):
-        pitch_arc = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
-        self.canvas.itemconfig(pitch_arc, fill="lightgrey", style=PIESLICE, stipple="gray25", start=45, outline='')
+        left_red_bg = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
+        self.canvas.itemconfig(left_red_bg, start=120, width=5, fill="#ffbfbf", extent=15, outline='')
 
-        left_red_arc = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
-        self.canvas.itemconfig(left_red_arc, start=120, width=5, fill="#ffbfbf", extent=15, outline='')
+        left_yellow_bg = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
+        self.canvas.itemconfig(left_yellow_bg,  start=95, width=5, fill="#fffeb0", extent=25, outline='')
 
-        left_yellow_arc = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
-        self.canvas.itemconfig(left_yellow_arc,  start=95, width=5, fill="#fffeb0", extent=25, outline='')
+        green_bg = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
+        self.canvas.itemconfig(green_bg, start=85, width=5, fill="#ccffbf", extent=10, outline='')
 
-        green_arc = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
-        self.canvas.itemconfig(green_arc, start=85, width=5, fill="#ccffbf", extent=10, outline='')
+        right_yellow_bg = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
+        self.canvas.itemconfig(right_yellow_bg, start=60, width=5, fill="#fffeb0", extent=25, outline='')
 
-        right_yellow_arc = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
-        self.canvas.itemconfig(right_yellow_arc, start=60, width=5, fill="#fffeb0", extent=25, outline='')
+        right_red_bg = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4, 3*self.screen_height/4)
+        self.canvas.itemconfig(right_red_bg, start=45, width=5, fill="#ffbfbf", extent=15, outline='')
 
-        right_red_arc = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4, 3*self.screen_height/4)
-        self.canvas.itemconfig(right_red_arc, start=45, width=5, fill="#ffbfbf", extent=15, outline='')
+        self.left_red = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
+        self.left_yellow = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
+        self.green = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
+        self.right_yellow = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
+        self.right_red = self.canvas.create_arc(self.screen_width/4, self.screen_height/4, 3*self.screen_width/4,3*self.screen_height/4)
+        self.canvas.itemconfig(self.left_red, fill='red', start=0, outline='', extent=0)
+        self.canvas.itemconfig(self.left_yellow, fill='yellow', start=0, outline='', extent=0)
+        self.canvas.itemconfig(self.green, fill='green', start=0, outline='', extent=0)
+        self.canvas.itemconfig(self.right_yellow, fill='yellow', start=0, outline='', extent=0)
+        self.canvas.itemconfig(self.right_red, fill='red', start=0, outline='', extent=0)
 
     def update_pitch(self, value): # event as parameter
         self._pitchValue = value
