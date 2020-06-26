@@ -11,65 +11,13 @@ from matplotlib.figure import Figure
 from pitchDisplay import *
 from FeedbackSystem import *
 
-#constants, will move to appriate constants file.
+#background color constant, used by pretty much all of these classes.
 background_color = "#575759"
 
-#not sure what this number will mean, but we should be able to filter how loud of noises we account for.
+#stand-in variable for noise-filter level, when we come up with some sort of filter, then can initialize real variable like the threshold variable in main of master.py 
 noise_filter_level = 20
 
-#store a list of session objects
-session_history_list = []
 
-
-#open the tuner settings window
-#wrapper functions to create settings windows
-
-def tuner_settings(self, master, obj):
-    settingsWindow = tuner_settings_window(master, obj)
-
-def update_pitch_settings(newPitch, newFilterLevel, oldSettingsView, obj):
-    obj.update_threshold(newPitch)
-    noise_filter_level = newFilterLevel
-    oldSettingsView.destroy()
-    
-def new_practice_session(master, mainWindow, obj):
-    newPracticeSessionWindow = new_session_window(master, mainWindow, obj)
-
-
-def load_practice_session(master, mainWindow,obj):
-    loadPracticeSessionWindow = load_session_window(master, mainWindow, obj)
-
-def end_practice_session(master, mainWindow, obj):
-    end_session_window(master, mainWindow, obj)
-
-def change_layout():
-    print("this will change the layout")
-    
-def user_settings():
-    print("function to display menu to change user settings")
-
-def load_faq():
-    print("function to load app faq")
-
-def load_tutorial():
-    print("function to load a tutorial for how to use the app")      
-
-#additional functions
-
-def creating_a_new_session(mainWindow,oldWindow, newName, obj):
-    oldWindow.destroy()
-    mySession = practice_session(newName)
-    mainWindow.practiceSessionList.append(mySession)
-    mainWindow.practiceSessionNameList.append(mySession._name)
-    mainWindow.practiceSession = mySession
-    obj._practice_session = mySession
-    print(mySession._name)
-
-def reset_practice_session(mainWindow, newPracticeSession, obj):
-    for practiceSession in mainWindow.practiceSessionList:
-        if practiceSession._name == newPracticeSession:
-            mainWindow.practiceSession = practiceSession
-            obj._practice_session = practiceSession
 
 #class to create practice session objects. Will hold all the data for each practice session
 class practice_session:
@@ -246,6 +194,14 @@ class session_diagnostics:
 
 #settings window to create a new session
 class new_session_window(tk.Toplevel):
+    def creating_a_new_session(self, mainWindow,oldWindow, newName, obj):
+        oldWindow.destroy()
+        mySession = practice_session(newName)
+        mainWindow.practiceSessionList.append(mySession)
+        mainWindow.practiceSessionNameList.append(mySession._name)
+        mainWindow.practiceSession = mySession
+        obj._practice_session = mySession
+    print(mySession._name)
     def __init__(self, master, mainWindow, obj):
         self.master = master
         new_sesh_window = tk.Toplevel(master)
@@ -276,7 +232,7 @@ class new_session_window(tk.Toplevel):
         textEntry = tk.Entry(middleFrame)
         textEntry.insert(tk.END, "new-session-1")
         textEntry.pack()
-        enterEntry = tk.Button(rightFrame, text = "Enter", command = lambda: creating_a_new_session(mainWindow,new_sesh_window,textEntry.get(), obj))
+        enterEntry = tk.Button(rightFrame, text = "Enter", command = lambda: self.creating_a_new_session(mainWindow,new_sesh_window,textEntry.get(), obj))
         enterEntry.pack()
 
         new_sesh_window.lift(master)
@@ -284,7 +240,12 @@ class new_session_window(tk.Toplevel):
 #settings window to load new session
 class load_session_window(tk.Toplevel):
     def call_function(self, value):
-        reset_practice_session(self.mainWindow, value, self.obj)
+        self.reset_practice_session(self.mainWindow, value, self.obj)
+    def reset_practice_session(self, mainWindow, newPracticeSession, obj):
+        for practiceSession in mainWindow.practiceSessionList:
+            if practiceSession._name == newPracticeSession:
+                mainWindow.practiceSession = practiceSession
+                obj._practice_session = practiceSession    
     def __init__(self, master, mainWindow, obj):
         self.obj = obj
         self.mainWindow = mainWindow
@@ -353,6 +314,10 @@ class end_session_window(tk.Toplevel):
 
 #tuner settings window
 class tuner_settings_window(tk.Toplevel):
+    def update_pitch_settings(self, newPitch, newFilterLevel, oldSettingsView, obj):
+        obj.update_threshold(newPitch)
+        noise_filter_level = newFilterLevel
+        oldSettingsView.destroy()
     def __init__(self, master, obj):
         self.master = master
         tuner_settings_window = tk.Toplevel(master)
@@ -417,7 +382,7 @@ class tuner_settings_window(tk.Toplevel):
         inCents.config(bg = background_color, fg = "white")
         inCents.pack()
         
-        doneButton = ttk.Button(bottomestFrame, text = "Apply", command = lambda: update_pitch_settings(pitch_sensitivity_scale.get(), outside_noise_scale.get(),tuner_settings_window, obj))
+        doneButton = ttk.Button(bottomestFrame, text = "Apply", command = lambda: update_pitch_settings(self, pitch_sensitivity_scale.get(), outside_noise_scale.get(),tuner_settings_window, obj))
         doneButton.pack()
 
         tuner_settings_window.lift(master)
@@ -456,8 +421,25 @@ class main_window(tk.Frame):
         save_window(self, self.master, obj)
     def remove_practice_session(self, obj):
         remove_window(self, self.master,obj)
+    def tuner_settings(self, obj):
+        settingsWindow = tuner_settings_window(self.master, obj)
+    def change_layout(self):
+        print("this will change the layout")
+    def user_settings(self):
+        print("function to display menu to change user settings")
+    def load_faq(self):
+        print("function to load app faq")
+    def load_tutorial(self):
+        print("function to load a tutorial for how to use the app")   
+    def new_practice_session(self, obj):
+        newPracticeSessionWindow = new_session_window(self.master, self, obj)
+    def load_practice_session(self, obj):
+        loadPracticeSessionWindow = load_session_window(self.master, self, obj)
+    def end_practice_session(self, obj):
+        end_session_window(self.master, self, obj)   
+    
     def create_menubar(self, master, obj):
-        menubar = tk.Menu(master)
+        menubar = tk.Menu(master)    
 
         master.config(menu=menubar)
 
@@ -465,11 +447,11 @@ class main_window(tk.Frame):
 
         #file menubar
         menubar.add_cascade(label="File", menu=file_menu)
-        file_menu.add_command(label="New Practice Session", command = lambda: new_practice_session(master,self, obj))
+        file_menu.add_command(label="New Practice Session", command = lambda: new_practice_session(obj))
         file_menu.add_separator
-        file_menu.add_command(label="End Practice Session", command = lambda: end_practice_session(master, self, obj))
+        file_menu.add_command(label="End Practice Session", command = lambda: end_practice_session(obj))
         file_menu.add_separator
-        file_menu.add_command(label="Load Practice Session", command = lambda: load_practice_session(master, self, obj))
+        file_menu.add_command(label="Load Practice Session", command = lambda: load_practice_session(obj))
         file_menu.add_separator
         file_menu.add_command(label = "Save Practice Session", command = lambda: self.save_practice_session(obj))
         file_menu.add_separator
@@ -480,7 +462,7 @@ class main_window(tk.Frame):
         #settings menubar
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
-        settings_menu.add_command(label="Tuner Settings", command = lambda: tuner_settings(self, master, obj))
+        settings_menu.add_command(label="Tuner Settings", command = lambda: self.tuner_settings( master, obj))
         settings_menu.add_separator
         settings_menu.add_command(label="User Settings", command = user_settings)
         settings_menu.add_separator
