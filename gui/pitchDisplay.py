@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter.font import Font
 from math import sin, cos, radians
 import sys
 sys.path.insert(1, '../python_bridge')
@@ -8,7 +9,6 @@ from pitch_utilities import *
 
 class PitchDisplay:
     def __init__(self, grandparent, master, manager, pitch=None, hertz=None, cents=None):
-        print("constructor for PitchDisplay has been called")
         self.grandparent = grandparent
         self.master = master
         self.audio_manager = manager
@@ -17,12 +17,12 @@ class PitchDisplay:
         self.green = None
         self.left_red = None
         self.left_yellow = None
+        self.font = Font(size=20)
+        self.pitchOffset = self.font.metrics('linespace')/2
         if not pitch:
-            self._pitchValue = 'C' # default display
-            self.current_pitch_display = 'C'
+            self._pitchValue = '---' # default display
         else:
             self._pitchValue = pitch
-            self.current_pitch_display = 'C'
 
         if not hertz:
             self._hertzValue = 261.625565 # middle C - hardcodedstr(event.char)
@@ -46,6 +46,8 @@ class PitchDisplay:
         self.canvas = Canvas(master, width=self.screen_width, height=self.screen_height)
         self.canvas.pack()
 
+        self.current_pitch_display = self.canvas.create_text(self.screen_width/2, self.screen_height/2 + self.pitchOffset, font=self.font, text='---')
+
         self.display_default_gui()
         self.display_current_gui()
 
@@ -61,8 +63,7 @@ class PitchDisplay:
         startValue = offset + 45
         extentValue = 90 - offset
 
-        self.canvas.delete(self.current_pitch_display)
-        self.current_pitch_display = self.canvas.create_text(self.screen_width/2, self.screen_height/2, text=self._pitchValue)
+        self.canvas.itemconfig(self.current_pitch_display, text=self._pitchValue)
 
         if startValue > 120:
             self.left_red = self.canvas.create_arc(self.screen_width/4,self.screen_height/4, 3*self.screen_width/4, 3*self.screen_height/4)
