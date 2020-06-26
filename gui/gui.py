@@ -32,15 +32,15 @@ def update_pitch_settings(newPitch, newFilterLevel, oldSettingsView, obj):
     noise_filter_level = newFilterLevel
     oldSettingsView.destroy()
     
-def new_practice_session(master):
-    newPracticeSessionWindow = new_session_window(master)
+def new_practice_session(master, mainWindow):
+    newPracticeSessionWindow = new_session_window(master, mainWindow)
 
 
-def load_practice_session(master):
-    loadPracticeSessionWindow = load_session_window(master) 
+def load_practice_session(master, mainWindow):
+    loadPracticeSessionWindow = load_session_window(master, mainWindow)
 
-def end_practice_session(master):
-    end_session_window(master)
+def end_practice_session(master, mainWindow):
+    end_session_window(master, mainWindow)
 
 def change_layout():
     print("this will change the layout")
@@ -56,14 +56,20 @@ def load_tutorial():
 
 #additional functions
 
-def creating_a_new_session(oldWindow, newName):
+def creating_a_new_session(mainWindow,oldWindow, newName):
     oldWindow.destroy()
-    mySession = new_practice_session(newName)
-    reset_practice_session(mySession)
+    mySession = practice_session(newName)
+    mainWindow.practiceSessionList.append(mySession)
+    mainWindow.practiceSessionNameList.append(mySession._name)
+    mainWindow.practiceSession = mySession
 
-def reset_practice_session(newPracticeSession):
-    print("will set up the selected practice session in the bottom and left frames.")
-
+def reset_practice_session(mainWindow, newPracticeSession):
+    print(newPracticeSession)
+    print("here at least")
+    for practiceSession in mainWindow.practiceSessionList:
+        if practiceSession._name == newPracticeSession:
+            mainWindow.practiceSession = practiceSession
+            print("we made it")
 
 #class to create practice session objects. Will hold all the data for each practice session
 class practice_session:
@@ -72,6 +78,8 @@ class practice_session:
         self._noteHistory = []
         #pitches can hold a int value of how off the cents are for the note in noteHistory of the same index.
         self._notePitches = []
+        self._scoreList = []
+        self._scoreIndex = []
         self._name = name
         self._date = date.today()
 
@@ -134,6 +142,9 @@ class session_history:
         canvas.image = pianoImage
 
 class more_info_window(tk.Toplevel):
+    def refresh(self, window, master, obj):
+        window.destroy()
+        more_info_window(master, obj)
     def __init__(self, master, obj):
         self.master = master
         myWindow = tk.Toplevel(master)
@@ -154,14 +165,35 @@ class more_info_window(tk.Toplevel):
             finalString += "\nno input yet"
         myLabel = Label(myWindow, text = finalString, bg = background_color, fg = "white")
         myLabel.pack()
+        exitButton = Button(myWindow, text = "Exit", command = lambda : myWindow.destroy())
+        exitButton.pack()
+        refreshButton = Button(myWindow, text = "Refresh", command = lambda : self.refresh(myWindow, master, obj))
+        refreshButton.pack()
         myWindow.lift(master)
 
 class session_diagnostics:
     def more_info_window_caller(self,master, obj):
         myMoreInfoWindow = more_info_window(master, obj)
+    def update_plot(self, new_score, master):
+        if master.practiceSession is not None:
+            print("valid session")
+            master.practiceSession._scoreList.append(new_score)
+            if len(master.practiceSession._scoreList) > 10:
+                master.practiceSession._scoreList.pop(0)
+            else:
+                master.practiceSession._scoreIndex.append(len(master.practiceSession._scoreIndex))
+            self.a.clear()
+            self.a.set_xlim([0,10])
+            self.a.set_ylim([0,100])
+            self.a.set_autoscale_on(FALSE)
+            self.a.set_title("Score over Time")
+            self.a.plot( master.practiceSession._scoreIndex, master.practiceSession._scoreList, color = "blue")
+            self.canvas.draw()
     def __init__(self, workingFrame, obj, master):
         #testLabel = tk.Label(workingFrame, text = "testing", bg = background_color, fg = "white")
         #testLabel.pack()
+        self.scoreList = []
+        self.scoreIndex = []
         topestFrame = tk.Frame(workingFrame, bd = 5, bg = background_color)
         topFrame = tk.Frame(workingFrame, bd = 5, bg = background_color)
         rightFrame = tk.Frame(workingFrame, bd = 5, bg = background_color)
@@ -190,27 +222,27 @@ class session_diagnostics:
         self.overallScoreLabel.pack()
         moreInfoButton = Button(middleFrame,text = "More info", command = lambda : self.more_info_window_caller(master, obj))
         moreInfoButton.pack()
-        Oder = np.array([1,2,3,4,5])
-        Score = np.array([100, 95, 93, 94, 96])
-
-        fig = Figure(figsize=(3,3))
-        a = fig.add_subplot(111)
-        a.plot(Oder,Score,color='blue')
+        defaultX = [0]
+        defaultY = [0]
+        self.fig = Figure(figsize=(3,3))
+        self.a = self.fig.add_subplot(111)
+        self.a.plot(defaultX,defaultY,color='blue')
         #not sure whether or not we want it to have the same axis the whole time
-        #a.set_ylim([0,100])
+        self.a.set_ylim([0,100])
+        self.a.set_xlim([0,10])
+        self.a.set_title ("Score over time", fontsize=16)
+        self.a.set_ylabel("Score", fontsize=14)
+        self.a.set_autoscale_on(FALSE)
 
-        a.set_title ("Score over time", fontsize=16)
-        a.set_ylabel("Score", fontsize=14)
-
-        canvas = FigureCanvasTkAgg(fig, master=rightFrame)
-        canvas.get_tk_widget().configure(relief = tk.RIDGE, bd = 5)
-        canvas.get_tk_widget().pack()
-        canvas.draw()
+        self.canvas = FigureCanvasTkAgg(self.fig, master=rightFrame)
+        self.canvas.get_tk_widget().configure(relief = tk.RIDGE, bd = 5)
+        self.canvas.get_tk_widget().pack()
+        self.canvas.draw()
 
 
 #settings window to create a new session
 class new_session_window(tk.Toplevel):
-    def __init__(self, master):
+    def __init__(self, master, mainWindow):
         self.master = master
         new_sesh_window = tk.Toplevel(master)
         new_sesh_window.geometry("500x100")
@@ -240,14 +272,17 @@ class new_session_window(tk.Toplevel):
         textEntry = tk.Entry(middleFrame)
         textEntry.insert(tk.END, "new-session-1")
         textEntry.pack()
-        enterEntry = tk.Button(rightFrame, text = "Enter", command = lambda: creating_a_new_session(new_sesh_window,textEntry.get()))
+        enterEntry = tk.Button(rightFrame, text = "Enter", command = lambda: creating_a_new_session(mainWindow,new_sesh_window,textEntry.get()))
         enterEntry.pack()
 
         new_sesh_window.lift(master)
 
 #settings window to load new session
 class load_session_window(tk.Toplevel):
-    def __init__(self, master):
+    def call_function(self, value):
+        reset_practice_session(self.mainWindow, value)
+    def __init__(self, master, mainWindow):
+        self.mainWindow = mainWindow
         self.master = master
 
         load_window = tk.Toplevel(master)
@@ -271,24 +306,30 @@ class load_session_window(tk.Toplevel):
 
         createSessionLabel = tk.Label(topFrame,text = "Load Previous Session", bg = background_color, fg = "white")
         createSessionLabel.pack()
-        if len(session_history_list) > 0:
+        if len(mainWindow.practiceSessionList) > 0:
             selectSessionLabel = tk.Label(leftFrame, text = "Select a session to load", bg = background_color, fg = "white")
             selectSessionLabel.pack()
-            firstSession = session_history[0]
-            loadSessionDropDown = tk.OptionMenu(middleFrame, firstSession, session_history)
+            firstSession = StringVar(master)
+            firstSession.set(mainWindow.practiceSessionNameList[0])
+            print("hello")
+            loadSessionDropDown = tk.OptionMenu(middleFrame, firstSession, *mainWindow.practiceSessionNameList, command = self.call_function)
             loadSessionDropDown.pack()
-            acceptButton = tk.Button(text = "Select", command = lambda: reset_practice_session(loadSessionDropDown.get()))
-            acceptButton.pack()
+            #acceptButton = tk.Button(middleFrame, text = "Select", command = lambda: reset_practice_session(loadSessionDropDown.get(), mainWindow))
+            #acceptButton.pack()
         else:
-            standInLabel = tk.Label(middleFrame, text = "No sessions to choose from.", fg = "white", bg = background_color)    
+            standInLabel = tk.Label(middleFrame, text = "No sessions to choose from.", fg = "white", bg = background_color)
             standInLabel.pack()
 
         load_window.lift(master)
 
 #settings window to end current session
 class end_session_window(tk.Toplevel):
-    def __init__(self, master):
+    def __init__(self, master, mainWindow):
         self.master = master
+        mainWindow.practiceSession = None
+        mainWindow.myDiagnosticObject.a.clear()
+        mainWindow.myDiagnosticObject.a.set_title("Score Over Time")
+        mainWindow.myDiagnosticObject.canvas.draw()
         self.end_sesh_window = tk.Toplevel(master)
         self.end_sesh_window.configure(bg = background_color)
         self.end_sesh_window.geometry("200x100")
@@ -349,7 +390,7 @@ class tuner_settings_window(tk.Toplevel):
         centsitivity.config(bg = background_color, fg= "white")
         centsitivity.pack()
 
-        pitch_sensitivity_scale = tk.Scale(middleFrame1, from_= 0, to_ = 40, orient = tk.HORIZONTAL)
+        pitch_sensitivity_scale = tk.Scale(middleFrame1, from_= 0, to_ = 50, orient = tk.HORIZONTAL)
         pitch_sensitivity_scale.config(bg = background_color, fg = "white")
         pitch_sensitivity_scale.pack()
 
@@ -378,6 +419,10 @@ class tuner_settings_window(tk.Toplevel):
 class main_window(tk.Frame):
 
     def __init__(self, master, manager, obj):
+        self.practiceSessionList = []
+        self.practiceSessionNameList = []
+        self.practiceSession = None
+        self.isPaused = False
         tk.Frame.__init__(self, master)
         self.master = master
         self.audio_manager = manager
@@ -403,11 +448,11 @@ class main_window(tk.Frame):
 
         #file menubar
         menubar.add_cascade(label="File", menu=file_menu)
-        file_menu.add_command(label="New Practice Session", command = lambda: new_practice_session(master))
+        file_menu.add_command(label="New Practice Session", command = lambda: new_practice_session(master,self))
         file_menu.add_separator
-        file_menu.add_command(label="End Practice Session", command = lambda: end_practice_session(master))
+        file_menu.add_command(label="End Practice Session", command = lambda: end_practice_session(master, self))
         file_menu.add_separator
-        file_menu.add_command(label="Load Practice Session", command = lambda: load_practice_session(master))
+        file_menu.add_command(label="Load Practice Session", command = lambda: load_practice_session(master, self))
         file_menu.add_separator
         file_menu.add_command(label="Exit", command = master.quit)
 
