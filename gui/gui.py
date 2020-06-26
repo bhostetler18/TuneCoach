@@ -32,15 +32,15 @@ def update_pitch_settings(newPitch, newFilterLevel, oldSettingsView, obj):
     noise_filter_level = newFilterLevel
     oldSettingsView.destroy()
     
-def new_practice_session(master, mainWindow):
-    newPracticeSessionWindow = new_session_window(master, mainWindow)
+def new_practice_session(master, mainWindow, obj):
+    newPracticeSessionWindow = new_session_window(master, mainWindow, obj)
 
 
-def load_practice_session(master, mainWindow):
-    loadPracticeSessionWindow = load_session_window(master, mainWindow)
+def load_practice_session(master, mainWindow,obj):
+    loadPracticeSessionWindow = load_session_window(master, mainWindow, obj)
 
-def end_practice_session(master, mainWindow):
-    end_session_window(master, mainWindow)
+def end_practice_session(master, mainWindow, obj):
+    end_session_window(master, mainWindow, obj)
 
 def change_layout():
     print("this will change the layout")
@@ -56,20 +56,20 @@ def load_tutorial():
 
 #additional functions
 
-def creating_a_new_session(mainWindow,oldWindow, newName):
+def creating_a_new_session(mainWindow,oldWindow, newName, obj):
     oldWindow.destroy()
     mySession = practice_session(newName)
     mainWindow.practiceSessionList.append(mySession)
     mainWindow.practiceSessionNameList.append(mySession._name)
     mainWindow.practiceSession = mySession
+    obj._practice_session = mySession
+    print(mySession._name)
 
-def reset_practice_session(mainWindow, newPracticeSession):
-    print(newPracticeSession)
-    print("here at least")
+def reset_practice_session(mainWindow, newPracticeSession, obj):
     for practiceSession in mainWindow.practiceSessionList:
         if practiceSession._name == newPracticeSession:
             mainWindow.practiceSession = practiceSession
-            print("we made it")
+            obj._practice_session = practiceSession
 
 #class to create practice session objects. Will hold all the data for each practice session
 class practice_session:
@@ -82,7 +82,11 @@ class practice_session:
         self._scoreIndex = []
         self._name = name
         self._date = date.today()
-
+        self._pitch_count = [0,0,0,0,0,0,0,0,0,0,0,0]
+        self._pitch_class = [0,0,0,0,0,0,0,0,0,0,0,0]
+        self._overall = 0
+        self._total_count = 0
+        self._cents = 0
         #see about adding raw data
 
 #dfferent classes for pop-up windows.
@@ -149,13 +153,15 @@ class more_info_window(tk.Toplevel):
         self.master = master
         myWindow = tk.Toplevel(master)
         finalString = ""
-        if obj._overall_count > 0:
-            avg_cents= obj._cents / obj._overall_count
+        if obj._practice_session is None:
+            finalString += "\n No Input Yet"
+        elif obj._practice_session._total_count > 0:
+            avg_cents= obj._practice_session._cents / obj._practice_session._total_count
             for i in range(12):
-                if obj._pitch_count[i] == 0:
+                if obj._practice_session._pitch_count[i] == 0:
                     finalString += ("\n" + obj._notes[i] + " was not played/sung in the session.")
                 else:
-                    pitch_error = (100.0*obj._pitch_class[i]) / obj._pitch_count[i]
+                    pitch_error = (100.0*obj._practice_session._pitch_class[i]) / obj._practice_session._pitch_count[i]
                     finalString += ("\n%s was in tune for %.2f %% of the time." % (obj._notes[i], pitch_error))
             finalString += "\n"
             finalString += "\nOverall"
@@ -176,7 +182,6 @@ class session_diagnostics:
         myMoreInfoWindow = more_info_window(master, obj)
     def update_plot(self, new_score, master):
         if master.practiceSession is not None:
-            print("valid session")
             master.practiceSession._scoreList.append(new_score)
             if len(master.practiceSession._scoreList) > 10:
                 master.practiceSession._scoreList.pop(0)
@@ -186,14 +191,13 @@ class session_diagnostics:
             self.a.set_xlim([0,10])
             self.a.set_ylim([0,100])
             self.a.set_autoscale_on(FALSE)
-            self.a.set_title("Score over Time")
+            self.a.set_title("Score Over Time")
+            self.a.set_ylabel("Score")
             self.a.plot( master.practiceSession._scoreIndex, master.practiceSession._scoreList, color = "blue")
             self.canvas.draw()
     def __init__(self, workingFrame, obj, master):
         #testLabel = tk.Label(workingFrame, text = "testing", bg = background_color, fg = "white")
         #testLabel.pack()
-        self.scoreList = []
-        self.scoreIndex = []
         topestFrame = tk.Frame(workingFrame, bd = 5, bg = background_color)
         topFrame = tk.Frame(workingFrame, bd = 5, bg = background_color)
         rightFrame = tk.Frame(workingFrame, bd = 5, bg = background_color)
@@ -230,7 +234,7 @@ class session_diagnostics:
         #not sure whether or not we want it to have the same axis the whole time
         self.a.set_ylim([0,100])
         self.a.set_xlim([0,10])
-        self.a.set_title ("Score over time", fontsize=16)
+        self.a.set_title ("Score Over Time", fontsize=16)
         self.a.set_ylabel("Score", fontsize=14)
         self.a.set_autoscale_on(FALSE)
 
@@ -242,7 +246,7 @@ class session_diagnostics:
 
 #settings window to create a new session
 class new_session_window(tk.Toplevel):
-    def __init__(self, master, mainWindow):
+    def __init__(self, master, mainWindow, obj):
         self.master = master
         new_sesh_window = tk.Toplevel(master)
         new_sesh_window.geometry("500x100")
@@ -272,7 +276,7 @@ class new_session_window(tk.Toplevel):
         textEntry = tk.Entry(middleFrame)
         textEntry.insert(tk.END, "new-session-1")
         textEntry.pack()
-        enterEntry = tk.Button(rightFrame, text = "Enter", command = lambda: creating_a_new_session(mainWindow,new_sesh_window,textEntry.get()))
+        enterEntry = tk.Button(rightFrame, text = "Enter", command = lambda: creating_a_new_session(mainWindow,new_sesh_window,textEntry.get(), obj))
         enterEntry.pack()
 
         new_sesh_window.lift(master)
@@ -280,8 +284,9 @@ class new_session_window(tk.Toplevel):
 #settings window to load new session
 class load_session_window(tk.Toplevel):
     def call_function(self, value):
-        reset_practice_session(self.mainWindow, value)
-    def __init__(self, master, mainWindow):
+        reset_practice_session(self.mainWindow, value, self.obj)
+    def __init__(self, master, mainWindow, obj):
+        self.obj = obj
         self.mainWindow = mainWindow
         self.master = master
 
@@ -324,11 +329,13 @@ class load_session_window(tk.Toplevel):
 
 #settings window to end current session
 class end_session_window(tk.Toplevel):
-    def __init__(self, master, mainWindow):
+    def __init__(self, master, mainWindow, obj):
         self.master = master
         mainWindow.practiceSession = None
+        obj._practice_session = None
         mainWindow.myDiagnosticObject.a.clear()
         mainWindow.myDiagnosticObject.a.set_title("Score Over Time")
+        mainWindow.myDiagnosticObject.a.set_ylabel("Score")
         mainWindow.myDiagnosticObject.canvas.draw()
         self.end_sesh_window = tk.Toplevel(master)
         self.end_sesh_window.configure(bg = background_color)
@@ -415,6 +422,14 @@ class tuner_settings_window(tk.Toplevel):
 
         tuner_settings_window.lift(master)
 
+class save_window(tk.Toplevel):
+    def __init__(self, mainWindow, root, obj):
+        print("will create the save window")
+
+class remove_window(tk.Toplevel):
+    def __init__(self, mainWindow, root, obj):
+        print("will create the remove window")
+
 #main gui
 class main_window(tk.Frame):
 
@@ -425,12 +440,11 @@ class main_window(tk.Frame):
         self.isPaused = False
         tk.Frame.__init__(self, master)
         self.master = master
+
         self.audio_manager = manager
         screen_width = master.winfo_screenwidth()
         screen_height = master.winfo_screenheight()
 
-        
-        
         master.title("TuneCoach")
         master.geometry(f'{screen_width}x{screen_height}')
     
@@ -438,7 +452,10 @@ class main_window(tk.Frame):
         self.layout_frames(self.master, screen_width, screen_height, obj)
 
     #adding menu options to the top of the screen.
-    
+    def save_practice_session(self, obj):
+        save_window(self, self.master, obj)
+    def remove_practice_session(self, obj):
+        remove_window(self, self.master,obj)
     def create_menubar(self, master, obj):
         menubar = tk.Menu(master)
 
@@ -448,11 +465,15 @@ class main_window(tk.Frame):
 
         #file menubar
         menubar.add_cascade(label="File", menu=file_menu)
-        file_menu.add_command(label="New Practice Session", command = lambda: new_practice_session(master,self))
+        file_menu.add_command(label="New Practice Session", command = lambda: new_practice_session(master,self, obj))
         file_menu.add_separator
-        file_menu.add_command(label="End Practice Session", command = lambda: end_practice_session(master, self))
+        file_menu.add_command(label="End Practice Session", command = lambda: end_practice_session(master, self, obj))
         file_menu.add_separator
-        file_menu.add_command(label="Load Practice Session", command = lambda: load_practice_session(master, self))
+        file_menu.add_command(label="Load Practice Session", command = lambda: load_practice_session(master, self, obj))
+        file_menu.add_separator
+        file_menu.add_command(label = "Save Practice Session", command = lambda: self.save_practice_session(obj))
+        file_menu.add_separator
+        file_menu.add_command(label = "Remove Practice Session", command = lambda : self.remove_practice_session(obj))
         file_menu.add_separator
         file_menu.add_command(label="Exit", command = master.quit)
 

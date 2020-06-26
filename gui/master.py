@@ -44,6 +44,7 @@ def main():
         if not mainWindow.isPaused:
             mainWindow.myDiagnosticObject.overallScoreLabel.config(text="Overall Score: %.2f" % data.get_overall())
             mainWindow.myDiagnosticObject.update_plot(int(data.get_overall()), mainWindow)
+            print(data.get_overall())
         root.after(500, lambda: score_update(mainWindow, data))
     threshold = 15
     data = FeedbackSystem(threshold)
