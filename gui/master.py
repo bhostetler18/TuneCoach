@@ -40,8 +40,9 @@ def kill_pressed(event, audio_manager, data, start):
     audio_manager.destroy()
 
 def cleanup(root, audio_manager):
-	audio_manager.destroy()
-	root.destroy()
+    audio_manager.destroy()
+    root.destroy()
+
 
 def main():
     def score_update(mainWindow, data):
@@ -50,6 +51,11 @@ def main():
             mainWindow.myDiagnosticObject.update_plot(int(data.get_overall()), mainWindow)
             print(data.get_overall())
         root.after(500, lambda: score_update(mainWindow, data))
+
+    def piano_update(mainWindow, data):
+        mainWindow.myHistoryObject.update(data)
+        root.after(20, lambda: piano_update(mainWindow, data))
+
     threshold = 15
     data = FeedbackSystem(threshold)
     start = time.time()
@@ -63,6 +69,7 @@ def main():
     root.bind('q', lambda event, arg=manager: kill_pressed(event, arg, data, start))
     root.wm_protocol("WM_DELETE_WINDOW", lambda r=root, m=manager: cleanup(r, m))
     score_update(ourWindow, data)
+    piano_update(ourWindow, data)
     root.mainloop()
 
 if __name__ == "__main__":

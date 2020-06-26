@@ -15,6 +15,7 @@ class FeedbackSystem:
         self._practice_session = None
         self._threshold = cent_range
         self._recent_notes = collections.deque([])
+        self.display_buffer = collections.deque([])
 
     def get_overall(self):
         if self._practice_session is None:
@@ -57,12 +58,17 @@ class FeedbackSystem:
             self._practice_session._total_count += 1
             self._practice_session._pitch_count[index] += 1
             self._practice_session._cents += abs(cent)
+
+        self.display_buffer.append((name, cent))
+        if len(self.display_buffer) > 64:
+            self.display_buffer.popleft()
+
         # Only inserts a note if it's different than the last
         if len(self._recent_notes) == 0 or name != self._recent_notes[-1]:
             self._recent_notes.append(name)
 
         # If deque is full, pop
-        if len(self._recent_notes) >= 8:
+        if len(self._recent_notes) > 8:
             self._recent_notes.popleft()
 
     def display_all_data(self):

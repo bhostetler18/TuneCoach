@@ -47,15 +47,17 @@ class session_history:
         return canvasName.create_oval(x0, y0, x1, y1, fill = fillColor)
     
     def __init__(self, workingFrame, width, height):
-        canvas = tk.Canvas(workingFrame,width = width/2, height = height/4, relief = tk.RIDGE, bd = 5, bg = "#bdd0df")
-        canvas.pack(side = tk.LEFT, padx = width/4)
+        self.canvas = tk.Canvas(workingFrame,width = width/2, height = height/4, relief = tk.RIDGE, bd = 5, bg = "#bdd0df")
+        self.canvas.pack(side = tk.LEFT, padx = width/4)
         largeImage = PIL.Image.open("piano.jpeg")
         largeImage = largeImage.resize((int(width/10),int(height/3.9)), PIL.Image.ANTIALIAS)
         pianoImage = PIL.ImageTk.PhotoImage(largeImage)
+        self.width = width
+        self.height = height
 
-        canvas.create_image(0, 0, anchor = tk.NW, image = pianoImage)
+        self.canvas.create_image(0, 0, anchor = tk.NW, image = pianoImage)
         
-        noteDict = {
+        self.noteDict = {
             "C" : height/3.9/15,
             "C#" : height/3.9/15*2.1,
             "D" : height/3.9/15*3.2,
@@ -70,28 +72,29 @@ class session_history:
             "B" : height/3.9/15*14
 
         }
-        canvas.create_line(width/10, noteDict["C"], width/2, noteDict["C"], width = 3)
-        canvas.create_line(width/10, noteDict["C#"], width/2, noteDict["C#"], width = 3)
-        canvas.create_line(width/10, noteDict["D"], width/2, noteDict["D"], width = 3)
-        canvas.create_line(width/10, noteDict["D#"], width/2, noteDict["D#"], width = 3)
-        canvas.create_line(width/10, noteDict["E"], width/2, noteDict["E"], width = 3)
-        canvas.create_line(width/10, noteDict["F"], width/2, noteDict["F"], width = 3)
-        canvas.create_line(width/10, noteDict["F#"], width/2, noteDict["F#"], width = 3)
-        canvas.create_line(width/10, noteDict["G"], width/2, noteDict["G"], width = 3)
-        canvas.create_line(width/10, noteDict["G#"], width/2, noteDict["G#"], width = 3)
-        canvas.create_line(width/10, noteDict["A"], width/2, noteDict["A"], width = 3)
-        canvas.create_line(width/10, noteDict["A#"], width/2, noteDict["A#"], width = 3)
-        canvas.create_line(width/10, noteDict["B"], width/2, noteDict["B"], width = 3)
 
+        for note in self.noteDict:
+            self.canvas.create_line(width/10, self.noteDict[note], width/2, self.noteDict[note], width = 3)
 
-        noteArray = ["F#", "A", "B", "A", "F#","F#", "A", "B", "A","B","F#", "F#", "A", "B", "C#", "D", "A", "F#", "D", "F#", "G", "F#", "E"]
-        colorArray = ["green", "red", "green", "green", "red", "green", "green", "red", "blue", "green", "green", "green", "blue", "green", "green", "red", "green", "red", "blue", "green", "green", "red", "blue", "green"]
-        i = 0
-        while i < len(noteArray):
-            self.create_circle(width/10 + (i+1)*20, noteDict[noteArray[i]], 10, canvas,colorArray[i])
-            i = i+1
+        self.circle_list = []
+        self.canvas.image = pianoImage
+        
 
-        canvas.image = pianoImage
+    def update(self, data):
+        recent = list(data.display_buffer)
+        thresh1 = 10
+        thresh2 = 25
+        for circle in self.circle_list:
+            self.canvas.delete(circle)
+        for i, (note, cents) in enumerate(recent):
+            color = "red"
+            if abs(cents) <= thresh1:
+                color = "green"
+            elif abs(cents) <= thresh2:
+                color = "yellow"
+            circle = self.create_circle(self.width/10 + (i+1)*20, self.noteDict[note], 10, self.canvas, color)
+            self.circle_list.append(circle)
+
 
 class more_info_window(tk.Toplevel):
     def refresh(self, window, master, obj):
@@ -506,7 +509,7 @@ class main_window(tk.Frame):
         tuner_header.config(bg = background_color, fg = "white")
         tuner_header.pack()
 
-        myHistoryObject = session_history(bottomFrame, screen_width, screen_height)
+        self.myHistoryObject = session_history(bottomFrame, screen_width, screen_height)
         self.myDiagnosticObject = session_diagnostics(leftFrame, obj, master)
 
         pitch = PitchDisplay(master, rightFrame, self.audio_manager)
