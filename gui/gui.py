@@ -171,6 +171,8 @@ class session_diagnostics:
         #will sub out these stand-ins for values once we get set up how and where we will store practice sessions.
         titleLabel = tk.Label(topestFrame, text = "Session Diagnostics", bg = background_color, fg = "white", font = ("calibri", 20))
         titleLabel.pack(side = tk.TOP)
+        self.sessionName = tk.Label(topestFrame, text = "No Practice Session Selected",bg = background_color, fg = "white" )
+        self.sessionName.pack(side  = tk.BOTTOM)
         #v = tk.StringVar()
         v = "Overall Score: %.2f" % obj.get_overall()
         self.overallScoreLabel = tk.Label(topFrame, text = v, bg = background_color, fg = "white")
@@ -204,6 +206,7 @@ class new_session_window(tk.Toplevel):
         mainWindow.practiceSessionNameList.append(mySession._name)
         mainWindow.practiceSession = mySession
         obj._practice_session = mySession
+        mainWindow.myDiagnosticObject.sessionName.configure(text = newName)
     def __init__(self, master, mainWindow, obj):
         self.master = master
         new_sesh_window = tk.Toplevel(master)
@@ -247,7 +250,8 @@ class load_session_window(tk.Toplevel):
         for practiceSession in mainWindow.practiceSessionList:
             if practiceSession._name == newPracticeSession:
                 mainWindow.practiceSession = practiceSession
-                obj._practice_session = practiceSession    
+                obj._practice_session = practiceSession
+                mainWindow.myDiagnosticObject.sessionName.configure(text = newPracticeSession) 
     def __init__(self, master, mainWindow, obj):
         self.obj = obj
         self.mainWindow = mainWindow
@@ -458,8 +462,6 @@ class main_window(tk.Frame):
         file_menu.add_command(label = "Save Practice Session", command = lambda: self.save_practice_session(obj))
         file_menu.add_separator
         file_menu.add_command(label = "Remove Practice Session", command = lambda : self.remove_practice_session(obj))
-        file_menu.add_separator
-        file_menu.add_command(label="Exit", command = master.quit)
 
         #settings menubar
         settings_menu = tk.Menu(menubar)
