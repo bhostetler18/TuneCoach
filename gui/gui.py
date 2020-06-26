@@ -201,7 +201,6 @@ class new_session_window(tk.Toplevel):
         mainWindow.practiceSessionNameList.append(mySession._name)
         mainWindow.practiceSession = mySession
         obj._practice_session = mySession
-    print(mySession._name)
     def __init__(self, master, mainWindow, obj):
         self.master = master
         new_sesh_window = tk.Toplevel(master)
@@ -447,11 +446,11 @@ class main_window(tk.Frame):
 
         #file menubar
         menubar.add_cascade(label="File", menu=file_menu)
-        file_menu.add_command(label="New Practice Session", command = lambda: new_practice_session(obj))
+        file_menu.add_command(label="New Practice Session", command = lambda: self.new_practice_session(obj))
         file_menu.add_separator
-        file_menu.add_command(label="End Practice Session", command = lambda: end_practice_session(obj))
+        file_menu.add_command(label="End Practice Session", command = lambda: self.end_practice_session(obj))
         file_menu.add_separator
-        file_menu.add_command(label="Load Practice Session", command = lambda: load_practice_session(obj))
+        file_menu.add_command(label="Load Practice Session", command = lambda: self.load_practice_session(obj))
         file_menu.add_separator
         file_menu.add_command(label = "Save Practice Session", command = lambda: self.save_practice_session(obj))
         file_menu.add_separator
@@ -464,21 +463,21 @@ class main_window(tk.Frame):
         menubar.add_cascade(label="Settings", menu=settings_menu)
         settings_menu.add_command(label="Tuner Settings", command = lambda: self.tuner_settings( master, obj))
         settings_menu.add_separator
-        settings_menu.add_command(label="User Settings", command = user_settings)
+        settings_menu.add_command(label="User Settings", command =self.user_settings)
         settings_menu.add_separator
 
         #view menubar
         view_menu = tk.Menu(menubar)
         menubar.add_cascade(label="View", menu = view_menu)
-        view_menu.add_command(label="Change layout", command = change_layout)
+        view_menu.add_command(label="Change layout", command = self.change_layout)
         view_menu.add_separator
 
         #help menubar
         help_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Help", menu=help_menu)
-        help_menu.add_command(label="FAQ", command = load_faq)
+        help_menu.add_command(label="FAQ", command = self.load_faq)
         help_menu.add_separator
-        help_menu.add_command(label="Tutorial", command = load_tutorial)
+        help_menu.add_command(label="Tutorial", command = self.load_tutorial)
         help_menu.add_separator
         #creating frames to organize the screen.
     
