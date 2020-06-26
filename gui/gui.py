@@ -133,9 +133,33 @@ class session_history:
 
         canvas.image = pianoImage
 
+class more_info_window(tk.Toplevel):
+    def __init__(self, master, obj):
+        self.master = master
+        myWindow = tk.Toplevel(master)
+        finalString = ""
+        if obj._overall_count > 0:
+            avg_cents= obj._cents / obj._overall_count
+            for i in range(12):
+                if obj._pitch_count[i] == 0:
+                    finalString += ("\n" + obj._notes[i] + " was not played/sung in the session.")
+                else:
+                    pitch_error = (100.0*obj._pitch_class[i]) / obj._pitch_count[i]
+                    finalString += ("\n%s was in tune for %.2f %% of the time." % (obj._notes[i], pitch_error))
+            finalString += "\n"
+            finalString += "\nOverall"
+            finalString += "\nYou were in tune for %.2f %% of the time." % obj.get_overall()
+            finalString += "\nYou were off by an average of %.2f cents." % avg_cents
+        else:
+            finalString += "\nno input yet"
+        myLabel = Label(myWindow, text = finalString, bg = background_color, fg = "white")
+        myLabel.pack()
+        myWindow.lift(master)
 
 class session_diagnostics:
-    def __init__(self, workingFrame, obj):
+    def more_info_window_caller(self,master, obj):
+        myMoreInfoWindow = more_info_window(master, obj)
+    def __init__(self, workingFrame, obj, master):
         #testLabel = tk.Label(workingFrame, text = "testing", bg = background_color, fg = "white")
         #testLabel.pack()
         topestFrame = tk.Frame(workingFrame, bd = 5, bg = background_color)
@@ -164,11 +188,8 @@ class session_diagnostics:
         v = "Overall Score: %.2f" % obj.get_overall()
         self.overallScoreLabel = tk.Label(topFrame, text = v, bg = background_color, fg = "white")
         self.overallScoreLabel.pack()
-        mostMissedLabel = tk.Label(middleFrame,text = "most missed note: A", bg = background_color, fg = "white")
-        mostMissedLabel.pack()
-        mostMissedTransition = tk.Label(bottomFrame, text = "most missed jump: D to A", bg = background_color, fg = "white")
-        mostMissedTransition.pack()
-        
+        moreInfoButton = Button(middleFrame,text = "More info", command = lambda : self.more_info_window_caller(master, obj))
+        moreInfoButton.pack()
         Oder = np.array([1,2,3,4,5])
         Score = np.array([100, 95, 93, 94, 96])
 
@@ -439,7 +460,7 @@ class main_window(tk.Frame):
         tuner_header.pack()
 
         myHistoryObject = session_history(bottomFrame, screen_width, screen_height)
-        self.myDiagnosticObject = session_diagnostics(leftFrame, obj)
+        self.myDiagnosticObject = session_diagnostics(leftFrame, obj, master)
 
         pitch = PitchDisplay(master, rightFrame, self.audio_manager)
         master.after(10, pitch.update_data)
