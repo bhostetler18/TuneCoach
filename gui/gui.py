@@ -76,7 +76,7 @@ class session_history:
         for note in self.noteDict:
             self.canvas.create_line(width/10, self.noteDict[note], width/2, self.noteDict[note], width = 3)
 
-        self.circle_list = []
+        self.circle_list = [None] * 64 # TODO: don't hardcode size and coordinate with Feedback buffer
         self.canvas.image = pianoImage
         
 
@@ -84,16 +84,22 @@ class session_history:
         recent = list(data.display_buffer)
         thresh1 = 10
         thresh2 = 25
-        for circle in self.circle_list:
-            self.canvas.delete(circle)
         for i, (note, cents) in enumerate(recent):
             color = "red"
             if abs(cents) <= thresh1:
                 color = "green"
             elif abs(cents) <= thresh2:
                 color = "yellow"
-            circle = self.create_circle(self.width/10 + (i+1)*20, self.noteDict[note], 10, self.canvas, color)
-            self.circle_list.append(circle)
+
+            circle = self.circle_list[i]
+            x = self.width/10 + (i+1)*20
+            y = self.noteDict[note]
+            if circle == None:
+                print("Create")
+                c = self.create_circle(x, y, 10, self.canvas, color)
+                self.circle_list[i] = c
+            else:
+                self.canvas.coords(circle, x - 10, y - 10, x + 10, y + 10)
 
 
 class more_info_window(tk.Toplevel):
