@@ -26,18 +26,20 @@ class PitchDisplay:
         self._span = 75 #size of tuner arc in degrees, starting at vertical 
 
         self.canvas = Canvas(frame)
-
         self.canvas.pack(fill = BOTH, expand = True)
+        self.canvas.bind("<Configure>", self.configure)
 
         self._last_time = 0
         self._clearing = False
-
 
         self.display_default_gui()
         self.display_current_gui()
 
     def cents_to_angle(self, cents):
         return cents/50 * self._span
+
+    def configure(self, event):
+        self.display_default_gui()
 
 
     def display_current_gui(self):
@@ -59,7 +61,7 @@ class PitchDisplay:
         self.radius = 0.4 * min_dimension
         self.centerX = self.width/2
         self.centerY = self.height/2
-        
+
         self.current_pitch_display = self.canvas.create_text(self.width/2, self.height/2 + self.pitchOffset, font=self.font, text='---')
         #left_red_bg = self.canvas.create_arc(self.centerX - self.radius, self.centerY - self.radius, self.centerX + self.radius, self.centerY + self.radius)
         #self.canvas.itemconfig(left_red_bg, start=0, width=5, fill="black", extent=180, outline='')
