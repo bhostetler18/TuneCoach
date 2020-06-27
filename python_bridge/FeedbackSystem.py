@@ -6,7 +6,7 @@ import math
 
 class FeedbackSystem:
     def __init__(self, cent_range):
-        self._notes = ("C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B")
+        self._notes = ("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
         self._pitch_class = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self._pitch_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self._cents = 0.0
@@ -84,7 +84,7 @@ class FeedbackSystem:
         if self._overall_count == 0:
             print("There was no audio input.")
         else:
+            avg_cents = self._cents / self._overall_count
             print("Overall:")
             print("You were in tune for %.2f %% of the time." % self.get_overall())
-            avg_cents = self._cents / self._overall_count
             print("You were off by an an average of %.2f cents." % avg_cents)

@@ -18,6 +18,8 @@ from save_window import *
 from remove_window import *
 from tuner_settings_window import *
 from load_session_window import *
+from faq_window import *
+from tutorial_window import *
 
 #stand-in variable for noise-filter level, when we come up with some sort of filter, then can initialize real variable like the threshold variable in main of master.py 
 noise_filter_level = 20
@@ -54,9 +56,9 @@ class main_window(tk.Frame):
     def user_settings(self):
         print("function to display menu to change user settings")
     def load_faq(self):
-        print("function to load app faq")
+        faq = faq_window(self.master)
     def load_tutorial(self):
-        print("function to load a tutorial for how to use the app")   
+        tutorial = tutorial_window(self.master)
     def new_practice_session(self, obj):
         newPracticeSessionWindow = new_session_window(self.master, self, obj)
     def load_practice_session(self, obj):
