@@ -72,7 +72,7 @@ class tuner_settings_window(tk.Toplevel):
         inCents.pack()
 
         doneButton = ttk.Button(bottomestFrame, text="Apply",
-                                command=lambda: self.update_pitch_settings(self, pitch_sensitivity_scale.get(),
+                                command=lambda: self.update_pitch_settings(pitch_sensitivity_scale.get(),
                                                                       outside_noise_scale.get(), tuner_settings_window,
                                                                       obj))
         doneButton.pack()
