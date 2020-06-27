@@ -5,26 +5,24 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class session_diagnostics:
-    def more_info_window_caller(self,master, obj):
-        myMoreInfoWindow = more_info_window(master, obj)
+    def more_info_window_caller(self, master, feedback_data):
+        myMoreInfoWindow = more_info_window(master, feedback_data)
     def update_plot(self, new_score, master):
-        if master.practiceSession is not None:
-            master.practiceSession._scoreList.append(new_score)
-            if len(master.practiceSession._scoreList) > 10:
-                master.practiceSession._scoreList.pop(0)
+        if master.currentPracticeSession is not None:
+            master.currentPracticeSession._scoreList.append(new_score)
+            if len(master.currentPracticeSession._scoreList) > 10:
+                master.currentPracticeSession._scoreList.pop(0)
             else:
-                master.practiceSession._scoreIndex.append(len(master.practiceSession._scoreIndex))
+                master.currentPracticeSession._scoreIndex.append(len(master.currentPracticeSession._scoreIndex))
             self.a.clear()
             self.a.set_xlim([0,10])
             self.a.set_ylim([0,100])
             self.a.set_autoscale_on(False)
             self.a.set_title("Score Over Time")
             self.a.set_ylabel("Score")
-            self.a.plot( master.practiceSession._scoreIndex, master.practiceSession._scoreList, color = "blue")
+            self.a.plot(master.currentPracticeSession._scoreIndex, master.currentPracticeSession._scoreList, color = "blue")
             self.canvas.draw()
-    def __init__(self, workingFrame, obj, master):
-        #testLabel = tk.Label(workingFrame, text = "testing", bg = background_color, fg = "white")
-        #testLabel.pack()
+    def __init__(self, workingFrame, feedback_data, master):
         topestFrame = tk.Frame(workingFrame, bd = 5, bg = background_color)
         topFrame = tk.Frame(workingFrame, bd = 5, bg = background_color)
         rightFrame = tk.Frame(workingFrame, bd = 5, bg = background_color)
@@ -50,10 +48,10 @@ class session_diagnostics:
         self.sessionName = tk.Label(topestFrame, text = "No Practice Session Selected",bg = background_color, fg = "white" )
         self.sessionName.pack(side  = tk.BOTTOM)
         #v = tk.StringVar()
-        v = "Overall Score: %.2f" % obj.get_overall()
+        v = "Overall Score: %.2f" % feedback_data.get_overall()
         self.overallScoreLabel = tk.Label(topFrame, text = v, bg = background_color, fg = "white")
         self.overallScoreLabel.pack()
-        moreInfoButton = tk.Button(middleFrame,text = "More info", command = lambda : self.more_info_window_caller(master, obj))
+        moreInfoButton = tk.Button(middleFrame,text = "More info", command = lambda : self.more_info_window_caller(master, feedback_data))
         moreInfoButton.pack()
         defaultX = [0]
         defaultY = [0]
