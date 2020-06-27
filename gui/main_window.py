@@ -7,7 +7,7 @@ import tkinter.ttk as ttk
 import numpy as np
 
 from pitchDisplay import *
-from FeedbackSystem import *
+from Session import *
 from constants import *
 from session_history import *
 from more_info_window import *
@@ -75,49 +75,49 @@ class main_window(tk.Frame):
 
         #file menubar
         menubar.add_cascade(label="File", menu=file_menu)
-        file_menu.add_command(label="New Practice Session", command = lambda: self.new_practice_session(obj))
+        file_menu.add_command(label="New Practice Session", command=lambda: self.new_practice_session(obj))
         file_menu.add_separator
-        file_menu.add_command(label="End Practice Session", command = lambda: self.end_practice_session(obj))
+        file_menu.add_command(label="End Practice Session", command=lambda: self.end_practice_session(obj))
         file_menu.add_separator
-        file_menu.add_command(label="Load Practice Session", command = lambda: self.load_practice_session(obj))
+        file_menu.add_command(label="Load Practice Session", command=lambda: self.load_practice_session(obj))
         file_menu.add_separator
-        file_menu.add_command(label = "Save Practice Session", command = lambda: self.save_practice_session(obj))
+        file_menu.add_command(label="Save Practice Session", command=lambda: self.save_practice_session(obj))
         file_menu.add_separator
-        file_menu.add_command(label = "Remove Practice Session", command = lambda : self.remove_practice_session(obj))
+        file_menu.add_command(label="Remove Practice Session", command=lambda: self.remove_practice_session(obj))
 
         #settings menubar
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
-        settings_menu.add_command(label="Tuner Settings", command = lambda: self.tuner_settings(obj))
+        settings_menu.add_command(label="Tuner Settings", command=lambda: self.tuner_settings(obj))
         settings_menu.add_separator
-        settings_menu.add_command(label="User Settings", command =self.user_settings)
+        settings_menu.add_command(label="User Settings", command=self.user_settings)
         settings_menu.add_separator
 
         #view menubar
         view_menu = tk.Menu(menubar)
-        menubar.add_cascade(label="View", menu = view_menu)
-        view_menu.add_command(label="Change layout", command = self.change_layout)
+        menubar.add_cascade(label="View", menu=view_menu)
+        view_menu.add_command(label="Change layout", command=self.change_layout)
         view_menu.add_separator
 
         #help menubar
         help_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Help", menu=help_menu)
-        help_menu.add_command(label="FAQ", command = self.load_faq)
+        help_menu.add_command(label="FAQ", command=self.load_faq)
         help_menu.add_separator
-        help_menu.add_command(label="Tutorial", command = self.load_tutorial)
+        help_menu.add_command(label="Tutorial", command=self.load_tutorial)
         help_menu.add_separator
         #creating frames to organize the screen.
     
     def layout_frames(self, master, screen_width, screen_height, obj):
-        bottomFrame = tk.Frame(master, bd = 5, relief = tk.RAISED, bg = background_color)
-        leftFrame = tk.Frame(master, bd = 5, relief = tk.RAISED ,bg =  background_color)
-        rightFrame = tk.Frame(master, bd = 5, relief = tk.RAISED, bg = background_color)
+        bottomFrame = tk.Frame(master, bd=5, relief=tk.RAISED, bg=background_color)
+        leftFrame = tk.Frame(master, bd=5, relief=tk.RAISED, bg=background_color)
+        rightFrame = tk.Frame(master, bd=5, relief=tk.RAISED, bg=background_color)
 
         #putting the frames into a grid layout
 
-        bottomFrame.grid(row = 1, column = 0, columnspan = 2, sticky = "nsew")
-        leftFrame.grid(row = 0, column = 0, sticky = "nsew")
-        rightFrame.grid(row = 0, column = 1, sticky = "nsew")
+        bottomFrame.grid(row=1, column=0, columnspan=2, sticky="nsew")
+        leftFrame.grid(row=0, column=0, sticky="nsew")
+        rightFrame.grid(row=0, column=1, sticky="nsew")
 
         #setting up grid weights.
 
@@ -132,5 +132,4 @@ class main_window(tk.Frame):
         self.myHistoryObject = session_history(bottomFrame, screen_width, screen_height)
         self.myDiagnosticObject = session_diagnostics(leftFrame, obj, master)
 
-        pitch = PitchDisplay(master, rightFrame, self.audio_manager)
-        master.after(10, pitch.update_data)
+        self.pitchDisplay = PitchDisplay(master, rightFrame, self.audio_manager)
