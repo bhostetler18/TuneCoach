@@ -126,10 +126,6 @@ class main_window(tk.Frame):
 
         #i think that here we can work on creating the funcitonality for each individual frame, ex: tuner, pitch history, information.
 
-        #adding temporary label to the Pitch Detector Section
-        tuner_header = tk.Label(rightFrame, text = "Pitch Detector", font=("Calibri", 20))
-        tuner_header.config(bg = background_color, fg = "white")
-        tuner_header.pack()
 
         self.myHistoryObject = session_history(bottomFrame, screen_width, screen_height)
         self.myDiagnosticObject = session_diagnostics(leftFrame, obj, master)
