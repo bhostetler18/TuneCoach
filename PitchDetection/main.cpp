@@ -12,11 +12,7 @@
 */
 
 int main(){
-    cout << "Please enter a threshold for intonation forgiveness in cents: ";
-    int threshold;
-    cin >> threshold;
-    cout << endl;
-    FeedbackSystem data(threshold);
+    FeedbackSystem data(15);
     auto start = chrono::steady_clock::now();
 
     TunerStream t(44100);
@@ -63,7 +59,7 @@ int main(){
 
 
 
-    t.start();
+    t.mainloop();
     stopper.join();
     reader.join();
 

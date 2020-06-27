@@ -6,9 +6,9 @@ TunerStream *create_stream(int sample_rate)
     return new TunerStream(sample_rate);
 }
 
-void start_stream(TunerStream *handle)
+void mainloop(TunerStream *handle)
 {
-    if (handle) handle->start();
+    if (handle) handle->mainloop();
 }
 
 void pause_stream(TunerStream* handle)
