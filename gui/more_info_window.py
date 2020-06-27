@@ -25,10 +25,10 @@ class more_info_window(tk.Toplevel):
             finalString += "\nYou were off by an average of %.2f cents." % avg_cents
         else:
             finalString += "\nno input yet"
-        myLabel = Label(myWindow, text = finalString, bg = background_color, fg = "white")
+        myLabel = tk.Label(myWindow, text = finalString, bg = background_color, fg = "white")
         myLabel.pack()
-        exitButton = Button(myWindow, text = "Exit", command = lambda : myWindow.destroy())
+        exitButton = tk.Button(myWindow, text = "Exit", command = lambda : myWindow.destroy())
         exitButton.pack()
-        refreshButton = Button(myWindow, text = "Refresh", command = lambda : self.refresh(myWindow, master, obj))
+        refreshButton = tk.Button(myWindow, text = "Refresh", command = lambda : self.refresh(myWindow, master, obj))
         refreshButton.pack()
         myWindow.lift(master)
