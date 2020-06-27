@@ -9,7 +9,7 @@ class load_session_window(tk.Toplevel):
     def reset_practice_session(self, mainWindow, newPracticeSession, obj):
         for practiceSession in mainWindow.practiceSessionList:
             if practiceSession._name == newPracticeSession:
-                mainWindow.practiceSession = practiceSession
+                mainWindow.currentPracticeSession = practiceSession
                 obj._practice_session = practiceSession
                 mainWindow.myDiagnosticObject.sessionName.configure(text=newPracticeSession)
 
