@@ -130,5 +130,4 @@ class main_window(tk.Frame):
         self.myHistoryObject = session_history(bottomFrame, screen_width, screen_height)
         self.myDiagnosticObject = session_diagnostics(leftFrame, obj, master)
 
-        pitch = PitchDisplay(master, rightFrame, self.audio_manager)
-        master.after(10, pitch.update_data)
+        self.pitchDisplay = PitchDisplay(master, rightFrame, self.audio_manager)

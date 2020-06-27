@@ -11,10 +11,11 @@ from math import sin, cos, radians
 import time
 
 class PitchDisplay:
-    def __init__(self, grandparent, frame, manager, threshold=5):
+    def __init__(self, grandparent, frame, manager, threshold=10):
         self.grandparent = grandparent
         self.frame = frame
         self.audio_manager = manager
+
         self.threshold = threshold
 
         self.font = Font(size=20)
@@ -30,10 +31,16 @@ class PitchDisplay:
         self.canvas.pack(fill = BOTH, expand = True)
         self.canvas.bind("<Configure>", self.configure)
 
+        self.showsHertz = BooleanVar()
+
+        c = ttk.Checkbutton(self.canvas, text="Show Hertz", variable=self.showsHertz, takefocus=False, command=self.display_default_gui)
+        c.pack(anchor='e', side='bottom')
+
         self._last_time = 0
         self._clearing = False
 
         self.display_default_gui()
+        self.update_data()
 
     def cents_to_angle(self, cents):
         return cents/50 * self._span
@@ -43,6 +50,8 @@ class PitchDisplay:
 
     def display_current_gui(self):
         self.canvas.itemconfig(self.current_pitch_display, text=self._pitchValue)
+        if self.showsHertz.get():
+            self.canvas.itemconfig(self.hertzDisplay, text=self._hertzValue)
         self.update_line(self._centsValue)
         if not self._clearing and abs(self._centsValue) <= self.threshold:
             self.canvas.itemconfig(self.green_arc, fill="green")
@@ -59,6 +68,8 @@ class PitchDisplay:
         self.centerY = self.height/2
 
         self.current_pitch_display = self.canvas.create_text(self.width/2, self.height/2 + self.pitchOffset, font=self.font, text='---')
+        if self.showsHertz.get():
+            self.hertzDisplay = self.canvas.create_text(self.width/2, self.height/2 + 3*self.pitchOffset, font=(None, 14), text='')
 
         x0 = self.centerX - self.radius
         y0 = self.centerY - self.radius
@@ -100,12 +111,11 @@ class PitchDisplay:
         self.threshold = thresh
         self.display_default_gui()
 
-
     def update_pitch(self, value): # event as parameter
         self._pitchValue = value
 
-    def update_hertz(self):
-        self._hertzValue = 0
+    def update_hertz(self, value):
+        self._hertzValue = value
 
     def update_cents(self, value):
         self._centsValue = value
@@ -118,9 +128,9 @@ class PitchDisplay:
             pitch_class = midi_to_pitch_class(midi)
             desired_hz = closest_in_tune_frequency(hz)
             cent = cents(desired_hz, hz)
-            name = pitch_class_to_name(pitch_class, Accidental.SHARP)
+            name = pitch_class_to_name(pitch_class, Accidental.SHARP) #TODO: coordinate accidental with FeedbackManager
             self.update_cents(cent)
-            self.update_hertz()
+            self.update_hertz(f"{round(hz)} Hz")
             self.update_pitch(name)
             self.display_current_gui()
             self._last_time = time.time()
@@ -129,6 +139,7 @@ class PitchDisplay:
             if self._centsValue != -50 and time.time() - self._last_time > 1.5:
                 self.update_cents(max(-50,self._centsValue - 3))
                 self.update_pitch('---')
+                self.update_hertz('')
                 self.display_current_gui()
 
 
