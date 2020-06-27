@@ -8,7 +8,7 @@ class new_session_window(tk.Toplevel):
         oldWindow.destroy()
         mySession = practice_session(newName)
         mainWindow.practiceSessionList.append(mySession)
-        mainWindow.practiceSessionNameList.append(mySession._name)
+        # mainWindow.practiceSessionNameList.append(mySession._name)
         mainWindow.currentPracticeSession = mySession
         obj._practice_session = mySession
         mainWindow.myDiagnosticObject.sessionName.configure(text=newName)

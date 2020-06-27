@@ -8,10 +8,11 @@ class load_session_window(tk.Toplevel):
 
     def reset_practice_session(self, mainWindow, newPracticeSession, obj):
         for practiceSession in mainWindow.practiceSessionList:
-            if practiceSession._name == newPracticeSession:
+            if practiceSession._name == newPracticeSession._name:
                 mainWindow.currentPracticeSession = practiceSession
                 obj._practice_session = practiceSession
-                mainWindow.myDiagnosticObject.sessionName.configure(text=newPracticeSession)
+                mainWindow.myDiagnosticObject.sessionName.configure(text=newPracticeSession._name)
+
 
     def __init__(self, master, mainWindow, obj):
         self.obj = obj
@@ -43,9 +44,9 @@ class load_session_window(tk.Toplevel):
             selectSessionLabel = tk.Label(leftFrame, text="Select a session to load", bg=background_color, fg="white")
             selectSessionLabel.pack()
             firstSession = tk.StringVar(master)
-            firstSession.set(mainWindow.practiceSessionNameList[0])
+            firstSession.set(mainWindow.practiceSessionList[0]._name)
             print("hello")
-            loadSessionDropDown = tk.OptionMenu(middleFrame, firstSession, *mainWindow.practiceSessionNameList,
+            loadSessionDropDown = tk.OptionMenu(middleFrame, firstSession, *map(lambda session: session._name, mainWindow.practiceSessionList),
                                                 command=self.call_function)
             loadSessionDropDown.pack()
             # acceptButton = tk.Button(middleFrame, text = "Select", command = lambda: reset_practice_session(loadSessionDropDown.get(), mainWindow))

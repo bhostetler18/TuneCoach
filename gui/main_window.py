@@ -25,16 +25,15 @@ from tutorial_window import *
 noise_filter_level = 20
 
 #main gui
-class main_window(tk.Frame):
-    def __init__(self, master, manager, feedback_data):
+class main_window:
+    def __init__(self, master, audio_manager, feedback_data):
         self.practiceSessionList = []
-        self.practiceSessionNameList = []
+        # self.practiceSessionNameList = []
         self.currentPracticeSession = None
         self.isPaused = False
-        tk.Frame.__init__(self, master)
         self.master = master
 
-        self.audio_manager = manager
+        self.audio_manager = audio_manager
         screen_width = master.winfo_screenwidth()
         screen_height = master.winfo_screenheight()
 
