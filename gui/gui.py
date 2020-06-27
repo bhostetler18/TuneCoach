@@ -324,6 +324,75 @@ class end_session_window(tk.Toplevel):
         endButton = tk.Button(bottomFrame, text = "Ok", command = lambda : self.end_sesh_window.destroy())
         endButton.pack()
 
+class faq_window(tk.Toplevel):
+    def __init__(self, master):
+        self.master = master
+        faq_window = tk.Toplevel(master)
+        faq_window.geometry()
+
+        message = "Q: Why am I not in tune?\n" \
+                  "A: Git gud\n" \
+                  "\n" \
+                  "Q: How do I use TuneCoach?\n" \
+                  "A: Thorough instructions can be found in \"Tutorial\" under the \"Help\" dropdown menu.\n" \
+                  "\n" \
+                  "Q: Is there any way to change the intonation threshold?\n" \
+                  "A: Yes! It is located in the \"Settings\" dropdown menu, then \"Tuner Settings\"\n" \
+                  "\n" \
+                  "Q: What instruments can be used with TuneCoach?\n" \
+                  "A: Any instrument can be used with TuneCoach! Even your voice!\n" \
+                  "\n" \
+                  "Q: Why does the tuner not work?\n" \
+                  "A: Check your microphone. Ensure that it is fully plugged in and is recognized as audio input.\n" \
+                  "    Other apps and programs may be using the microphone, blocking access to TuneCoach.\n" \
+                  "    Other apps must be closed in this case. If it does not help, restart TuneCoach or your PC.\n" \
+                  "    Microphone permissions may also be blocked. To fix this, go into your system settings\n" \
+                  "    to allow the microphone to be used with TuneCoach.\n" \
+                  "\n" \
+                  "Q: Do I need internet to use TuneCoach?\n" \
+                  "A: No! Once TuneCoach is downloaded and installed, it can be used at any time!\n"
+
+        faq_label = tk.Label(faq_window, text=message, font=("Calibri", 12), justify=LEFT)
+        faq_label.config(bg=background_color, fg="white")
+        faq_label.pack()
+        faq_window.lift(master)
+
+
+class tutorial_window(tk.Toplevel):
+    def __init__(self, master):
+        self.master = master
+        tutorial_window = tk.Toplevel(master)
+        tutorial_window.geometry()
+
+        message = "Welcome to TuneCoach!\n" \
+                  "TuneCoach is convenient PC-based tuning application that records sessions for intonation\n" \
+                  "and provides detailed feedback for your performance. \n" \
+                  "\n" \
+                  "To get started, click the \"File\" dropdown menu in the top left corner and select \n" \
+                  "\"New Practice Session\"\n" \
+                  "In the same dropdown menu, there are more options to manage your tuning sessions\n" \
+                  "(Note: The pitch detector will function upon startup, but it will be in practice mode.\n" \
+                  "This means that the tuner works but no session is started and therefore no data is saved.)\n" \
+                  "\n" \
+                  "The Pitch Detector continuously shows the note being played, as well as the intonation.\n" \
+                  "Green means you're in tune, yellow means you're a little bit out of tune, and red means\n" \
+                  "you're completely out of tune.\n" \
+                  "The bottom area shows your recently played notes, represented on a piano octave.\n" \
+                  "The Session Diagnostics area shows your overall score and actively reflected in the graph.\n" \
+                  "You can click on \"More Info\" button to display how in tune you were for each note,\n" \
+                  "the overall score, and how out of tune you were overall in cents.\n" \
+                  "\n" \
+                  "Keyboard Shortcuts:\n" \
+                  "------------------------------------------\n" \
+                  "Space: Pause or resume the session.\n" \
+                  "q: Stops a session."
+
+        tutorial_label = tk.Label(tutorial_window, text=message, font=("Calibri", 12), justify=LEFT)
+        tutorial_label.config(bg=background_color, fg="white")
+        tutorial_label.pack()
+        tutorial_window.lift(master)
+
+
 #tuner settings window
 class tuner_settings_window(tk.Toplevel):
     def update_pitch_settings(self, newPitch, newFilterLevel, oldSettingsView, obj):
@@ -440,9 +509,9 @@ class main_window(tk.Frame):
     def user_settings(self):
         print("function to display menu to change user settings")
     def load_faq(self):
-        print("function to load app faq")
+        faq = faq_window(self.master)
     def load_tutorial(self):
-        print("function to load a tutorial for how to use the app")   
+        tutorial = tutorial_window(self.master)
     def new_practice_session(self, obj):
         newPracticeSessionWindow = new_session_window(self.master, self, obj)
     def load_practice_session(self, obj):
@@ -472,7 +541,7 @@ class main_window(tk.Frame):
         #settings menubar
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
-        settings_menu.add_command(label="Tuner Settings", command = lambda: self.tuner_settings( master, obj))
+        settings_menu.add_command(label="Tuner Settings", command = lambda: self.tuner_settings(obj))
         settings_menu.add_separator
         settings_menu.add_command(label="User Settings", command =self.user_settings)
         settings_menu.add_separator
