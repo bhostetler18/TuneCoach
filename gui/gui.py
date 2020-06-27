@@ -99,6 +99,7 @@ class session_history:
                 self.circle_list[i] = c
             else:
                 self.canvas.coords(circle, x - 10, y - 10, x + 10, y + 10)
+                self.canvas.itemconfig(circle, fill=color)
 
 
 class more_info_window(tk.Toplevel):
