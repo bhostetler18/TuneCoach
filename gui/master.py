@@ -1,13 +1,11 @@
-# import gui
-from gui import *
+from main_window import *
 from pitchDisplay import *
 from tkinter import *
 from FeedbackSystem import *
 from AudioManager import *
 import time
-import tkinter as tk
-sys.path.insert(1, '../python_bridge')
 
+sys.path.insert(1, '../python_bridge')
 
 def space_pressed(event, audio_manager, mainWindow):
     if audio_manager.is_paused():
