@@ -1,6 +1,6 @@
 import collections
 from pitch_utilities import *
-from gui import *
+from main_window import *
 import math
 
 
