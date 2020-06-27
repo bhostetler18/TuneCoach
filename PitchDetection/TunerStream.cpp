@@ -111,6 +111,11 @@ void TunerStream::start()
             this->most_recent = detected_hz;
         }
         this->most_recent = 0.0;
+#ifdef USE_PULSE
+        //rc = pa_simple_flush(server, nullptr); //This doesn't actually do anything for some reason, so instead
+        //we have to fake "reading" the buffer to keep it from grabbing values while paused
+        rc = pa_simple_read(server, audio_buffer, audio_buffer_size*4, nullptr);
+#endif
     }
 #ifdef USE_PULSE
     pa_simple_free(server);

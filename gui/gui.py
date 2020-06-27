@@ -95,7 +95,6 @@ class session_history:
             x = self.width/10 + (i+1)*20
             y = self.noteDict[note]
             if circle == None:
-                print("Create")
                 c = self.create_circle(x, y, 10, self.canvas, color)
                 self.circle_list[i] = c
             else:
