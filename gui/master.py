@@ -1,20 +1,21 @@
-from MainWindow import *
-from PitchDisplay import *
+from gui.MainWindow import *
+from gui.PitchDisplay import *
 from tkinter import *
-from Session import *
-from AudioManager import *
+from python_bridge.Session import *
+from python_bridge.AudioManager import *
 import time
-sys.path.insert(1, '../python_bridge')
 
 
 def space_pressed(event, audio_manager, mainWindow):
     if audio_manager.is_paused():
         print("Resuming")
         mainWindow.isPaused = False
+        mainWindow.pitchDisplay.light.start_flashing()
         audio_manager.resume()
     else:
         print("Pausing")
         mainWindow.isPaused = True
+        mainWindow.pitchDisplay.light.stop()
         audio_manager.pause()
 
 
@@ -62,8 +63,6 @@ def main():
     root = Tk()
     root.title("TuneCoach")
     manager = AudioManager(data)
-    manager.start_capture()
-    manager.start_reader()
     our_window = MainWindow(root, manager, data)
     root.bind('<space>', lambda event, arg=manager: space_pressed(event, arg, our_window))
     root.bind('q', lambda event, arg=manager: kill_pressed(event, arg, data, start))

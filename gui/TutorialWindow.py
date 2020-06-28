@@ -1,11 +1,11 @@
 import tkinter as tk
-from constants import *
+from gui.constants import *
 
 
-class TutorialWindow(tk.Toplevel):
-    def __init__(self, master):
-        self.master = master
-        tutorial_window = tk.Toplevel(master)
+class TutorialWindow:
+    def __init__(self, mainWindow):
+        tutorial_window = tk.Toplevel(mainWindow)
+
         tutorial_window.geometry()
 
         message = "Welcome to TuneCoach!\n" \
@@ -34,4 +34,4 @@ class TutorialWindow(tk.Toplevel):
         tutorial_label = tk.Label(tutorial_window, text=message, font=("Calibri", 12), justify=tk.LEFT)
         tutorial_label.config(bg=background_color, fg="white")
         tutorial_label.pack()
-        tutorial_window.lift(master)
+        tutorial_window.lift(mainWindow)

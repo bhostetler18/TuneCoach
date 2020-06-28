@@ -15,7 +15,7 @@ class TunerStream
 {
 public:
     TunerStream(int sample_rate);
-    void start();
+    void mainloop();
     void pause();
     void resume();
     void kill();

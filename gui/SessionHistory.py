@@ -15,9 +15,11 @@ class SessionHistory:
     def __init__(self, workingFrame, width, height):
         self.canvas = tk.Canvas(workingFrame, width=width / 2, height=height / 4, relief=tk.RIDGE, bd=5, bg="#bdd0df")
         self.canvas.pack(side=tk.LEFT, padx=width / 4)
-        large_image = PIL.Image.open("piano.jpeg")
+
+        large_image = PIL.Image.open("./gui/piano.jpeg")
         large_image = large_image.resize((int(width / 10), int(height / 3.9)), PIL.Image.ANTIALIAS)
         piano_image = PIL.ImageTk.PhotoImage(large_image)
+
         self.width = width
         self.height = height
 

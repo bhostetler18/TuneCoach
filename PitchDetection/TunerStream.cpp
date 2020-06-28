@@ -7,7 +7,7 @@ TunerStream::TunerStream(int sample_rate)
     this->alive = true;
     this->paused = true;
     this->was_started = false;
-    this->safe_to_delete = false;
+    this->safe_to_delete = true;
     this->most_recent = 0.0;
 
 #ifdef USE_PULSE
@@ -16,7 +16,7 @@ TunerStream::TunerStream(int sample_rate)
     sample_format.channels = 1;
     sample_format.rate = sample_rate;
     int err;
-    server = pa_simple_new(nullptr,               // Use the default server.
+    server = pa_simple_new(nullptr,          // Use the default server.
                       "TuneCoach",           // Our application's name.
                       PA_STREAM_RECORD,
                       nullptr,               // Use the default device.
@@ -85,11 +85,13 @@ TunerStream::TunerStream(int sample_rate)
     p = new PitchDetector(sample_rate, audio_buffer_size, 60.0);
 }
 
-void TunerStream::start()
+void TunerStream::mainloop()
 {
     if (was_started) return;
     was_started = true;
-    paused = false;
+    paused = true;
+    safe_to_delete = false;
+
     int rc;
 #ifdef USE_ALSA
     snd_pcm_uframes_t frames = audio_buffer_size;

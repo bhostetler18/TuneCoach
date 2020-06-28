@@ -1,6 +1,5 @@
 import tkinter as tk
 
-
-class RemoveWindow(tk.Toplevel):
-    def __init__(self, mainWindow, root, obj):
+class RemoveWindow: #TODO figure out what this file is for ? remove a session?
+    def __init__(self, mainWindow):
         print("will create the remove window")

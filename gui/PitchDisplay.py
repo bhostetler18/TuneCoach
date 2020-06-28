@@ -1,19 +1,21 @@
 from tkinter import *
 from tkinter.font import Font
+import tkinter.ttk as ttk
 from math import sin, cos, radians
 import sys
 sys.path.insert(1, '../python_bridge')
 from ctypes import *
 import threading
-from constants import Colors
-from pitch_utilities import *
+from gui.constants import Colors
+from python_bridge.pitch_utilities import *
 from math import sin, cos, radians
 import time
+from gui.indicatorlight import *
 
 
 class PitchDisplay:
-    def __init__(self, grandparent, frame, manager, threshold=10):
-        self.grandparent = grandparent
+    def __init__(self, parent, frame, manager, threshold=10):
+        self.parent = parent
         self.frame = frame
         self.audio_manager = manager
 
@@ -31,6 +33,9 @@ class PitchDisplay:
         self.canvas = Canvas(frame)
         self.canvas.pack(fill=BOTH, expand=True)
         self.canvas.bind("<Configure>", self.configure)
+
+        self.light = IndicatorLight(self.canvas, 50)
+        self.light.pack(anchor='w', side='top')
 
         self.showsHertz = BooleanVar()
 
@@ -144,4 +149,4 @@ class PitchDisplay:
                 self.display_current_gui()
 
 
-        self.grandparent.after(10, self.update_data)
+        self.parent.after(10, self.update_data)

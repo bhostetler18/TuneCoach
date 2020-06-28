@@ -1,4 +1,13 @@
 cmake-build-debug/
-__pycache__/
+**/__pycache__/
 *.pyc
 /.idea/
+build/
+
+PitchDetection/CMake*
+PitchDetection/Makefile
+PitchDetection/cmake*
+PitchDetection/PitchDetection.cbp
+PitchDetection/PitchDetection
+PitchDetection/.idea
+bridge/__pycache__/

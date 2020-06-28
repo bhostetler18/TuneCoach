@@ -1,21 +1,19 @@
 import tkinter as tk
-from constants import *
-
+from gui.constants import *
 
 # Settings window to load new session
-class LoadSessionWindow(tk.Toplevel):
+class LoadSessionWindow:
     def call_function(self, value):
-        self.reset_practice_session(self.mainWindow, value, self.obj)
+        self.reset_practice_session(self.mainWindow, value)
 
-    def reset_practice_session(self, mainWindow, newPracticeSession, obj):
+    def reset_practice_session(self, mainWindow, newPracticeSession):
         for practiceSession in mainWindow.practiceSessionList:
             if practiceSession._name == newPracticeSession:
                 mainWindow.currentPracticeSession = practiceSession
-                obj._practice_session = practiceSession
+                # obj._practice_session = practiceSession
                 mainWindow.myDiagnosticObject.sessionName.configure(text=newPracticeSession)
 
-    def __init__(self, master, mainWindow, obj):
-        self.obj = obj
+    def __init__(self, master, mainWindow):
         self.mainWindow = mainWindow
         self.master = master
 
@@ -44,11 +42,10 @@ class LoadSessionWindow(tk.Toplevel):
             select_session_label = tk.Label(left_frame, text="Select a session to load", bg=background_color, fg="white")
             select_session_label.pack()
             first_session = tk.StringVar(master)
-            first_session.set(mainWindow.practiceSessionNameList[0])
-            print("hello")
-            load_session_dropdown = tk.OptionMenu(middle_frame, first_session, *mainWindow.practiceSessionNameList,
-                                                command=self.call_function)
+            first_session.set(mainWindow.practiceSessionList[0]._name)
+            load_session_dropdown = tk.OptionMenu(middle_frame, first_session, *map(lambda session: session._name, mainWindow.practiceSessionList), command=self.call_function)
             load_session_dropdown.pack()
+            #TODO: complete functionality for acceptButton
             # acceptButton = tk.Button(middle_frame, text = "Select", command = lambda: reset_practice_session(loadSessionDropDown.get(), mainWindow))
             # acceptButton.pack()
         else:
