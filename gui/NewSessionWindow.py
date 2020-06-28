@@ -5,21 +5,17 @@ from constants import *
 import sys
 sys.path.insert(1, '../python_bridge')
 
-
 # Settings window to create a new session
-class NewSessionWindow(tk.Toplevel):
-    def creating_a_new_session(self, mainWindow, oldWindow, newName, obj):
+class NewSessionWindow:
+    def creating_a_new_session(self, mainWindow, oldWindow, newName): #TODO ask Joe why new sesh window is old window
         oldWindow.destroy()
-        my_session = Session(15 ,newName) #TODO: fix cent range
+        my_session = Session(15, newName) #TODO: fix cent range
         mainWindow.practiceSessionList.append(my_session)
-        # mainWindow.practiceSessionNameList.append(my_session._name)
         mainWindow.currentPracticeSession = my_session
-        obj._practice_session = my_session
         mainWindow.myDiagnosticObject.sessionName.configure(text=newName)
 
-    def __init__(self, master, mainWindow, obj):
-        self.master = master
-        new_sesh_window = tk.Toplevel(master)
+    def __init__(self, mainWindow):
+        new_sesh_window = tk.Toplevel(mainWindow)
         new_sesh_window.geometry("500x100")
         top_frame = tk.Frame(new_sesh_window, bd=5, bg=background_color)
         left_frame = tk.Frame(new_sesh_window, bd=5, bg=background_color)
@@ -41,15 +37,14 @@ class NewSessionWindow(tk.Toplevel):
 
         create_session_label = tk.Label(top_frame, text="Create New Session", bg=background_color, fg="white")
         create_session_label.pack()
-        new_sesh_window.lift(master)
+        new_sesh_window.lift(mainWindow)
         text_entry_label = tk.Label(left_frame, text="Enter name of new Session", fg="white", bg=background_color)
         text_entry_label.pack()
         text_entry = tk.Entry(middle_frame)
         text_entry.insert(tk.END, "new-session-1")
         text_entry.pack()
         enter_entry = tk.Button(right_frame, text="Enter",
-                               command=lambda: self.creating_a_new_session(mainWindow, new_sesh_window, text_entry.get(),
-                                                                           obj))
+                               command=lambda: self.creating_a_new_session(mainWindow, new_sesh_window, text_entry.get()))
         enter_entry.pack()
 
-        new_sesh_window.lift(master)
+        new_sesh_window.lift(mainWindow)
