@@ -2,7 +2,7 @@ import tkinter as tk
 from constants import *
 
 # settings window to load new session
-class load_session_window(tk.Toplevel):
+class LoadSessionWindow(tk.Toplevel):
     def call_function(self, value):
         self.reset_practice_session(self.mainWindow, value, self.obj)
 

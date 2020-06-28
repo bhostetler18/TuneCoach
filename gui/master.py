@@ -1,7 +1,7 @@
 from main_window import *
-from pitchDisplay import *
+from PitchDisplay import *
 from tkinter import *
-from FeedbackSystem import *
+from Session import *
 from AudioManager import *
 import time
 
@@ -55,7 +55,7 @@ def main():
         root.after(20, lambda: piano_update(mainWindow, data))
 
     threshold = 15
-    data = FeedbackSystem(threshold)
+    data = Session(threshold, "temp")
     start = time.time()
     root = Tk()
     root.title("TuneCoach")

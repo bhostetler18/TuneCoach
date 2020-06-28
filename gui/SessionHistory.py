@@ -3,7 +3,7 @@ import PIL.Image
 import PIL.ImageTk
 
 # dfferent classes for pop-up windows.
-class session_history:
+class SessionHistory:
     def create_circle(self, x, y, r, canvasName, fillColor):  # center coordinates, radius
         x0 = x - r
         y0 = y - r

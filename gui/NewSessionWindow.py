@@ -3,7 +3,7 @@ from practice_session import *
 from constants import *
 
 # settings window to create a new session
-class new_session_window(tk.Toplevel):
+class NewSessionWindow(tk.Toplevel):
     def creating_a_new_session(self, mainWindow, oldWindow, newName, obj):
         oldWindow.destroy()
         mySession = practice_session(newName)

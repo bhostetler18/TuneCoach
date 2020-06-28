@@ -2,7 +2,7 @@ import tkinter as tk
 from constants import *
 
 #settings window to end current session
-class end_session_window(tk.Toplevel):
+class EndSessionWindow(tk.Toplevel):
     def __init__(self, master, mainWindow, obj):
         self.master = master
         mainWindow.currentPracticeSession = None

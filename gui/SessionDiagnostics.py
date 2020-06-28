@@ -1,10 +1,10 @@
-from more_info_window import *
+from MoreInfoWindow import *
 import tkinter as tk
 from constants import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-class session_diagnostics:
+class SessionDiagnostics:
     def more_info_window_caller(self, master, feedback_data):
         myMoreInfoWindow = more_info_window(master, feedback_data)
     def update_plot(self, new_score, master):

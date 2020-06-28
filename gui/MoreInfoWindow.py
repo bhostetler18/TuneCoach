@@ -1,10 +1,11 @@
 from constants import *
 import tkinter as tk
 
-class more_info_window(tk.Toplevel):
+class MoreInfoWindow(tk.Toplevel):
     def refresh(self, window, master, obj):
         window.destroy()
-        more_info_window(master, obj)
+        MoreInfoWindow(master, obj)
+
     def __init__(self, master, obj):
         self.master = master
         myWindow = tk.Toplevel(master)

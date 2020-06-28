@@ -1,6 +1,6 @@
 import tkinter as tk
 from constants import *
-class tutorial_window(tk.Toplevel):
+class TutorialWindow(tk.Toplevel):
     def __init__(self, master):
         self.master = master
         tutorial_window = tk.Toplevel(master)
