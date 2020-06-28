@@ -6,20 +6,20 @@ import tkinter.ttk as ttk
 # import PIL.ImageTk
 import numpy as np
 
-from pitchDisplay import *
-from FeedbackSystem import *
-from constants import *
-from session_history import *
-from more_info_window import *
-from session_diagnostics import *
-from new_session_window import *
-from end_session_window import *
-from save_window import *
-from remove_window import *
-from tuner_settings_window import *
-from load_session_window import *
-from faq_window import *
-from tutorial_window import *
+from gui.pitchDisplay import *
+from python_bridge.FeedbackSystem import *
+from gui.constants import *
+from gui.session_history import *
+from gui.more_info_window import *
+from gui.session_diagnostics import *
+from gui.new_session_window import *
+from gui.end_session_window import *
+from gui.save_window import *
+from gui.remove_window import *
+from gui.tuner_settings_window import *
+from gui.load_session_window import *
+from gui.faq_window import *
+from gui.tutorial_window import *
 
 #stand-in variable for noise-filter level, when we come up with some sort of filter, then can initialize real variable like the threshold variable in main of master.py 
 noise_filter_level = 20

@@ -1,6 +1,6 @@
 import tkinter as tk
-from practice_session import *
-from constants import *
+from gui.practice_session import *
+from gui.constants import *
 
 # settings window to create a new session
 class new_session_window(tk.Toplevel):

@@ -5,8 +5,8 @@ import sys
 sys.path.insert(1, '../python_bridge')
 from ctypes import *
 import threading
-from constants import Colors
-from pitch_utilities import *
+from gui.constants import Colors
+from python_bridge.pitch_utilities import *
 from math import sin, cos, radians
 import time
 

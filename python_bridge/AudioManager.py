@@ -1,8 +1,9 @@
 from ctypes import *
 import threading
-from pitch_utilities import *
-from FeedbackSystem import *
-
+from python_bridge.pitch_utilities import *
+from python_bridge.FeedbackSystem import *
+from pitch_detection import TunerStream
+from multiprocessing import Process
 
 def load_library():
     lib = cdll.LoadLibrary("./libPitchDetection.so")
@@ -24,58 +25,42 @@ def load_library():
 
 
 class AudioThread(threading.Thread):
-    def __init__(self, lib, handle):
+    def __init__(self, stream):
         super().__init__()
-        self._lib = lib
-        self._handle = handle
+        self._stream = stream
         # self.daemon = True
       
     def run(self):
         print("Starting background audio thread")
-        self._lib.mainloop(self._handle)
+        self._stream.mainloop()
         print("Exited background audio thread")
 
 
 class Reader(threading.Thread):
-    def __init__(self, lib, handle, session):
+    def __init__(self, stream, session):
         super().__init__()
-        self._handle = handle
-        self._lib = lib
+        self._stream = stream
         # self.daemon = True
         self.session = session
       
     def run(self):
         print("Starting reader")
-        while(self._lib.is_alive(self._handle)):
-            response = c_double()
-            success = self._lib.read_stream(self._handle, byref(response))
+        while(self._stream.is_alive()):
+            response, success = self._stream.read()
             if success and response:
                 hz = response.value
                 self.session.collect_data(hz)
         print("Reader stopped")
 
 
-class AudioManager:
+class AudioManager(TunerStream):
     def __init__(self, session):
-        self._lib = load_library()
-        self._handle = self._lib.create_stream(44100)
-        self._background_audio = AudioThread(self._lib, self._handle)
+        super().__init__(44100)
+        self._background_audio = Process(target=lambda: self.mainloop(), daemon=True)
         self._background_audio.start()
-        self._background_reader = Reader(self._lib, self._handle, session)
+        self._background_reader = Reader(self, session)
         self._background_reader.start()
 
-    def resume(self):
-        self._lib.resume_stream(self._handle)
-
-    def pause(self):
-        self._lib.pause_stream(self._handle)
-
-    def is_paused(self):
-        return self._lib.is_paused(self._handle)
-
-    def peek(self):
-        return self._lib.peek_stream(self._handle)
-
     def destroy(self):
-        self._lib.kill_stream(self._handle)
+        self.kill()
         print("Successfully killed audio stream")

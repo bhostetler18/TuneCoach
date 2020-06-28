@@ -1,5 +1,5 @@
 import tkinter as tk
-from constants import *
+from gui.constants import *
 class tutorial_window(tk.Toplevel):
     def __init__(self, master):
         self.master = master

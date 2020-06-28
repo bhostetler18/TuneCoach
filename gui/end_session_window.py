@@ -1,5 +1,5 @@
 import tkinter as tk
-from constants import *
+from gui.constants import *
 
 #settings window to end current session
 class end_session_window(tk.Toplevel):

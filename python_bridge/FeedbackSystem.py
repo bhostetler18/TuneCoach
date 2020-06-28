@@ -1,6 +1,6 @@
 import collections
-from pitch_utilities import *
-from main_window import *
+from python_bridge.pitch_utilities import *
+from gui.main_window import *
 import math
 
 

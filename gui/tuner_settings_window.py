@@ -1,5 +1,5 @@
 import tkinter as tk
-from constants import *
+from gui.constants import *
 import tkinter.ttk as ttk
 # tuner settings window
 class tuner_settings_window(tk.Toplevel):

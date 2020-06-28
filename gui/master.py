@@ -1,8 +1,8 @@
-from main_window import *
-from pitchDisplay import *
+from gui.main_window import *
+from gui.pitchDisplay import *
 from tkinter import *
-from FeedbackSystem import *
-from AudioManager import *
+from python_bridge.FeedbackSystem import *
+from python_bridge.AudioManager import *
 import time
 
 sys.path.insert(1, '../python_bridge')

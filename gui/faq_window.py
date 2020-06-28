@@ -1,5 +1,5 @@
 import tkinter as tk
-from constants import *
+from gui.constants import *
 
 class faq_window(tk.Toplevel):
     def __init__(self, master):
