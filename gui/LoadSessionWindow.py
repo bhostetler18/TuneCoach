@@ -9,10 +9,10 @@ class LoadSessionWindow(tk.Toplevel):
 
     def reset_practice_session(self, mainWindow, newPracticeSession, obj):
         for practiceSession in mainWindow.practiceSessionList:
-            if practiceSession._name == newPracticeSession:
+            if practiceSession._name == newPracticeSession._name:
                 mainWindow.currentPracticeSession = practiceSession
                 obj._practice_session = practiceSession
-                mainWindow.myDiagnosticObject.sessionName.configure(text=newPracticeSession)
+                mainWindow.myDiagnosticObject.sessionName.configure(text=newPracticeSession._name)
 
     def __init__(self, master, mainWindow, obj):
         self.obj = obj
@@ -44,10 +44,12 @@ class LoadSessionWindow(tk.Toplevel):
             select_session_label = tk.Label(left_frame, text="Select a session to load", bg=background_color, fg="white")
             select_session_label.pack()
             first_session = tk.StringVar(master)
-            first_session.set(mainWindow.practiceSessionNameList[0])
+            # first_session.set(mainWindow.practiceSessionNameList[0])
+            first_session.set(mainWindow.practiceSessionList[0]._name) #TODO CHECK
             print("hello")
-            load_session_dropdown = tk.OptionMenu(middle_frame, first_session, *mainWindow.practiceSessionNameList,
-                                                command=self.call_function)
+            load_session_dropdown = tk.OptionMenu(middle_frame, first_session, *mainWindow.practiceSessionList, command=self.call_function) #TODO CHECK, changed practiceSessionNameList->withoutName
+            # load_session_dropdown = tk.OptionMenu(middle_frame, first_session, *map(lambda session: mainWindow.practiceSessionList), command=self.call_function) #TODO CHECK, changed practiceSessionNameList->withoutName
+
             load_session_dropdown.pack()
             # acceptButton = tk.Button(middle_frame, text = "Select", command = lambda: reset_practice_session(loadSessionDropDown.get(), mainWindow))
             # acceptButton.pack()

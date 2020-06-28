@@ -1,15 +1,18 @@
 import tkinter as tk
-from practice_session import *
+# from practice_session import *
+from Session import *
 from constants import *
+import sys
+sys.path.insert(1, '../python_bridge')
 
 
 # Settings window to create a new session
 class NewSessionWindow(tk.Toplevel):
     def creating_a_new_session(self, mainWindow, oldWindow, newName, obj):
         oldWindow.destroy()
-        my_session = practice_session(newName)
+        my_session = Session(15 ,newName) #TODO: fix cent range
         mainWindow.practiceSessionList.append(my_session)
-        mainWindow.practiceSessionNameList.append(my_session._name)
+        # mainWindow.practiceSessionNameList.append(my_session._name)
         mainWindow.currentPracticeSession = my_session
         obj._practice_session = my_session
         mainWindow.myDiagnosticObject.sessionName.configure(text=newName)

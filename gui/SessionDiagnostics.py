@@ -7,7 +7,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class SessionDiagnostics:
     def more_info_window_caller(self, master, feedback_data):
-        myMoreInfoWindow = more_info_window(master, feedback_data)
+        myMoreInfoWindow = MoreInfoWindow(master, feedback_data)
         
     def update_plot(self, new_score, master):
         if master.currentPracticeSession is not None:

@@ -23,6 +23,8 @@ class Session:
         # Potential data storage
         self._note_history = []
         self._cent_history = []
+        self._scoreList = []
+        self._scoreIndex = []
 
     def get_overall(self):
         if self._overall_count == 0:
