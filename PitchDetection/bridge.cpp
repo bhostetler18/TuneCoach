@@ -41,11 +41,11 @@ static int TunerStream_py_init(TunerStream_py *self, PyObject *args, PyObject *k
 
 static PyObject *TunerStream_py_mainloop(TunerStream_py *self, PyObject *Py_UNUSED(ignored))
 {
+    Py_BEGIN_ALLOW_THREADS
     if (self->stream) {
-        Py_BEGIN_ALLOW_THREADS
         self->stream->mainloop();
-        Py_END_ALLOW_THREADS
     }
+    Py_END_ALLOW_THREADS
     Py_RETURN_NONE;
 }
 
@@ -93,9 +93,11 @@ static PyObject *TunerStream_py_read(TunerStream_py *self, PyObject *Py_UNUSED(i
 {
     double ret = 0;
     PyObject *success = Py_False;
+    Py_BEGIN_ALLOW_THREADS
     if (self->stream && self->stream->fetch_freq(ret)) {
         success = Py_True;
     }
+    Py_END_ALLOW_THREADS
     Py_INCREF(success);
     return PyTuple_Pack(2, PyFloat_FromDouble(ret), success);
 }
@@ -103,10 +105,11 @@ static PyObject *TunerStream_py_read(TunerStream_py *self, PyObject *Py_UNUSED(i
 static PyObject *TunerStream_py_peek(TunerStream_py *self, PyObject *Py_UNUSED(ignored))
 {
     double ret = 0;
+    Py_BEGIN_ALLOW_THREADS
     if (self->stream) {
         ret = self->stream->peek();
     }
-
+    Py_END_ALLOW_THREADS
     return PyFloat_FromDouble(ret);
 }
 

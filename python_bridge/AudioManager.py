@@ -48,7 +48,7 @@ class Reader(threading.Thread):
         while(self._stream.is_alive()):
             response, success = self._stream.read()
             if success and response:
-                hz = response.value
+                hz = response
                 self.session.collect_data(hz)
         print("Reader stopped")
 
@@ -56,7 +56,7 @@ class Reader(threading.Thread):
 class AudioManager(TunerStream):
     def __init__(self, session):
         super().__init__(44100)
-        self._background_audio = Process(target=lambda: self.mainloop(), daemon=True)
+        self._background_audio = threading.Thread(target = lambda: self.mainloop())
         self._background_audio.start()
         self._background_reader = Reader(self, session)
         self._background_reader.start()
