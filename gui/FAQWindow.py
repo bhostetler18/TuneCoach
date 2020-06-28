@@ -1,10 +1,10 @@
 import tkinter as tk
 from constants import *
 
-class faq_window(tk.Toplevel):
-    def __init__(self, master):
-        self.master = master
-        faq_window = tk.Toplevel(master)
+
+class FAQWindow:
+    def __init__(self, mainWindow):
+        faq_window = tk.Toplevel(mainWindow)
         faq_window.geometry()
 
         message = "Q: Why am I not in tune?\n" \
@@ -32,4 +32,4 @@ class faq_window(tk.Toplevel):
         faq_label = tk.Label(faq_window, text=message, font=("Calibri", 12), justify=tk.LEFT)
         faq_label.config(bg=background_color, fg="white")
         faq_label.pack()
-        faq_window.lift(master)
+        faq_window.lift(mainWindow)

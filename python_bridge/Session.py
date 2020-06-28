@@ -1,29 +1,36 @@
 import collections
 from pitch_utilities import *
-from main_window import *
+from MainWindow import *
 import math
+import datetime
 
 
-class FeedbackSystem:
-    def __init__(self, cent_range):
+class Session:
+    def __init__(self, cent_range, session_name):
         self._notes = ("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
-        self._pitch_class = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self._in_tune_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self._pitch_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self._freq_history = []
         self._cents = 0.0
         self._overall = 0
         self._overall_count = 0
-        self._practice_session = None
         self._threshold = cent_range
+        self._timestamp = datetime.date.today()
+        self._name = session_name
         self._recent_notes = collections.deque([])
         self.display_buffer = collections.deque([])
 
+        # Potential data storage
+        self._note_history = []
+        self._cent_history = []
+        self._scoreList = []
+        self._scoreIndex = []
+
     def get_overall(self):
-        if self._practice_session is None:
-            return 0
-        if self._practice_session._total_count == 0:
+        if self._overall_count == 0:
             return 0
         else:
-            return (100.0 * self._practice_session._overall) / self._practice_session._total_count
+            return (100.0 * self._overall) / self._overall_count
 
     def get_recent_notes(self):
         return self._recent_notes
@@ -33,6 +40,7 @@ class FeedbackSystem:
 
     # Takes in frequency and calculates and stores all data
     def collect_data(self, hz):
+        self._freq_history.append(hz)
         midi = hz_to_midi(hz)
         index = midi_to_pitch_class(midi)
         desired_hz = closest_in_tune_frequency(hz)
@@ -44,20 +52,11 @@ class FeedbackSystem:
 
         # Gets counts of everything to calculate accuracy
         if abs(cent) <= self._threshold:
-            self._pitch_class[index] += 1
+            self._in_tune_count[index] += 1
             self._overall += 1
         self._pitch_count[index] += 1
         self._overall_count += 1
         self._cents += abs(cent)
-
-        #for updating the score information for each practice session
-        if self._practice_session is not None:
-            if abs(cent) <= self._threshold:
-                self._practice_session._pitch_class[index] += 1
-                self._practice_session._overall += 1
-            self._practice_session._total_count += 1
-            self._practice_session._pitch_count[index] += 1
-            self._practice_session._cents += abs(cent)
 
         self.display_buffer.append((name, cent))
         if len(self.display_buffer) > 64:
@@ -77,7 +76,7 @@ class FeedbackSystem:
             if self._pitch_count[i] == 0:
                 print(self._notes[i], "was not played/sung in the session.")
             else:
-                pitch_error = (100.0 * self._pitch_class[i]) / self._pitch_count[i]
+                pitch_error = (100.0 * self._in_tune_count[i]) / self._pitch_count[i]
                 print("%s was in tune for %.2f %% of the time." % (self._notes[i], pitch_error))
 
         print("")

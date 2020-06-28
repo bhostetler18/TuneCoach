@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter.font import Font
+import tkinter.ttk as ttk
 from math import sin, cos, radians
 import sys
 sys.path.insert(1, '../python_bridge')
@@ -11,9 +12,10 @@ from math import sin, cos, radians
 import time
 from indicatorlight import *
 
+
 class PitchDisplay:
-    def __init__(self, grandparent, frame, manager, threshold=10):
-        self.grandparent = grandparent
+    def __init__(self, parent, frame, manager, threshold=10):
+        self.parent = parent
         self.frame = frame
         self.audio_manager = manager
 
@@ -26,10 +28,10 @@ class PitchDisplay:
         self._centsValue = -50
         self._hertzValue = 0
 
-        self._span = 75 #size of tuner arc in degrees, starting at vertical 
+        self._span = 75 # Size of tuner arc in degrees, starting at vertical
 
         self.canvas = Canvas(frame)
-        self.canvas.pack(fill = BOTH, expand = True)
+        self.canvas.pack(fill=BOTH, expand=True)
         self.canvas.bind("<Configure>", self.configure)
 
         self.light = IndicatorLight(self.canvas, 50)
@@ -147,4 +149,4 @@ class PitchDisplay:
                 self.display_current_gui()
 
 
-        self.grandparent.after(10, self.update_data)
+        self.parent.after(10, self.update_data)
