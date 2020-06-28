@@ -1,9 +1,7 @@
 import tkinter as tk
-# from practice_session import *
-from Session import *
-from constants import *
-import sys
-sys.path.insert(1, '../python_bridge')
+from python_bridge.Session import *
+from gui.constants import *
+
 
 # Settings window to create a new session
 class NewSessionWindow:

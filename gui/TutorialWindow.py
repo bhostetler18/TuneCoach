@@ -1,10 +1,11 @@
 import tkinter as tk
-from constants import *
+from gui.constants import *
 
 
 class TutorialWindow:
     def __init__(self, mainWindow):
         tutorial_window = tk.Toplevel(mainWindow)
+
         tutorial_window.geometry()
 
         message = "Welcome to TuneCoach!\n" \

@@ -16,7 +16,7 @@ TunerStream::TunerStream(int sample_rate)
     sample_format.channels = 1;
     sample_format.rate = sample_rate;
     int err;
-    server = pa_simple_new(nullptr,               // Use the default server.
+    server = pa_simple_new(nullptr,          // Use the default server.
                       "TuneCoach",           // Our application's name.
                       PA_STREAM_RECORD,
                       nullptr,               // Use the default device.

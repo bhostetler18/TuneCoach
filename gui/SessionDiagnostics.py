@@ -1,6 +1,6 @@
-from MoreInfoWindow import *
+from gui.MoreInfoWindow import *
 import tkinter as tk
-from constants import *
+from gui.constants import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 

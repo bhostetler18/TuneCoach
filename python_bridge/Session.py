@@ -1,6 +1,6 @@
 import collections
-from pitch_utilities import *
-from MainWindow import *
+from python_bridge.pitch_utilities import *
+from gui.MainWindow import *
 import math
 import datetime
 

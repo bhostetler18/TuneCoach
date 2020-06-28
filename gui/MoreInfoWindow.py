@@ -1,4 +1,4 @@
-from constants import *
+from gui.constants import *
 import tkinter as tk
 
 

@@ -1,10 +1,9 @@
-from MainWindow import *
-from PitchDisplay import *
+from gui.MainWindow import *
+from gui.PitchDisplay import *
 from tkinter import *
-from Session import *
-from AudioManager import *
+from python_bridge.Session import *
+from python_bridge.AudioManager import *
 import time
-sys.path.insert(1, '../python_bridge')
 
 
 def space_pressed(event, audio_manager, mainWindow):

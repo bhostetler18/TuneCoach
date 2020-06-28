@@ -1,5 +1,5 @@
 import tkinter as tk
-from constants import *
+from gui.constants import *
 
 # Settings window to load new session
 class LoadSessionWindow:
