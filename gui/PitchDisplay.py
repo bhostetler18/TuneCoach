@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter.font import Font
+import tkinter.ttk as ttk
 from math import sin, cos, radians
 import sys
 sys.path.insert(1, '../python_bridge')
@@ -12,8 +13,8 @@ import time
 
 
 class PitchDisplay:
-    def __init__(self, grandparent, frame, manager, threshold=10):
-        self.grandparent = grandparent
+    def __init__(self, parent, frame, manager, threshold=10):
+        self.parent = parent
         self.frame = frame
         self.audio_manager = manager
 
@@ -144,4 +145,4 @@ class PitchDisplay:
                 self.display_current_gui()
 
 
-        self.grandparent.after(10, self.update_data)
+        self.parent.after(10, self.update_data)

@@ -6,26 +6,27 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
 class SessionDiagnostics:
-    def more_info_window_caller(self, master, feedback_data):
-        myMoreInfoWindow = MoreInfoWindow(master, feedback_data)
+    def more_info_window_caller(self, mainWindow):
+        MoreInfoWindow(mainWindow)
         
-    def update_plot(self, new_score, master):
-        if master.currentPracticeSession is not None:
-            master.currentPracticeSession._scoreList.append(new_score)
-            if len(master.currentPracticeSession._scoreList) > 10:
-                master.currentPracticeSession._scoreList.pop(0)
+    def update_plot(self, new_score, mainWindow):
+        if mainWindow.currentPracticeSession is not None:
+            mainWindow.currentPracticeSession._scoreList.append(new_score)
+            if len(mainWindow.currentPracticeSession._scoreList) > 10:
+                mainWindow.currentPracticeSession._scoreList.pop(0)
             else:
-                master.currentPracticeSession._scoreIndex.append(len(master.currentPracticeSession._scoreIndex))
+                mainWindow.currentPracticeSession._scoreIndex.append(len(mainWindow.currentPracticeSession._scoreIndex))
             self.a.clear()
             self.a.set_xlim([0,10])
             self.a.set_ylim([0,100])
             self.a.set_autoscale_on(False)
             self.a.set_title("Score Over Time")
             self.a.set_ylabel("Score")
-            self.a.plot(master.currentPracticeSession._scoreIndex, master.currentPracticeSession._scoreList, color = "blue")
+            self.a.plot(mainWindow.currentPracticeSession._scoreIndex, mainWindow.currentPracticeSession._scoreList, color = "blue")
             self.canvas.draw()
 
-    def __init__(self, workingFrame, feedback_data, master):
+    def __init__(self, workingFrame, mainWindow):
+        currentSession = mainWindow.currentPracticeSession
         topest_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
         top_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
         right_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
@@ -52,10 +53,16 @@ class SessionDiagnostics:
         title_label.pack(side=tk.TOP)
         self.sessionName = tk.Label(topest_frame, text="No Practice Session Selected", bg=background_color, fg="white")
         self.sessionName.pack(side=tk.BOTTOM)
-        v = "Overall Score: %.2f" % feedback_data.get_overall()
+
+        if currentSession is None:
+            print("There is no session.")
+            v = 'No score available.'
+        else:
+            v = "Overall Score: %.2f" % currentSession.get_overall()
+
         self.overallScoreLabel = tk.Label(top_frame, text=v, bg=background_color, fg="white")
         self.overallScoreLabel.pack()
-        more_info_button = tk.Button(middle_frame, text="More info", command=lambda: self.more_info_window_caller(master, feedback_data))
+        more_info_button = tk.Button(middle_frame, text="More info", command=lambda: self.more_info_window_caller(mainWindow))
         more_info_button.pack()
 
         defaultX = [0]
@@ -63,6 +70,7 @@ class SessionDiagnostics:
         self.fig = Figure(figsize=(3, 3))
         self.a = self.fig.add_subplot(111)
         self.a.plot(defaultX, defaultY, color='blue')
+
         # Not sure whether or not we want it to have the same axis the whole time
         self.a.set_ylim([0, 100])
         self.a.set_xlim([0, 10])
