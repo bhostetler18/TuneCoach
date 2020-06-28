@@ -1,5 +1,7 @@
 #include "processing_utilities.h"
 
+//NOTE: many of the more useful templated functions are only present in processing_utilities.h
+
 double lag_to_hertz(double lag, double sample_rate)
 {
     return sample_rate/lag;
@@ -29,4 +31,9 @@ double closest_in_tune_frequency(double hz)
 {
     int closest_note = (int)round(hz_to_midi(hz));
     return midi_to_hz(closest_note);
+}
+
+double dbfs_from_rms(double rms)
+{
+    return 20.0 * log10(rms) + 3.0103;
 }

@@ -10,11 +10,13 @@
  * For example, output[52] will contain the NSDF with tau of 52 once this is run.
  * Ensure 'output' has allocated space for (lag_stop - lag_start) values.
  * 'buffer' of size 'length' should contain the audio samples
+ * The optimized version always runs with lag_start = 0
  * See https://www.researchgate.net/publication/230554927_A_smarter_way_to_find_pitch
  */
 template <typename T>
 void normalized_square_difference(T* buffer, int length, int lag_start, int lag_stop, T* output);
-
+template <typename T>
+void normalized_square_difference_optimized(T* buffer, int length, int lag_stop, T* output);
 
 /* Populates 'peaks' with the sample location [0, length) of local maxima in arr (if any).
  * Pass in the length of 'arr' with 'length'. Only the highest local maximum between zero crossings
@@ -47,6 +49,13 @@ template <typename T>
 double parabolic_interpolation(T* arr, int peak);
 
 
+// Calculates the root mean square of values in arr in [0, length)
+template <typename T>
+double rms(T* arr, int length);
+
+//Calculates dBFS (decibels full scale) from an rms value
+double dbfs_from_rms(double rms);
+
 // Converts a sample number/lag amount to the pitch in Hz it represents.
 double lag_to_hertz(double lag, double sample_rate);
 
@@ -56,10 +65,8 @@ int hertz_to_lag(double hertz, double sample_rate);
 // Converts a frequency to the corresponding MIDI note designation (unrounded).
 double hz_to_midi(double hz);
 
-
 // Converts a MIDI note # to the corresponding frequency
 double midi_to_hz(int midi);
-
 
 /* Returns the difference in cents between the 'target' frequency and 'actual' (Hz).
  * Positive indicates sharp, negative flat.
@@ -68,6 +75,7 @@ double cents(double target, double actual);
 
 // Returns the closest (equal tempered) in-tune frequency to 'hz'
 double closest_in_tune_frequency(double hz);
+
 
 template <typename T>
 //TODO: this can definitely be optimized, even without the FFT trick
@@ -168,15 +176,27 @@ double choose_fundamental(T* nsdf, int* peaks, int psize, double sample_rate, do
     return 0;
 }
 
-//TODO: iterative interpolation instead of a single shot?
+
 template <typename T>
 double parabolic_interpolation(T* arr, int peak)
 {
+    double a = arr[peak - 1];
     double b = arr[peak];
-    double an = arr[peak - 1];
     double c = arr[peak + 1];
 
-    double offset = (an - c) / (2.0 * (an - 2.0 * b + c));
+    double offset = (a - c) / (2.0 * (a - 2.0 * b + c));
     if (std::isnan(offset)) return peak;
     return peak + offset;
+}
+
+
+template<typename T>
+double rms(T* arr, int length)
+{
+    double sum = 0;
+    for (int i = 0; i < length; ++i)
+    {
+        sum += arr[i] * arr[i];
+    }
+    return sqrt(sum/(double)length);
 }

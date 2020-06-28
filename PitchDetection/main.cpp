@@ -1,53 +1,83 @@
 #include <iostream>
 #include <cmath>
-#include <pulse/simple.h>
 #include <chrono>
+#include <thread>
 #include "processing_utilities.h"
-#include "PitchDetector.h"
+#include "TunerStream.h"
+#include "FeedbackSystem.h"
 
-int main()
-{
-    int rc;
-    int sample_rate = 44100;
+/* TODO:
+ * Octave numbers
+ * Fix input interrupt
+*/
 
-    pa_simple *server;
-    pa_sample_spec sample_format;
-    sample_format.format = PA_SAMPLE_FLOAT32LE;
-    sample_format.channels = 1;
-    sample_format.rate = sample_rate;
-    int err;
-    server = pa_simple_new(nullptr,               // Use the default server.
-                      "TuneCoach",           // Our application's name.
-                      PA_STREAM_RECORD,
-                      nullptr,               // Use the default device.
-                      "Audio capture",            // Description of our stream.
-                      &sample_format,                // Our sample format.
-                      nullptr,               // Use default channel map
-                      nullptr,               // Use default buffering attributes.
-                      &err
-    );
+int main(){
+    FeedbackSystem data(15);
+    auto start = chrono::steady_clock::now();
 
-    const int buffer_size = 2048;
-    float buffer[buffer_size];
-    PitchDetector p(sample_rate, buffer_size, 60.0);
+    TunerStream t(44100);
 
-    std::string notes[12] = {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
-
-    while (true)
-    {
-        rc = pa_simple_read(server, buffer, buffer_size*4, nullptr);
-        if (rc) break; // TODO error checking for underrun and other issues
-
-        double detected_hz = p.get_frequency(buffer);
-        if (detected_hz != 0) {
-            int midi = (int)round(hz_to_midi(detected_hz));
-            std::string name = notes[midi % 12];
-            double desired_hz = closest_in_tune_frequency(detected_hz);
-            double cent = cents(desired_hz, detected_hz);
-            std::cout << name << "    " << detected_hz << "    " << cent << "  cents" << std::endl;
+    std::thread stopper([&]{
+        char in;
+        while(t.isAlive()){
+            cin.get(in);
+            if(in == ' '){
+                if(!t.isPaused()){
+                    t.pause();
+                    cout << "PAUSING" << endl;
+                }
+                else{
+                    t.resume();
+                    cout << "RESUMING" << endl;
+                }
+            }
+            if(in == 'q'){
+                t.kill();
+                cout << "KILLING" << endl;
+                cout << endl;
+            }
         }
-    }
 
-    pa_simple_free(server);
+    });
+
+
+    std::thread reader([&]{
+        while(t.isAlive()) {
+            double freq;
+            std::string notes[12] = {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
+            while(!t.fetch_freq(freq));
+            if (freq != 0) {
+                int midi = (int)round(hz_to_midi(freq));
+                std::string name = notes[midi % 12];
+                double desired_hz = closest_in_tune_frequency(freq);
+                double cent = cents(desired_hz, freq);
+                data.collectData(midi % 12, cent);
+                std::cout << name << "    " << freq << "    " << cent << "  cents" << "    " << data.getOverall() << std::endl;
+            }
+        }
+    });
+
+
+
+    t.mainloop();
+    stopper.join();
+    reader.join();
+
+    auto end = chrono::steady_clock::now();
+    int time = chrono::duration_cast<chrono::seconds>(end - start).count();
+    int minutes = time / 60;
+    int seconds = time % 60;
+
+    cout << "Here are the results of this session:" << endl;
+    cout << "-------------------------------------" << endl;
+    if(minutes == 0){
+        cout << "This session lasted " << seconds << " seconds." << endl;
+    }
+    else{
+        cout << "This session lasted " << minutes << " minutes and " << seconds << " seconds." << endl;
+    }
+    cout << endl;
+
+    data.displayData();
     return 0;
 }
