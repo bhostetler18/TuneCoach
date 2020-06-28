@@ -8,6 +8,7 @@ import numpy as np
 
 from gui.PitchDisplay import *
 from python_bridge.Session import *
+from python_bridge.AudioManager import *
 from gui.constants import *
 from gui.SessionHistory import *
 from gui.MoreInfoWindow import *
@@ -28,22 +29,22 @@ noise_filter_level = 20
 
 # main gui
 class MainWindow(tk.Frame):
-    def __init__(self, master, manager, session):
+    def __init__(self, master):
         self.practiceSessionList = []
         self.practiceSessionNameList = []
-        self.currentPracticeSession = session
+        self.currentPracticeSession = Session(15, "temp") # TODO: don't hardcode threshold
         self.isPaused = False
         tk.Frame.__init__(self, master)
         self.master = master
 
-        self.audio_manager = manager
+        self.audio_manager = AudioManager(self.currentPracticeSession)
         screen_width = master.winfo_screenwidth()
         screen_height = master.winfo_screenheight()
 
         master.title("TuneCoach")
         master.geometry(f'{screen_width}x{screen_height}')
     
-        self.create_menubar(self.master, session)
+        self.create_menubar(self.master, self.currentPracticeSession)
         self.layout_frames(screen_width, screen_height)
 
     # adding menu options to the top of the screen.
