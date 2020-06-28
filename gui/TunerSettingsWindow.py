@@ -4,7 +4,7 @@ import tkinter.ttk as ttk
 
 
 # Tuner settings window
-class TunerSettingsWindow(tk.Toplevel):
+class TunerSettingsWindow:
     def update_pitch_settings(self, newPitch, newFilterLevel, oldSettingsView, obj):
         obj.update_threshold(newPitch)
         noise_filter_level = newFilterLevel

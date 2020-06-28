@@ -9,6 +9,7 @@ class EndSessionWindow:
         mainWindow.myDiagnosticObject.a.set_title("Score Over Time")
         mainWindow.myDiagnosticObject.a.set_ylabel("Score")
         mainWindow.myDiagnosticObject.canvas.draw()
+        mainWindow.myDiagnosticObject.sessionName.configure(text="No Practice Session Selected")
 
         self.end_sesh_window = tk.Toplevel(mainWindow)
         self.end_sesh_window.configure(bg = background_color)

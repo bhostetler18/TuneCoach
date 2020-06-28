@@ -11,6 +11,7 @@ class NewSessionWindow:
         oldWindow.destroy()
         my_session = Session(15, newName) #TODO: fix cent range
         mainWindow.practiceSessionList.append(my_session)
+        print("new session is created, it is set to our current practice session variable")
         mainWindow.currentPracticeSession = my_session
         mainWindow.myDiagnosticObject.sessionName.configure(text=newName)
 

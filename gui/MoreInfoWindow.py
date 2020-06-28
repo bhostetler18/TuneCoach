@@ -10,16 +10,21 @@ class MoreInfoWindow:
     def __init__(self, mainWindow):
         my_window = tk.Toplevel(mainWindow)
         currentSession = mainWindow.currentPracticeSession
+
+        print(currentSession._name, '**************************', currentSession._overall_count)
+
         final_string = ""
-        if currentSession._practice_session is None:
+        # if currentSession._practice_session is None:
+        if currentSession is None:
             final_string += "\n No Input Yet"
-        elif currentSession._practice_session._total_count > 0:
-            avg_cents= currentSession._practice_session._cents / currentSession._practice_session._total_count
+        # elif currentSession._practice_session._total_count > 0:
+        elif currentSession._overall_count > 0:
+            avg_cents= currentSession._cents / currentSession._overall_count
             for i in range(12):
-                if currentSession._practice_session._pitch_count[i] == 0:
+                if currentSession._pitch_count[i] == 0:
                     final_string += ("\n" + currentSession._notes[i] + " was not played/sung in the session.")
                 else:
-                    pitch_error = (100.0*currentSession._practice_session._pitch_class[i]) / currentSession._practice_session._pitch_count[i]
+                    pitch_error = (100.0*currentSession._pitch_class[i]) / currentSession._pitch_count[i]
                     final_string += ("\n%s was in tune for %.2f %% of the time." % (currentSession._notes[i], pitch_error))
             final_string += "\n"
             final_string += "\nOverall"
