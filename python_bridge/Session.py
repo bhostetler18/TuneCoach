@@ -1,6 +1,6 @@
 import collections
 from pitch_utilities import *
-from main_window import *
+from MainWindow import *
 import math
 import datetime
 

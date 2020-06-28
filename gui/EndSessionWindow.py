@@ -1,7 +1,8 @@
 import tkinter as tk
 from constants import *
 
-#settings window to end current session
+
+# Settings window to end current session
 class EndSessionWindow(tk.Toplevel):
     def __init__(self, master, mainWindow, obj):
         self.master = master
@@ -14,13 +15,13 @@ class EndSessionWindow(tk.Toplevel):
         self.end_sesh_window = tk.Toplevel(master)
         self.end_sesh_window.configure(bg = Colors.background_color)
         self.end_sesh_window.geometry("200x100")
-        topFrame = tk.Frame(self.end_sesh_window, bg=background_color, bd=5)
-        bottomFrame = tk.Frame(self.end_sesh_window, bg=background_color, bd=5)
-        topFrame.grid(row=0, sticky="nsew")
-        bottomFrame.grid(row=1, sticky="nsew")
+        top_frame = tk.Frame(self.end_sesh_window, bg=background_color, bd=5)
+        bottom_frame = tk.Frame(self.end_sesh_window, bg=background_color, bd=5)
+        top_frame.grid(row=0, sticky="nsew")
+        bottom_frame.grid(row=1, sticky="nsew")
         self.end_sesh_window.grid_rowconfigure(0, weight=1)
         self.end_sesh_window.grid_rowconfigure(1, weight=1)
-        successLabel = tk.Label(topFrame, text="Session ended successfully.", fg="white", bg=background_color)
-        successLabel.pack()
-        endButton = tk.Button(bottomFrame, text="Ok", command=lambda: self.end_sesh_window.destroy())
-        endButton.pack()
+        success_label = tk.Label(top_frame, text="Session ended successfully.", fg="white", bg=background_color)
+        success_label.pack()
+        end_button = tk.Button(bottom_frame, text="Ok", command=lambda: self.end_sesh_window.destroy())
+        end_button.pack()

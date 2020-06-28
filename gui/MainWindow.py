@@ -1,4 +1,4 @@
-#main gui for our project, tuneCoach. Made by the group , Jamm Hostetler , James Eschrich, Joe Gravelle, Jenny Baik, Gavin Gui
+# main gui for TuneCoach. Made by the group, Jamm Hostetler, James Eschrich, Joe Gravelle, Jenny Baik, Gavin Gui
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -21,11 +21,13 @@ from LoadSessionWindow import *
 from FAQWindow import *
 from TutorialWindow import *
 
-#stand-in variable for noise-filter level, when we come up with some sort of filter, then can initialize real variable like the threshold variable in main of master.py 
+# Stand-in variable for noise-filter level, when we come up with some sort of filter, 
+# then can initialize real variable like the threshold variable in main of master.py 
 noise_filter_level = 20
 
-#main gui
-class main_window(tk.Frame):
+
+# main gui
+class MainWindow(tk.Frame):
     def __init__(self, master, manager, feedback_data):
         self.practiceSessionList = []
         self.practiceSessionNameList = []
@@ -44,7 +46,7 @@ class main_window(tk.Frame):
         self.create_menubar(self.master, feedback_data)
         self.layout_frames(self.master, screen_width, screen_height, feedback_data)
 
-    #adding menu options to the top of the screen.
+    # adding menu options to the top of the screen.
     def save_practice_session(self, feedback_data):
         SaveWindow(self, self.master, feedback_data)
 
@@ -52,7 +54,7 @@ class main_window(tk.Frame):
         RemoveWindow(self, self.master, feedback_data)
 
     def tuner_settings(self, feedback_data):
-        settingsWindow = TunerSettingsWindow(self.master, feedback_data)
+        TunerSettingsWindow(self.master, feedback_data)
 
     def change_layout(self):
         print("this will change the layout")
@@ -61,16 +63,16 @@ class main_window(tk.Frame):
         print("function to display menu to change user settings")
 
     def load_faq(self):
-        faq = FAQWindow(self.master)
+        FAQWindow(self.master)
 
     def load_tutorial(self):
-        tutorial = TutorialWindow(self.master)
+        TutorialWindow(self.master)
 
     def new_practice_session(self, feedback_data):
-        newPracticeSessionWindow = NewSessionWindow(self.master, self, feedback_data)
+        NewSessionWindow(self.master, self, feedback_data)
 
     def load_practice_session(self, feedback_data):
-        loadPracticeSessionWindow = LoadSessionWindow(self.master, self, feedback_data)
+        LoadSessionWindow(self.master, self, feedback_data)
 
     def end_practice_session(self, feedback_data):
         EndSessionWindow(self.master, self, feedback_data)
@@ -121,14 +123,14 @@ class main_window(tk.Frame):
 
         # Creating frames to organize the screen.
     def layout_frames(self, master, screen_width, screen_height, feedback_data):
-        bottomFrame = tk.Frame(master, bd=5, relief=tk.RAISED, bg=background_color)
-        leftFrame = tk.Frame(master, bd=5, relief=tk.RAISED, bg=background_color)
-        rightFrame = tk.Frame(master, bd=5, relief=tk.RAISED, bg=background_color)
+        bottom_frame = tk.Frame(master, bd=5, relief=tk.RAISED, bg=background_color)
+        left_frame = tk.Frame(master, bd=5, relief=tk.RAISED, bg=background_color)
+        right_frame = tk.Frame(master, bd=5, relief=tk.RAISED, bg=background_color)
 
         # Putting the frames into a grid layout
-        bottomFrame.grid(row=1, column=0, columnspan=2, sticky="nsew")
-        leftFrame.grid(row=0, column=0, sticky="nsew")
-        rightFrame.grid(row=0, column=1, sticky="nsew")
+        bottom_frame.grid(row=1, column=0, columnspan=2, sticky="nsew")
+        left_frame.grid(row=0, column=0, sticky="nsew")
+        right_frame.grid(row=0, column=1, sticky="nsew")
 
         # setting up grid weights.
         master.grid_rowconfigure(0, weight=1)
@@ -137,7 +139,7 @@ class main_window(tk.Frame):
         master.grid_columnconfigure(1, weight=4)
 
         # Here we can work on creating the functionality for each frame, ex: tuner, pitch history, information
-        self.myHistoryObject = SessionHistory(bottomFrame, screen_width, screen_height)
-        self.myDiagnosticObject = SessionDiagnostics(leftFrame, feedback_data, master)
+        self.myHistoryObject = SessionHistory(bottom_frame, screen_width, screen_height)
+        self.myDiagnosticObject = SessionDiagnostics(left_frame, feedback_data, master)
 
-        self.pitchDisplay = PitchDisplay(master, rightFrame, self.audio_manager)
+        self.pitchDisplay = PitchDisplay(master, right_frame, self.audio_manager)

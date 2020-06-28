@@ -2,7 +2,8 @@ import tkinter as tk
 import PIL.Image
 import PIL.ImageTk
 
-# dfferent classes for pop-up windows.
+
+# Different classes for pop-up windows.
 class SessionHistory:
     def create_circle(self, x, y, r, canvasName, fillColor):  # center coordinates, radius
         x0 = x - r
@@ -14,13 +15,13 @@ class SessionHistory:
     def __init__(self, workingFrame, width, height):
         self.canvas = tk.Canvas(workingFrame, width=width / 2, height=height / 4, relief=tk.RIDGE, bd=5, bg="#bdd0df")
         self.canvas.pack(side=tk.LEFT, padx=width / 4)
-        largeImage = PIL.Image.open("piano.jpeg")
-        largeImage = largeImage.resize((int(width / 10), int(height / 3.9)), PIL.Image.ANTIALIAS)
-        pianoImage = PIL.ImageTk.PhotoImage(largeImage)
+        large_image = PIL.Image.open("piano.jpeg")
+        large_image = large_image.resize((int(width / 10), int(height / 3.9)), PIL.Image.ANTIALIAS)
+        piano_image = PIL.ImageTk.PhotoImage(large_image)
         self.width = width
         self.height = height
 
-        self.canvas.create_image(0, 0, anchor=tk.NW, image=pianoImage)
+        self.canvas.create_image(0, 0, anchor=tk.NW, image=piano_image)
 
         self.noteDict = {
             "C": height / 3.9 / 15,
@@ -42,7 +43,7 @@ class SessionHistory:
             self.canvas.create_line(width / 10, self.noteDict[note], width / 2, self.noteDict[note], width=3)
 
         self.circle_list = [None] * 64  # TODO: don't hardcode size and coordinate with Feedback buffer
-        self.canvas.image = pianoImage
+        self.canvas.image = piano_image
 
     def update(self, data):
         recent = list(data.display_buffer)
@@ -58,7 +59,7 @@ class SessionHistory:
             circle = self.circle_list[i]
             x = self.width / 10 + (i + 1) * 20
             y = self.noteDict[note]
-            if circle == None:
+            if circle is None:
                 c = self.create_circle(x, y, 10, self.canvas, color)
                 self.circle_list[i] = c
             else:

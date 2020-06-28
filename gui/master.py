@@ -1,11 +1,11 @@
-from main_window import *
+from MainWindow import *
 from PitchDisplay import *
 from tkinter import *
 from Session import *
 from AudioManager import *
 import time
-
 sys.path.insert(1, '../python_bridge')
+
 
 def space_pressed(event, audio_manager, mainWindow):
     if audio_manager.is_paused():
@@ -16,6 +16,7 @@ def space_pressed(event, audio_manager, mainWindow):
         print("Pausing")
         mainWindow.isPaused = True
         audio_manager.pause()
+
 
 def kill_pressed(event, audio_manager, data, start):
     print("Killing")
@@ -36,6 +37,7 @@ def kill_pressed(event, audio_manager, data, start):
     print("")
     data.display_all_data()
     audio_manager.destroy()
+
 
 def cleanup(root, audio_manager):
     audio_manager.destroy()
@@ -62,13 +64,14 @@ def main():
     manager = AudioManager(data)
     manager.start_capture()
     manager.start_reader()
-    ourWindow = main_window(root, manager, data)
-    root.bind('<space>', lambda event, arg=manager: space_pressed(event, arg, ourWindow))
+    our_window = MainWindow(root, manager, data)
+    root.bind('<space>', lambda event, arg=manager: space_pressed(event, arg, our_window))
     root.bind('q', lambda event, arg=manager: kill_pressed(event, arg, data, start))
     root.wm_protocol("WM_DELETE_WINDOW", lambda r=root, m=manager: cleanup(r, m))
-    score_update(ourWindow, data)
-    piano_update(ourWindow, data)
+    score_update(our_window, data)
+    piano_update(our_window, data)
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()

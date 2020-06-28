@@ -1,6 +1,7 @@
 import tkinter as tk
 from constants import *
 
+
 class FAQWindow(tk.Toplevel):
     def __init__(self, master):
         self.master = master
