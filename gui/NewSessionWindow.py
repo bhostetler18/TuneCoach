@@ -45,7 +45,7 @@ class NewSessionWindow(tk.Toplevel):
         text_entry.insert(tk.END, "new-session-1")
         text_entry.pack()
         enter_entry = tk.Button(right_frame, text="Enter",
-                               command=lambda: self.creating_a_new_session(mainWindow, new_sesh_window, textEntry.get(),
+                               command=lambda: self.creating_a_new_session(mainWindow, new_sesh_window, text_entry.get(),
                                                                            obj))
         enter_entry.pack()
 

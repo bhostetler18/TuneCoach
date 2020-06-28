@@ -13,7 +13,7 @@ class EndSessionWindow(tk.Toplevel):
         mainWindow.myDiagnosticObject.a.set_ylabel("Score")
         mainWindow.myDiagnosticObject.canvas.draw()
         self.end_sesh_window = tk.Toplevel(master)
-        self.end_sesh_window.configure(bg = Colors.background_color)
+        self.end_sesh_window.configure(bg = background_color)
         self.end_sesh_window.geometry("200x100")
         top_frame = tk.Frame(self.end_sesh_window, bg=background_color, bd=5)
         bottom_frame = tk.Frame(self.end_sesh_window, bg=background_color, bd=5)
