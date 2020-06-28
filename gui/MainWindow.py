@@ -28,10 +28,10 @@ noise_filter_level = 20
 
 # main gui
 class MainWindow(tk.Frame):
-    def __init__(self, master, manager, feedback_data):
+    def __init__(self, master, manager, session):
         self.practiceSessionList = []
         self.practiceSessionNameList = []
-        self.currentPracticeSession = None
+        self.currentPracticeSession = session
         self.isPaused = False
         tk.Frame.__init__(self, master)
         self.master = master
@@ -43,7 +43,7 @@ class MainWindow(tk.Frame):
         master.title("TuneCoach")
         master.geometry(f'{screen_width}x{screen_height}')
     
-        self.create_menubar(self.master, feedback_data)
+        self.create_menubar(self.master, session)
         self.layout_frames(screen_width, screen_height)
 
     # adding menu options to the top of the screen.

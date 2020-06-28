@@ -24,7 +24,7 @@ class MoreInfoWindow:
                 if currentSession._pitch_count[i] == 0:
                     final_string += ("\n" + currentSession._notes[i] + " was not played/sung in the session.")
                 else:
-                    pitch_error = (100.0*currentSession._pitch_class[i]) / currentSession._pitch_count[i]
+                    pitch_error = (100.0*currentSession._in_tune_count[i]) / currentSession._pitch_count[i]
                     final_string += ("\n%s was in tune for %.2f %% of the time." % (currentSession._notes[i], pitch_error))
             final_string += "\n"
             final_string += "\nOverall"

@@ -8,7 +8,7 @@ import datetime
 class Session:
     def __init__(self, cent_range, session_name):
         self._notes = ("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
-        self._pitch_class_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self._in_tune_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self._pitch_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self._freq_history = []
         self._cents = 0.0
@@ -52,7 +52,7 @@ class Session:
 
         # Gets counts of everything to calculate accuracy
         if abs(cent) <= self._threshold:
-            self._pitch_class_count[index] += 1
+            self._in_tune_count[index] += 1
             self._overall += 1
         self._pitch_count[index] += 1
         self._overall_count += 1
@@ -76,7 +76,7 @@ class Session:
             if self._pitch_count[i] == 0:
                 print(self._notes[i], "was not played/sung in the session.")
             else:
-                pitch_error = (100.0 * self._pitch_class_count[i]) / self._pitch_count[i]
+                pitch_error = (100.0 * self._in_tune_count[i]) / self._pitch_count[i]
                 print("%s was in tune for %.2f %% of the time." % (self._notes[i], pitch_error))
 
         print("")
