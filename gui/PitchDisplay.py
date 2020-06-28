@@ -10,6 +10,7 @@ from pitch_utilities import *
 from math import sin, cos, radians
 import time
 
+
 class PitchDisplay:
     def __init__(self, grandparent, frame, manager, threshold=10):
         self.grandparent = grandparent
@@ -25,10 +26,10 @@ class PitchDisplay:
         self._centsValue = -50
         self._hertzValue = 0
 
-        self._span = 75 #size of tuner arc in degrees, starting at vertical 
+        self._span = 75 # Size of tuner arc in degrees, starting at vertical
 
         self.canvas = Canvas(frame)
-        self.canvas.pack(fill = BOTH, expand = True)
+        self.canvas.pack(fill=BOTH, expand=True)
         self.canvas.bind("<Configure>", self.configure)
 
         self.showsHertz = BooleanVar()

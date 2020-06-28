@@ -1,7 +1,8 @@
 import tkinter as tk
 from constants import *
 
-class faq_window(tk.Toplevel):
+
+class FAQWindow(tk.Toplevel):
     def __init__(self, master):
         self.master = master
         faq_window = tk.Toplevel(master)
