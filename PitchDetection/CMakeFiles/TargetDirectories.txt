@@ -1,3 +1,0 @@
-/home/james/TuneCoach/PitchDetection/CMakeFiles/rebuild_cache.dir
-/home/james/TuneCoach/PitchDetection/CMakeFiles/edit_cache.dir
-/home/james/TuneCoach/PitchDetection/CMakeFiles/PitchDetection.dir

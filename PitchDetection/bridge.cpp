@@ -51,13 +51,21 @@ static PyObject *TunerStream_py_mainloop(TunerStream_py *self, PyObject *Py_UNUS
 
 static PyObject *TunerStream_py_pause(TunerStream_py *self, PyObject *Py_UNUSED(ignored))
 {
-    if (self->stream) self->stream->pause();
+    Py_BEGIN_ALLOW_THREADS
+    if (self->stream) {
+        self->stream->pause();
+    }
+    Py_END_ALLOW_THREADS
     Py_RETURN_NONE;
 }
 
 static PyObject *TunerStream_py_resume(TunerStream_py *self, PyObject *Py_UNUSED(ignored))
 {
-    if (self->stream) self->stream->resume();
+    Py_BEGIN_ALLOW_THREADS
+    if (self->stream) {
+        self->stream->resume();
+    }
+    Py_END_ALLOW_THREADS
     Py_RETURN_NONE;
 }
 
@@ -67,13 +75,17 @@ static PyObject *TunerStream_py_kill(TunerStream_py *self, PyObject *Py_UNUSED(i
     while (!self->stream->isSafeToDelete());
     delete self->stream;
     self->stream = nullptr;
-
     Py_RETURN_NONE;
 }
 
 static PyObject *TunerStream_py_is_alive(TunerStream_py *self, PyObject *Py_UNUSED(ignored))
 {
-    if (self->stream && self->stream->isAlive()) {
+    bool res;
+    Py_BEGIN_ALLOW_THREADS
+    res = self->stream && self->stream->isAlive();
+    Py_END_ALLOW_THREADS
+
+    if (res) {
         Py_RETURN_TRUE;
     } else {
         Py_RETURN_FALSE;
@@ -82,7 +94,12 @@ static PyObject *TunerStream_py_is_alive(TunerStream_py *self, PyObject *Py_UNUS
 
 static PyObject *TunerStream_py_is_paused(TunerStream_py *self, PyObject *Py_UNUSED(ignored))
 {
-    if (self->stream && self->stream->isPaused()) {
+    bool res;
+    Py_BEGIN_ALLOW_THREADS
+    res = self->stream && self->stream->isPaused();
+    Py_END_ALLOW_THREADS
+
+    if (res) {
         Py_RETURN_TRUE;
     } else {
         Py_RETURN_FALSE;
