@@ -7,9 +7,9 @@ from time import sleep
 if __name__ == "__main__":
     #main()
     stream = TunerStream(44100)
-
     reader_thread = Thread(target = lambda: stream.mainloop(), daemon=True)
     reader_thread.start()
+    stream.resume()
     while True:
         print(stream.peek())
-        sleep(1)
+        sleep(0.5)

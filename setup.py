@@ -7,7 +7,8 @@ pitch_detection = Extension('pitch_detection',
     sources = ['./PitchDetection/bridge.cpp', './PitchDetection/TunerStream.cpp', './PitchDetection/PitchDetector.cpp', \
         './PitchDetection/processing_utilities.cpp'],
     include_dirs = ['./PitchDetetion'],
-    define_macros = [('USE_PULSE',)])
+    libraries = ['pulse-simple'],
+    define_macros = [('USE_PULSE', '1')])
 
 setup(
     name="tunecoach", # Replace with your own username
