@@ -41,7 +41,11 @@ static int TunerStream_py_init(TunerStream_py *self, PyObject *args, PyObject *k
 
 static PyObject *TunerStream_py_mainloop(TunerStream_py *self, PyObject *Py_UNUSED(ignored))
 {
-    if (self->stream) self->stream->mainloop();
+    if (self->stream) {
+        Py_BEGIN_ALLOW_THREADS
+        self->stream->mainloop();
+        Py_END_ALLOW_THREADS
+    }
     Py_RETURN_NONE;
 }
 

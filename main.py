@@ -8,9 +8,8 @@ if __name__ == "__main__":
     #main()
     stream = TunerStream(44100)
 
-
-    reader_thread = Process(target = lambda: stream.mainloop(), daemon=True)
+    reader_thread = Thread(target = lambda: stream.mainloop(), daemon=True)
     reader_thread.start()
     while True:
-        print(stream.read())
+        print(stream.peek())
         sleep(1)
