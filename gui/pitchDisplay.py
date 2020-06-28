@@ -9,6 +9,7 @@ from constants import Colors
 from pitch_utilities import *
 from math import sin, cos, radians
 import time
+from indicatorlight import *
 
 class PitchDisplay:
     def __init__(self, grandparent, frame, manager, threshold=10):
@@ -30,6 +31,9 @@ class PitchDisplay:
         self.canvas = Canvas(frame)
         self.canvas.pack(fill = BOTH, expand = True)
         self.canvas.bind("<Configure>", self.configure)
+
+        self.light = IndicatorLight(self.canvas, 50)
+        self.light.pack(anchor='w', side='top')
 
         self.showsHertz = BooleanVar()
 

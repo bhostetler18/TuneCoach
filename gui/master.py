@@ -11,10 +11,12 @@ def space_pressed(event, audio_manager, mainWindow):
     if audio_manager.is_paused():
         print("Resuming")
         mainWindow.isPaused = False
+        mainWindow.pitchDisplay.light.start_flashing()
         audio_manager.resume()
     else:
         print("Pausing")
         mainWindow.isPaused = True
+        mainWindow.pitchDisplay.light.stop()
         audio_manager.pause()
 
 def kill_pressed(event, audio_manager, data, start):
@@ -60,7 +62,7 @@ def main():
     root = Tk()
     root.title("TuneCoach")
     manager = AudioManager(data)
-    manager.resume()
+    # manager.resume()
     ourWindow = main_window(root, manager, data)
     root.bind('<space>', lambda event, arg=manager: space_pressed(event, arg, ourWindow))
     root.bind('q', lambda event, arg=manager: kill_pressed(event, arg, data, start))
