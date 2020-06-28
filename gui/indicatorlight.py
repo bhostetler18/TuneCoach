@@ -13,20 +13,26 @@ class IndicatorLight(tk.Canvas):
 		self.line2 = self.create_line(0.65*size, 0.65*size, 0.65*size, 0.35*size, width=size/4.5, capstyle=tk.ROUND)
 
 	def start_flashing(self):
-		self._flashing = True
-		self.itemconfig(self.pausedCircle, state=tk.HIDDEN)
-		self.itemconfig(self.line1, state=tk.HIDDEN)
-		self.itemconfig(self.line2, state=tk.HIDDEN)
-		self._flash()
+		print("Start flashing")
+		if not self._flashing:
+			self._flashing = True
+			self.itemconfig(self.pausedCircle, state=tk.HIDDEN)
+			self.itemconfig(self.line1, state=tk.HIDDEN)
+			self.itemconfig(self.line2, state=tk.HIDDEN)
+			self._flash()
 
 	def _flash(self):
+		print("FLASH CALLED")
 		if self._flashing:
 			state = tk.HIDDEN if self._isOn else tk.NORMAL
 			self.itemconfig(self.light, state=state)
 			self._isOn = not self._isOn
-			self._parent.after(800, self._flash)
+			print("after called")
+			self._job = self._parent.after(800, self._flash)
 
 	def stop(self):
+		print("Stop flashing")
+		self._parent.after_cancel(self._job)
 		self._flashing = False
 		self.itemconfig(self.light, state=tk.HIDDEN)
 		self.itemconfig(self.pausedCircle, state=tk.NORMAL)
