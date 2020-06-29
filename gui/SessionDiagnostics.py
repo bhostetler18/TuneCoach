@@ -25,7 +25,8 @@ class SessionDiagnostics:
             self.a.plot(mainWindow.currentPracticeSession._scoreIndex, mainWindow.currentPracticeSession._scoreList, color = "blue")
             self.canvas.draw()
 
-    def __init__(self, workingFrame, mainWindow):
+    def __init__(self, mainWindow):
+        workingFrame = mainWindow.left_frame
         currentSession = mainWindow.currentPracticeSession
         topest_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
         top_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
