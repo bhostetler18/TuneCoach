@@ -76,6 +76,6 @@ class TunerSettingsWindow:
         in_cents.config(bg=background_color, fg="white")
         in_cents.pack()
 
-        done_button = ttk.Button(bottomest_frame, text="Apply", command=lambda: self.update_pitch_settings(pitch_sensitivity_scale.get(), outside_noise_scale.get(), tuner_settings_window,))
+        done_button = ttk.Button(bottomest_frame, text="Apply", command=lambda: self.update_pitch_settings(pitch_sensitivity_scale.get(), outside_noise_scale.get(), tuner_settings_window))
         done_button.pack()
         tuner_settings_window.lift(self.master)

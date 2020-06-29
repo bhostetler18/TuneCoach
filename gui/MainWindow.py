@@ -51,7 +51,7 @@ class MainWindow:
         RemoveWindow(self)
 
     def tuner_settings(self):
-        TunerSettingsWindow(self.master)
+        TunerSettingsWindow(self)
 
     def change_layout(self):
         print("this will change the layout")
