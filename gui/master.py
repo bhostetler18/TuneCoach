@@ -41,9 +41,9 @@ def main():
     def score_update(mainWindow):
         if not mainWindow.isPaused:
             mainWindow.myDiagnosticObject.overallScoreLabel.config(text="Overall Score: %.2f" % mainWindow.currentPracticeSession.get_overall())
-            mainWindow.myDiagnosticObject.update_plot(int(mainWindow.currentPracticeSession.get_overall()), mainWindow)
+            mainWindow.myDiagnosticObject.update_plot(int(mainWindow.currentPracticeSession.get_overall()))
             print(mainWindow.currentPracticeSession.get_overall())
-        root.after(500, lambda: score_update(mainWindow))
+        root.after(1000, lambda: score_update(mainWindow))
 
     def piano_update(mainWindow):
         mainWindow.myHistoryObject.update(mainWindow.currentPracticeSession)

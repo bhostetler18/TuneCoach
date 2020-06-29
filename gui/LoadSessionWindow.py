@@ -12,7 +12,10 @@ class LoadSessionWindow:
             if practiceSession._name == practiceSessionName:
                 mainWindow.currentPracticeSession = practiceSession
                 mainWindow.myDiagnosticObject.sessionName.configure(text=practiceSessionName)
-
+                mainWindow.myDiagnosticObject.update_plot(-1)
+                mainWindow.audio_manager = AudioManager(practiceSession)
+                mainWindow.myHistoryObject.clear()
+             
     def load_new_session(self, oldWindow):
         oldWindow.destroy()
         NewSessionWindow(self.mainWindow)
