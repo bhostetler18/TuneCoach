@@ -29,6 +29,15 @@ noise_filter_level = 20
 
 # main gui
 class MainWindow:
+    def get_current_screen_geometry(self):
+        root = tk.Tk()
+        root.update_idletasks()
+        root.attributes('-fullscreen', True)
+        root.state('iconic')
+        self.screen_width = root.winfo_screenwidth()
+        self.screen_height = root.winfo_screenheight()
+        root.destroy()
+
     def __init__(self, master):
         self.practiceSessionList = []
         self.currentPracticeSession = Session(15, "Temporary Session") # TODO: don't hardcode threshold
@@ -40,9 +49,13 @@ class MainWindow:
 
         self.master = master
 
+        master.attributes('-fullscreen', True)
+        master.state('iconic')
+        #self.get_current_screen_geometry()
         self.screen_width = master.winfo_screenwidth()
         self.screen_height = master.winfo_screenheight()
-
+        master.attributes('-fullscreen', False)
+        master.deiconify()
         master.title("TuneCoach")
         master.geometry(f'{self.screen_width}x{self.screen_height}')
         master.minsize(width = int(self.screen_width/2), height = int(self.screen_height/2))
