@@ -61,13 +61,7 @@ class MainWindow:
     def tuner_settings(self):
         TunerSettingsWindow(self)
 
-    def change_layout(self):
-        print("this will change the layout")
-
-    def user_settings(self):
-        print("function to display menu to change user settings")
-
-    def load_faq(self):
+    def load_FAQ(self):
         FAQWindow(self)
 
     def load_tutorial(self):
@@ -108,20 +102,10 @@ class MainWindow:
 
         settings_menu.add_command(label="Tuner Settings", command = self.tuner_settings)
 
-        settings_menu.add_separator
-        settings_menu.add_command(label="User Settings", command=self.user_settings)
-        settings_menu.add_separator
-
-        # View menubar
-        view_menu = tk.Menu(menubar)
-        menubar.add_cascade(label="View", menu=view_menu)
-        view_menu.add_command(label="Change layout", command=self.change_layout)
-        view_menu.add_separator
-
         # Help menubar
         help_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Help", menu=help_menu)
-        help_menu.add_command(label="FAQ", command=self.load_faq)
+        help_menu.add_command(label = "FAQ", command = self.load_FAQ)
         help_menu.add_separator
         help_menu.add_command(label="Tutorial", command=self.load_tutorial)
         help_menu.add_separator
