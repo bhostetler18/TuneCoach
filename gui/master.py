@@ -6,69 +6,66 @@ from python_bridge.AudioManager import *
 import time
 
 
-def space_pressed(event, audio_manager, mainWindow):
-    if audio_manager.is_paused():
+def space_pressed(event, mainWindow):
+    if mainWindow.audio_manager.is_paused():
         print("Resuming")
         mainWindow.isPaused = False
         mainWindow.pitchDisplay.light.start_flashing()
-        audio_manager.resume()
+        mainWindow.audio_manager.resume()
     else:
         print("Pausing")
         mainWindow.isPaused = True
         mainWindow.pitchDisplay.light.stop()
-        audio_manager.pause()
+        mainWindow.audio_manager.pause()
 
 
-def kill_pressed(event, audio_manager, data, start):
+def kill_pressed(event, mainWindow):
     print("Killing")
     print("")
-    end = time.time()
-    elapsed_time = end - start
-    minutes = int(elapsed_time) // 60
-    seconds = int(elapsed_time) % 60
+    # end = time.time()
+    # elapsed_time = end - start
+    # minutes = int(elapsed_time) // 60
+    # seconds = int(elapsed_time) % 60
 
-    print("Here are the results of this session:")
-    print("-------------------------------------")
-    if minutes == 0:
-        print("This session lasted", seconds, "seconds.")
-    elif minutes == 1:
-        print("This session lasted", minutes, "minute and", seconds, "seconds.")
-    else:
-        print("This session lasted", minutes, "minutes and", seconds, "seconds.")
-    print("")
-    data.display_all_data()
-    audio_manager.destroy()
+    # print("Here are the results of this session:")
+    # print("-------------------------------------")
+    # if minutes == 0:
+    #     print("This session lasted", seconds, "seconds.")
+    # elif minutes == 1:
+    #     print("This session lasted", minutes, "minute and", seconds, "seconds.")
+    # else:
+    #     print("This session lasted", minutes, "minutes and", seconds, "seconds.")
+    # print("")
+    mainWindow.currentPracticeSession.display_all_data()
+    mainWindow.audio_manager.destroy()
 
 
-def cleanup(root, audio_manager):
-    audio_manager.destroy()
-    root.destroy()
+def cleanup(mainWindow):
+    mainWindow.audio_manager.destroy()
+    mainWindow.master.destroy()
 
 
 def main():
-    def score_update(mainWindow, data):
+    def score_update(mainWindow):
         if not mainWindow.isPaused:
-            mainWindow.myDiagnosticObject.overallScoreLabel.config(text="Overall Score: %.2f" % data.get_overall())
-            mainWindow.myDiagnosticObject.update_plot(int(data.get_overall()), mainWindow)
-            print(data.get_overall())
-        root.after(500, lambda: score_update(mainWindow, data))
+            mainWindow.myDiagnosticObject.overallScoreLabel.config(text="Overall Score: %.2f" % mainWindow.currentPracticeSession.get_overall())
+            mainWindow.myDiagnosticObject.update_plot(int(mainWindow.currentPracticeSession.get_overall()), mainWindow)
+            print(mainWindow.currentPracticeSession.get_overall())
+        root.after(500, lambda: score_update(mainWindow))
 
-    def piano_update(mainWindow, data):
-        mainWindow.myHistoryObject.update(data)
-        root.after(20, lambda: piano_update(mainWindow, data))
+    def piano_update(mainWindow):
+        mainWindow.myHistoryObject.update(mainWindow.currentPracticeSession)
+        root.after(20, lambda: piano_update(mainWindow))
 
-    threshold = 15
-    data = Session(threshold, "temp")
     start = time.time()
     root = Tk()
     root.title("TuneCoach")
-    manager = AudioManager(data)
-    our_window = MainWindow(root, manager, data)
-    root.bind('<space>', lambda event, arg=manager: space_pressed(event, arg, our_window))
-    root.bind('q', lambda event, arg=manager: kill_pressed(event, arg, data, start))
-    root.wm_protocol("WM_DELETE_WINDOW", lambda r=root, m=manager: cleanup(r, m))
-    score_update(our_window, data)
-    piano_update(our_window, data)
+    our_window = MainWindow(root)
+    root.bind('<space>', lambda event, arg=our_window: space_pressed(event, arg))
+    root.bind('q', lambda event, arg=our_window: kill_pressed(event, arg))
+    root.wm_protocol("WM_DELETE_WINDOW", lambda w=our_window: cleanup(w))
+    score_update(our_window)
+    piano_update(our_window)
     root.mainloop()
 
 

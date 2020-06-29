@@ -6,7 +6,7 @@ from gui.constants import *
 class NewSessionWindow:
     def creating_a_new_session(self, mainWindow, oldWindow, newName): #TODO ask Joe why new sesh window is old window
         oldWindow.destroy()
-        my_session = Session(15, newName) #TODO: fix cent range
+        my_session = Session(mainWindow.threshold, newName) #TODO: fix cent range
         mainWindow.practiceSessionList.append(my_session)
         print("new session is created, it is set to our current practice session variable")
         mainWindow.currentPracticeSession = my_session
