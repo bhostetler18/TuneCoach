@@ -12,7 +12,7 @@ class TunerSettingsWindow:
 
     def __init__(self, mainWindow):
         self.mainWindow = mainWindow
-        tuner_settings_window = tk.Toplevel(mainWindow.master)
+        tuner_settings_window = tk.Toplevel(self.mainWindow.master)
         tuner_settings_window.geometry("500x300")
 
         top_frame = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
@@ -64,5 +64,6 @@ class TunerSettingsWindow:
 
         done_button = ttk.Button(bottomest_frame, text="Apply",
                                 command=lambda: self.update_pitch_settings(cent_scale.get(), tuner_settings_window))
+
         done_button.pack()
-        tuner_settings_window.lift(master)
+        tuner_settings_window.lift(self.mainWindow.master)

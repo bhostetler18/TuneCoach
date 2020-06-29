@@ -14,8 +14,8 @@ from gui.indicatorlight import *
 
 
 class PitchDisplay:
-    def __init__(self, parent, frame, manager, threshold=10):
-        self.parent = parent
+    def __init__(self, mainWindow, frame, manager, threshold=10):
+        self.mainWindow = mainWindow
         self.frame = frame
         self.audio_manager = manager
 
@@ -149,4 +149,4 @@ class PitchDisplay:
                 self.display_current_gui()
 
 
-        self.parent.after(10, self.update_data)
+        self.mainWindow.master.after(10, self.update_data)

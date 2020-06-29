@@ -26,20 +26,18 @@ from gui.TutorialWindow import *
 # then can initialize real variable like the threshold variable in main of master.py 
 noise_filter_level = 20
 
-
 # main gui
 class MainWindow():
     def __init__(self, master):
         self.practiceSessionList = []
-        self.practiceSessionNameList = []
         self.currentPracticeSession = Session(15, "temp") # TODO: don't hardcode threshold
         self.audio_manager = AudioManager(self.currentPracticeSession)
         self.threshold = 15
         
         self.isPaused = False
 
-        self.master = master
 
+        self.master = master
 
         screen_width = master.winfo_screenwidth()
         screen_height = master.winfo_screenheight()
@@ -47,7 +45,8 @@ class MainWindow():
         master.title("TuneCoach")
         master.geometry(f'{screen_width}x{screen_height}')
     
-        self.create_menubar(self.master, self.currentPracticeSession)
+        self.create_menubar()
+
         self.layout_frames(screen_width, screen_height)
 
     # adding menu options to the top of the screen.
@@ -81,31 +80,31 @@ class MainWindow():
     def end_practice_session(self):
         EndSessionWindow(self)
     
-    def create_menubar(self, master, feedback_data):
-        menubar = tk.Menu(master)    
+    def create_menubar(self):
+        menubar = tk.Menu(self.master)
 
-        master.config(menu=menubar)
+        self.master.config(menu=menubar)
 
         file_menu = tk.Menu(menubar)
 
         # File menubar
         menubar.add_cascade(label="File", menu=file_menu)
 
-        file_menu.add_command(label="New Practice Session", command = lambda: self.new_practice_session)
+        file_menu.add_command(label="New Practice Session", command = self.new_practice_session)
         file_menu.add_separator
-        file_menu.add_command(label="End Practice Session", command = lambda: self.end_practice_session)
+        file_menu.add_command(label="End Practice Session", command = self.end_practice_session)
         file_menu.add_separator
-        file_menu.add_command(label="Load Practice Session", command = lambda: self.load_practice_session)
+        file_menu.add_command(label="Load Practice Session", command = self.load_practice_session)
         file_menu.add_separator
-        file_menu.add_command(label = "Save Practice Session", command = lambda: self.save_practice_session)
+        file_menu.add_command(label = "Save Practice Session", command = self.save_practice_session)
         file_menu.add_separator
-        file_menu.add_command(label = "Remove Practice Session", command = lambda : self.remove_practice_session)
+        file_menu.add_command(label = "Remove Practice Session", command = self.remove_practice_session)
 
         # Settings menubar
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
 
-        settings_menu.add_command(label="Tuner Settings", command=self.tuner_settings)
+        settings_menu.add_command(label="Tuner Settings", command = self.tuner_settings)
 
         settings_menu.add_separator
         settings_menu.add_command(label="User Settings", command=self.user_settings)
