@@ -40,15 +40,17 @@ class MainWindow:
 
         self.master = master
 
-        screen_width = master.winfo_screenwidth()
-        screen_height = master.winfo_screenheight()
+        self.screen_width = master.winfo_screenwidth()
+        self.screen_height = master.winfo_screenheight()
 
         master.title("TuneCoach")
-        master.geometry(f'{screen_width}x{screen_height}')
-    
+        master.geometry(f'{self.screen_width}x{self.screen_height}')
+        master.minsize(width = int(self.screen_width/2), height = int(self.screen_height/2))
+        master.maxsize(width = self.screen_width, height = self.screen_height)
+
         self.create_menubar()
 
-        self.layout_frames(screen_width, screen_height)
+        self.layout_frames(self.screen_width, self.screen_height)
 
         IntroWindow(self)
     # adding menu options to the top of the screen.

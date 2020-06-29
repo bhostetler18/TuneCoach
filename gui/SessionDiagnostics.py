@@ -71,15 +71,23 @@ class SessionDiagnostics:
 
         defaultX = [0]
         defaultY = [0]
-        self.fig = Figure(figsize=(3, 3))
+        if mainWindow.screen_width > 1000:
+            self.fig = Figure(figsize=(3, 3))
+        else:
+            self.fig = Figure(figsize=(2,2))
         self.a = self.fig.add_subplot(111)
         self.a.plot(defaultX, defaultY, color='blue')
 
         # Not sure whether or not we want it to have the same axis the whole time
         self.a.set_ylim([0, 100])
         self.a.set_xlim([0, 10])
-        self.a.set_title("Score Over Time", fontsize=16)
-        self.a.set_ylabel("Score", fontsize=14)
+        my_fontsize = 16
+        my_axissize = 14
+        if mainWindow.screen_width < 1000:
+            my_fontsize = 3
+            my_axissize = 3
+        self.a.set_title("Score Over Time", fontsize=my_fontsize)
+        self.a.set_ylabel("Score", fontsize=my_axissize)
         self.a.set_autoscale_on(False)
 
         self.canvas = FigureCanvasTkAgg(self.fig, master=right_frame)
