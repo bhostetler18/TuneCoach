@@ -14,10 +14,10 @@ from gui.indicatorlight import *
 
 
 class PitchDisplay:
-    def __init__(self, mainWindow, frame, manager, threshold=10):
+    def __init__(self, mainWindow, threshold=10):
+        self.frame = mainWindow.right_frame
         self.mainWindow = mainWindow
-        self.frame = frame
-        self.audio_manager = manager
+        self.audio_manager = mainWindow.audio_manager
 
         self.threshold = threshold
 
@@ -30,7 +30,7 @@ class PitchDisplay:
 
         self._span = 75 # Size of tuner arc in degrees, starting at vertical
 
-        self.canvas = Canvas(frame)
+        self.canvas = Canvas(self.frame)
         self.canvas.pack(fill=BOTH, expand=True)
         self.canvas.bind("<Configure>", self.configure)
 
