@@ -70,4 +70,6 @@ class SessionHistory:
                     self.canvas.itemconfig(circle, fill=color)
 
     def clear(self):
-        self.canvas.delete("all")
+        for circle in self.circle_list:
+            self.canvas.delete(circle)
+        self.circle_list = [None] * 64
