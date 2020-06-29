@@ -1,3 +1,6 @@
+import tkinter as tk
+from gui.constants import *
+
 class IntroWindow:
      def intro_load_session(self, mainWindow, oldFrame):
          oldFrame.destroy()

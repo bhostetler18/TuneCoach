@@ -21,6 +21,7 @@ from gui.TunerSettingsWindow import *
 from gui.LoadSessionWindow import *
 from gui.FAQWindow import *
 from gui.TutorialWindow import *
+from gui.IntroWindow import *
 
 # Stand-in variable for noise-filter level, when we come up with some sort of filter, 
 # then can initialize real variable like the threshold variable in main of master.py 
@@ -49,7 +50,7 @@ class MainWindow:
 
         self.layout_frames(screen_width, screen_height)
 
-        IntroWindow(mainWindow)
+        IntroWindow(self)
     # adding menu options to the top of the screen.
     def save_practice_session(self):
         SaveWindow(self)
