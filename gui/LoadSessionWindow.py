@@ -1,5 +1,6 @@
 import tkinter as tk
 from gui.constants import *
+from NewSessionWindow import *
 
 # Settings window to load new session
 class LoadSessionWindow:
@@ -11,6 +12,10 @@ class LoadSessionWindow:
             if practiceSession._name == practiceSessionName:
                 mainWindow.currentPracticeSession = practiceSession
                 mainWindow.myDiagnosticObject.sessionName.configure(text=practiceSessionName)
+
+    def load_new_session(self, oldWindow):
+        oldWindow.destroy()
+        NewSessionWindow(self.mainWindow)
 
     def __init__(self, mainWindow):
         self.mainWindow = mainWindow
@@ -45,10 +50,12 @@ class LoadSessionWindow:
             load_session_dropdown = tk.OptionMenu(middle_frame, first_session, *map(lambda session: session._name, mainWindow.practiceSessionList), command=self.call_function)
             load_session_dropdown.pack()
             #TODO: complete functionality for acceptButton
-            # acceptButton = tk.Button(middle_frame, text = "Select", command = lambda: reset_practice_session(loadSessionDropDown.get(), mainWindow))
-            # acceptButton.pack()
+            acceptButton = tk.Button(right_frame, text = "Select", command = lambda: load_window.destroy())
+            acceptButton.pack()
         else:
-            stand_in_label = tk.Label(middle_frame, text="No sessions to choose from.", fg="white", bg=background_color)
+            stand_in_label = tk.Label(middle_frame, text="No sessions to choose from. \n Create a new session first.", fg="white", bg=background_color)
             stand_in_label.pack()
+            new_session_button = tk.Button(right_frame, text = "New Session", command = lambda: self.load_new_session(load_window))
+            
 
         load_window.lift(self.master)
