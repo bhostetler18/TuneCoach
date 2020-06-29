@@ -8,6 +8,7 @@ class TunerSettingsWindow:
     def update_pitch_settings(self, cent_threshold, oldSettingsView):
         self.mainWindow.currentPracticeSession.update_threshold(cent_threshold)
         self.mainWindow.pitchDisplay.set_threshold(cent_threshold)
+
         oldSettingsView.destroy()
 
     def __init__(self, mainWindow):
@@ -53,14 +54,16 @@ class TunerSettingsWindow:
         centsitivity.config(bg=background_color, fg="white")
         centsitivity.pack()
 
-        cent_scale = tk.Scale(middle_frame1, from_=1, to=25, orient=tk.HORIZONTAL)
+        v = tk.DoubleVar()
+        v.set(mainWindow.currentPracticeSession._threshold)
+
+        cent_scale = tk.Scale(middle_frame1, from_=1, to=25, orient=tk.HORIZONTAL, variable=v)
         cent_scale.config(bg=background_color, fg="white")
         cent_scale.pack()
 
         in_cents = tk.Label(middle_frame2, text="cents")
         in_cents.config(bg=background_color, fg="white")
         in_cents.pack()
-
 
         done_button = ttk.Button(bottomest_frame, text="Apply",
                                 command=lambda: self.update_pitch_settings(cent_scale.get(), tuner_settings_window))
