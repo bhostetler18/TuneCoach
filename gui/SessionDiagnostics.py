@@ -17,12 +17,15 @@ class SessionDiagnostics:
             else:
                 mainWindow.currentPracticeSession._scoreIndex.append(len(mainWindow.currentPracticeSession._scoreIndex))
             self.a.clear()
-            self.a.set_xlim([0,10])
-            self.a.set_ylim([0,100])
+            self.a.set_xlim([0, 10])
+            self.a.set_ylim([0, 100])
             self.a.set_autoscale_on(False)
             self.a.set_title("Score Over Time")
             self.a.set_ylabel("Score")
             self.a.plot(mainWindow.currentPracticeSession._scoreIndex, mainWindow.currentPracticeSession._scoreList, color = "blue")
+            self.canvas.draw()
+        else:
+            self.a.clear()
             self.canvas.draw()
 
     def __init__(self, mainWindow):
@@ -57,7 +60,7 @@ class SessionDiagnostics:
 
         if currentSession is None:
             print("There is no session.")
-            v = 'No score available.'
+            v = "Overall Score: 0.00"
         else:
             v = "Overall Score: %.2f" % currentSession.get_overall()
 

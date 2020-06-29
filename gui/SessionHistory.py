@@ -48,22 +48,28 @@ class SessionHistory:
         self.canvas.image = piano_image
 
     def update(self, data):
-        recent = list(data.display_buffer)
-        thresh1 = 10
-        thresh2 = 25
-        for i, (note, cents) in enumerate(recent):
-            color = "red"
-            if abs(cents) <= thresh1:
-                color = "green"
-            elif abs(cents) <= thresh2:
-                color = "yellow"
+        if data is not None:
+            recent = list(data.display_buffer)
+            thresh1 = 10
+            thresh2 = 25
+            for i, (note, cents) in enumerate(recent):
+                color = "red"
+                if abs(cents) <= thresh1:
+                    color = "green"
+                elif abs(cents) <= thresh2:
+                    color = "yellow"
 
-            circle = self.circle_list[i]
-            x = self.width / 10 + (i + 1) * 20
-            y = self.noteDict[note]
-            if circle is None:
-                c = self.create_circle(x, y, 10, self.canvas, color)
-                self.circle_list[i] = c
-            else:
-                self.canvas.coords(circle, x - 10, y - 10, x + 10, y + 10)
-                self.canvas.itemconfig(circle, fill=color)
+                circle = self.circle_list[i]
+                x = self.width / 10 + (i + 1) * 20
+                y = self.noteDict[note]
+                if circle is None:
+                    c = self.create_circle(x, y, 10, self.canvas, color)
+                    self.circle_list[i] = c
+                else:
+                    self.canvas.coords(circle, x - 10, y - 10, x + 10, y + 10)
+                    self.canvas.itemconfig(circle, fill=color)
+
+    def clear(self):
+        for circle in self.circle_list:
+            self.canvas.delete(circle)
+        self.circle_list = [None] * 64
