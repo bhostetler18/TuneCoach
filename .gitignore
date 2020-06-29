@@ -11,3 +11,4 @@ PitchDetection/PitchDetection.cbp
 PitchDetection/PitchDetection
 PitchDetection/.idea
 bridge/__pycache__/
+.DS_Store
