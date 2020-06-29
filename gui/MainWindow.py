@@ -49,6 +49,7 @@ class MainWindow:
 
         self.layout_frames(screen_width, screen_height)
 
+        IntroWindow(mainWindow)
     # adding menu options to the top of the screen.
     def save_practice_session(self):
         SaveWindow(self)
