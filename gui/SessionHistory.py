@@ -12,61 +12,80 @@ class SessionHistory:
         y1 = y + r
         return canvasName.create_oval(x0, y0, x1, y1, fill=fillColor)
 
-    def __init__(self, workingFrame, width, height):
-        self.canvas = tk.Canvas(workingFrame, width=width / 2, height=height / 4, relief=tk.RIDGE, bd=5, bg="#bdd0df")
-        self.canvas.pack(side=tk.LEFT, padx=width / 4)
+    def __init__(self, mainWindow, workingFrame):
+        self.mainWindow = mainWindow
+        self.frame = workingFrame
+        self.canvas = tk.Canvas(workingFrame, bg="#bdd0df")
+        self.canvas.pack(expand=True, fill=tk.BOTH)
 
-        large_image = PIL.Image.open("./gui/piano.jpeg")
-        large_image = large_image.resize((int(width / 10), int(height / 3.9)), PIL.Image.ANTIALIAS)
-        piano_image = PIL.ImageTk.PhotoImage(large_image)
+        self.width = self.frame.winfo_width()
+        self.height = self.frame.winfo_height()
 
-        self.width = width
-        self.height = height
+        self.large_image = PIL.Image.open("./gui/piano.jpeg")
+        self.aspect_ratio = self.large_image.width / self.large_image.height
+        self.piano_image = None
 
-        self.canvas.create_image(0, 0, anchor=tk.NW, image=piano_image)
+        self.available_width = self.width
+        self.circle_size = self.available_width/65
+        self.circle_start = 0
+        self.circle_list = [None] * 64  # TODO: don't hardcode size and coordinate with Feedback buffer
 
+        self.frame.bind("<Configure>", self.setup)
+
+
+    def setup(self, event):
+        self.clear()
+        self.canvas.delete("all")
+
+        self.width = self.frame.winfo_width()
+        self.height = self.frame.winfo_height()
+
+
+        resized = self.large_image.resize((int(self.height*self.aspect_ratio), int(self.height)), PIL.Image.ANTIALIAS)
+        self.piano_image = PIL.ImageTk.PhotoImage(resized)
+        self.canvas.create_image(0, 0, anchor=tk.NW, image=self.piano_image)
+
+        self.available_width = self.width - self.piano_image.width()
+        self.circle_start = self.piano_image.width()
+        self.circle_size = 0.5*self.available_width/64
+        
         self.noteDict = {
-            "C": height / 3.9 / 15,
-            "C#": height / 3.9 / 15 * 2.1,
-            "D": height / 3.9 / 15 * 3.2,
-            "D#": height / 3.9 / 15 * 4.3,
-            "E": height / 3.9 / 15 * 5.6,
-            "F": height / 3.9 / 15 * 7.1,
-            "F#": height / 3.9 / 15 * 8.4,
-            "G": height / 3.9 / 15 * 9.5,
-            "G#": height / 3.9 / 15 * 10.6,
-            "A": height / 3.9 / 15 * 11.7,
-            "A#": height / 3.9 / 15 * 12.7,
-            "B": height / 3.9 / 15 * 14
-
+            "C": self.height / 14,
+            "C#": self.height / 7,
+            "D": self.height / 14 * 3,
+            "D#": self.height / 7 * 2,
+            "E": self.height / 14 * 5,
+            "F": self.height / 14 * 7,
+            "F#": self.height / 7 * 4,
+            "G": self.height / 14 * 9,
+            "G#": self.height / 7 * 5,
+            "A": self.height / 14 * 11,
+            "A#": self.height / 7 * 6,
+            "B": self.height / 14 * 13
         }
 
         for note in self.noteDict:
-            self.canvas.create_line(width / 10, self.noteDict[note], width / 2, self.noteDict[note], width=3)
-
-        self.circle_list = [None] * 64  # TODO: don't hardcode size and coordinate with Feedback buffer
-        self.canvas.image = piano_image
+            self.canvas.create_line(self.piano_image.width(), self.noteDict[note], self.width, self.noteDict[note], width=3)
 
     def update(self, data):
         if data is not None:
             recent = list(data.display_buffer)
-            thresh1 = 10
-            thresh2 = 25
+            thresh2 = 25 # TODO: Coordinate with pitchdisplay!
             for i, (note, cents) in enumerate(recent):
                 color = "red"
-                if abs(cents) <= thresh1:
+                if abs(cents) <= self.mainWindow.threshold:
                     color = "green"
                 elif abs(cents) <= thresh2:
                     color = "yellow"
 
                 circle = self.circle_list[i]
-                x = self.width / 10 + (i + 1) * 20
+                x = self.circle_start + self.circle_size/2 + 2*self.circle_size*i
                 y = self.noteDict[note]
                 if circle is None:
-                    c = self.create_circle(x, y, 10, self.canvas, color)
+                    c = self.create_circle(x, y, self.circle_size, self.canvas, color)
                     self.circle_list[i] = c
                 else:
-                    self.canvas.coords(circle, x - 10, y - 10, x + 10, y + 10)
+                    self.canvas.coords(circle, x - self.circle_size, y - self.circle_size, x + self.circle_size, y + self.circle_size)
                     self.canvas.itemconfig(circle, fill=color)
 
     def clear(self):
