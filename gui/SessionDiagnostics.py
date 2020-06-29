@@ -24,6 +24,9 @@ class SessionDiagnostics:
             self.a.set_ylabel("Score")
             self.a.plot(mainWindow.currentPracticeSession._scoreIndex, mainWindow.currentPracticeSession._scoreList, color = "blue")
             self.canvas.draw()
+        else:
+            self.a.clear()
+            self.canvas.draw()
 
     def __init__(self, mainWindow):
         workingFrame = mainWindow.left_frame
@@ -57,7 +60,7 @@ class SessionDiagnostics:
 
         if currentSession is None:
             print("There is no session.")
-            v = 'No score available.'
+            v = "Overall Score: 0.00"
         else:
             v = "Overall Score: %.2f" % currentSession.get_overall()
 
