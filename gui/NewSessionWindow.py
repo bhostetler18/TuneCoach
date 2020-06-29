@@ -2,7 +2,6 @@ import tkinter as tk
 from python_bridge.Session import *
 from gui.constants import *
 
-
 # Settings window to create a new session
 class NewSessionWindow:
     def creating_a_new_session(self, mainWindow, oldWindow, newName): #TODO ask Joe why new sesh window is old window
@@ -14,7 +13,7 @@ class NewSessionWindow:
         mainWindow.myDiagnosticObject.sessionName.configure(text=newName)
 
     def __init__(self, mainWindow):
-        new_sesh_window = tk.Toplevel(mainWindow)
+        new_sesh_window = tk.Toplevel(mainWindow.master)
         new_sesh_window.geometry("500x100")
         top_frame = tk.Frame(new_sesh_window, bd=5, bg=background_color)
         left_frame = tk.Frame(new_sesh_window, bd=5, bg=background_color)
@@ -36,7 +35,7 @@ class NewSessionWindow:
 
         create_session_label = tk.Label(top_frame, text="Create New Session", bg=background_color, fg="white")
         create_session_label.pack()
-        new_sesh_window.lift(mainWindow)
+        new_sesh_window.lift(mainWindow.master)
         text_entry_label = tk.Label(left_frame, text="Enter name of new Session", fg="white", bg=background_color)
         text_entry_label.pack()
         text_entry = tk.Entry(middle_frame)
@@ -46,4 +45,4 @@ class NewSessionWindow:
                                command=lambda: self.creating_a_new_session(mainWindow, new_sesh_window, text_entry.get()))
         enter_entry.pack()
 
-        new_sesh_window.lift(mainWindow)
+        new_sesh_window.lift(mainWindow.master)

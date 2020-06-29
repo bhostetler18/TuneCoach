@@ -26,7 +26,7 @@ from gui.TutorialWindow import *
 noise_filter_level = 20
 
 # main gui
-class MainWindow(tk.Frame):
+class MainWindow:
     def __init__(self, master, manager, session):
         self.practiceSessionList = []
         self.currentPracticeSession = session
@@ -84,21 +84,21 @@ class MainWindow(tk.Frame):
         # File menubar
         menubar.add_cascade(label="File", menu=file_menu)
 
-        file_menu.add_command(label="New Practice Session", command = lambda: self.new_practice_session)
+        file_menu.add_command(label="New Practice Session", command = self.new_practice_session)
         file_menu.add_separator
-        file_menu.add_command(label="End Practice Session", command = lambda: self.end_practice_session)
+        file_menu.add_command(label="End Practice Session", command = self.end_practice_session)
         file_menu.add_separator
-        file_menu.add_command(label="Load Practice Session", command = lambda: self.load_practice_session)
+        file_menu.add_command(label="Load Practice Session", command = self.load_practice_session)
         file_menu.add_separator
-        file_menu.add_command(label = "Save Practice Session", command = lambda: self.save_practice_session)
+        file_menu.add_command(label = "Save Practice Session", command = self.save_practice_session)
         file_menu.add_separator
-        file_menu.add_command(label = "Remove Practice Session", command = lambda : self.remove_practice_session)
+        file_menu.add_command(label = "Remove Practice Session", command = self.remove_practice_session)
 
         # Settings menubar
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
 
-        settings_menu.add_command(label="Tuner Settings", command = lambda: self.tuner_settings)
+        settings_menu.add_command(label="Tuner Settings", command = self.tuner_settings)
 
         settings_menu.add_separator
         settings_menu.add_command(label="User Settings", command=self.user_settings)
