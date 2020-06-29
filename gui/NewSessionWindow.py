@@ -7,7 +7,8 @@ from python_bridge.AudioManager import *
 class NewSessionWindow:
     def creating_a_new_session(self, mainWindow, popup, newName):
         # Cleanup Code:
-        mainWindow.audio_manager.destroy()
+        if mainWindow.audio_manager is not None:
+            mainWindow.audio_manager.destroy()
         
         # New Session Code:
         new_session = Session(mainWindow.threshold, newName) # TODO: Make threshold setting in the popup for new session
