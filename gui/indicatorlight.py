@@ -29,7 +29,8 @@ class IndicatorLight(tk.Canvas):
 			self._job = self._parent.after(800, self._flash)
 
 	def stop(self):
-		self._parent.after_cancel(self._job)
+		if self._job is not None:
+			self._parent.after_cancel(self._job)
 		self._flashing = False
 		self.itemconfig(self.light, state=tk.HIDDEN)
 		self.itemconfig(self.pausedCircle, state=tk.NORMAL)

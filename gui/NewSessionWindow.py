@@ -17,6 +17,7 @@ class NewSessionWindow:
                 mainWindow.audio_manager.destroy()
         
             # New Session Code:
+            mainWindow.reset_everything()
             new_session = Session(mainWindow.threshold, newName) # TODO: Make threshold setting in the popup for new session
             mainWindow.currentPracticeSession = new_session
             mainWindow.practiceSessionList.append(new_session)

@@ -35,7 +35,7 @@ class MainWindow:
         self.audio_manager = AudioManager(self.currentPracticeSession)
         self.threshold = 15
         
-        self.isPaused = False
+        self.isPaused = True
 
 
         self.master = master
@@ -117,23 +117,29 @@ class MainWindow:
         help_menu.add_separator
 
     def toggle_pause(self):
-        if self.audio_manager.is_paused():
-            print("Resuming")
-            self.isPaused = False
-            self.pitchDisplay.resume()
-            self.audio_manager.resume()
-        else:
+        if self.audio_manager is not None:
+            if self.audio_manager.is_paused():
+                print("Resuming")
+                self.isPaused = False
+                self.pitchDisplay.resume()
+                self.audio_manager.resume()
+            else:
+                print("Pausing")
+                self.isPaused = True
+                self.pitchDisplay.pause()
+                self.audio_manager.pause()
+
+    def force_pause(self):
+        if self.audio_manager is not None and not self.audio_manager.is_paused():
             print("Pausing")
             self.isPaused = True
             self.pitchDisplay.pause()
             self.audio_manager.pause()
 
-    def force_pause(self):
-        if not self.audio_manager.is_paused():
-            print("Pausing")
-            self.isPaused = True
-            self.pitchDisplay.light.stop()
-            self.audio_manager.pause()
+    def reset_everything(self):
+        self.myHistoryObject.clear()
+        self.myDiagnosticObject.reset()
+        self.force_pause()
 
         # Creating frames to organize the screen.
     def layout_frames(self, screen_width, screen_height):

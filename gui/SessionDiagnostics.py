@@ -25,8 +25,12 @@ class SessionDiagnostics:
             self.a.plot(mainWindow.currentPracticeSession._scoreIndex, mainWindow.currentPracticeSession._scoreList, color = "blue")
             self.canvas.draw()
         else:
-            self.a.clear()
-            self.canvas.draw()
+            self.reset()
+
+    def reset(self):
+        self.a.clear()
+        self.canvas.draw()
+        self.overallScoreLabel.config(text="Overall Score: 0.00")
 
     def __init__(self, mainWindow):
         workingFrame = mainWindow.left_frame
