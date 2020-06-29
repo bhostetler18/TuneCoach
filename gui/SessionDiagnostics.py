@@ -17,8 +17,8 @@ class SessionDiagnostics:
             else:
                 mainWindow.currentPracticeSession._scoreIndex.append(len(mainWindow.currentPracticeSession._scoreIndex))
             self.a.clear()
-            self.a.set_xlim([0,10])
-            self.a.set_ylim([0,100])
+            self.a.set_xlim([0, 10])
+            self.a.set_ylim([0, 100])
             self.a.set_autoscale_on(False)
             self.a.set_title("Score Over Time")
             self.a.set_ylabel("Score")

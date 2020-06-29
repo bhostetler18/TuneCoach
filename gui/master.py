@@ -7,16 +7,7 @@ import time
 
 
 def space_pressed(event, mainWindow):
-    if mainWindow.audio_manager.is_paused():
-        print("Resuming")
-        mainWindow.isPaused = False
-        mainWindow.pitchDisplay.light.start_flashing()
-        mainWindow.audio_manager.resume()
-    else:
-        print("Pausing")
-        mainWindow.isPaused = True
-        mainWindow.pitchDisplay.light.stop()
-        mainWindow.audio_manager.pause()
+    mainWindow.toggle_pause()
 
 
 def kill_pressed(event, mainWindow):

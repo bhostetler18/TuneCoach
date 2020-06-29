@@ -1,16 +1,22 @@
 import tkinter as tk
 from python_bridge.Session import *
 from gui.constants import *
+from python_bridge.AudioManager import *
 
 # Settings window to create a new session
 class NewSessionWindow:
-    def creating_a_new_session(self, mainWindow, oldWindow, newName): #TODO ask Joe why new sesh window is old window
-        oldWindow.destroy()
-        my_session = Session(mainWindow.threshold, newName) #TODO: fix cent range
-        mainWindow.practiceSessionList.append(my_session)
+    def creating_a_new_session(self, mainWindow, popup, newName):
+        # Cleanup Code:
+        mainWindow.audio_manager.destroy()
+        
+        # New Session Code:
+        new_session = Session(mainWindow.threshold, newName) # TODO: Make threshold setting in the popup for new session
+        mainWindow.currentPracticeSession = new_session
+        mainWindow.practiceSessionList.append(new_session)
+        mainWindow.audio_manager = AudioManager(new_session)
         print("new session is created, it is set to our current practice session variable")
-        mainWindow.currentPracticeSession = my_session
         mainWindow.myDiagnosticObject.sessionName.configure(text=newName)
+        popup.destroy()
 
     def __init__(self, mainWindow):
         new_sesh_window = tk.Toplevel(mainWindow.master)

@@ -124,6 +124,25 @@ class MainWindow():
         help_menu.add_command(label="Tutorial", command=self.load_tutorial)
         help_menu.add_separator
 
+    def toggle_pause(self):
+        if self.audio_manager.is_paused():
+            print("Resuming")
+            self.isPaused = False
+            self.pitchDisplay.light.start_flashing()
+            self.audio_manager.resume()
+        else:
+            print("Pausing")
+            self.isPaused = True
+            self.pitchDisplay.light.stop()
+            self.audio_manager.pause()
+
+    def force_pause(self):
+        if not self.audio_manager.is_paused():
+            print("Pausing")
+            self.isPaused = True
+            self.pitchDisplay.light.stop()
+            self.audio_manager.pause()
+
         # Creating frames to organize the screen.
     def layout_frames(self, screen_width, screen_height):
         self.bottom_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)

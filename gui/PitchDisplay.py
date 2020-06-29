@@ -17,7 +17,6 @@ class PitchDisplay:
     def __init__(self, mainWindow, threshold=10):
         self.frame = mainWindow.right_frame
         self.mainWindow = mainWindow
-        self.audio_manager = mainWindow.audio_manager
 
         self.threshold = threshold
 
@@ -127,7 +126,7 @@ class PitchDisplay:
         self._centsValue = value
 
     def update_data(self): #event
-        hz = self.audio_manager.peek()
+        hz = self.mainWindow.audio_manager.peek()
         if hz != 0:
             self._clearing = False
             midi = hz_to_midi(hz)
@@ -147,6 +146,5 @@ class PitchDisplay:
                 self.update_pitch('---')
                 self.update_hertz('')
                 self.display_current_gui()
-
 
         self.mainWindow.master.after(10, self.update_data)
