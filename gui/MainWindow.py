@@ -27,7 +27,7 @@ from gui.TutorialWindow import *
 noise_filter_level = 20
 
 # main gui
-class MainWindow():
+class MainWindow:
     def __init__(self, master):
         self.practiceSessionList = []
         self.currentPracticeSession = Session(15, "temp") # TODO: don't hardcode threshold
