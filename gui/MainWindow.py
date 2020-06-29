@@ -75,7 +75,7 @@ class MainWindow():
         NewSessionWindow(self)
 
     def load_practice_session(self):
-        LoadSessionWindow(self.master, self)
+        LoadSessionWindow(self)
 
     def end_practice_session(self):
         EndSessionWindow(self)
@@ -126,14 +126,14 @@ class MainWindow():
 
         # Creating frames to organize the screen.
     def layout_frames(self, screen_width, screen_height):
-        bottom_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
-        left_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
-        right_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
+        self.bottom_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
+        self.left_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
+        self.right_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
 
         # Putting the frames into a grid layout
-        bottom_frame.grid(row=1, column=0, columnspan=2, sticky="nsew")
-        left_frame.grid(row=0, column=0, sticky="nsew")
-        right_frame.grid(row=0, column=1, sticky="nsew")
+        self.bottom_frame.grid(row=1, column=0, columnspan=2, sticky="nsew")
+        self.left_frame.grid(row=0, column=0, sticky="nsew")
+        self.right_frame.grid(row=0, column=1, sticky="nsew")
 
         # setting up grid weights.
         self.master.grid_rowconfigure(0, weight=1)
@@ -142,6 +142,6 @@ class MainWindow():
         self.master.grid_columnconfigure(1, weight=4)
 
         # Here we can work on creating the functionality for each frame, ex: tuner, pitch history, information
-        self.myHistoryObject = SessionHistory(bottom_frame, screen_width, screen_height)
-        self.myDiagnosticObject = SessionDiagnostics(left_frame, self)
-        self.pitchDisplay = PitchDisplay(self, right_frame, self.audio_manager, self.threshold)
+        self.myHistoryObject = SessionHistory(self.bottom_frame, screen_width, screen_height)
+        self.myDiagnosticObject = SessionDiagnostics(self)
+        self.pitchDisplay = PitchDisplay(self)
