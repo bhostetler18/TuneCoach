@@ -4,7 +4,7 @@ from gui.constants import *
 
 class TutorialWindow:
     def __init__(self, mainWindow):
-        tutorial_window = tk.Toplevel(mainWindow)
+        tutorial_window = tk.Toplevel(mainWindow.master)
 
         tutorial_window.geometry()
 
@@ -34,4 +34,4 @@ class TutorialWindow:
         tutorial_label = tk.Label(tutorial_window, text=message, font=("Calibri", 12), justify=tk.LEFT)
         tutorial_label.config(bg=background_color, fg="white")
         tutorial_label.pack()
-        tutorial_window.lift(mainWindow)
+        tutorial_window.lift(mainWindow.master)

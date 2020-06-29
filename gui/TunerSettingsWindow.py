@@ -5,14 +5,17 @@ import tkinter.ttk as ttk
 
 # Tuner settings window
 class TunerSettingsWindow:
-    def update_pitch_settings(self, newPitch, newFilterLevel, oldSettingsView, obj):
-        obj.update_threshold(newPitch)
+    def update_pitch_settings(self, newPitch, newFilterLevel, oldSettingsView):
+        #obj.update_threshold(newPitch)
+        #TODO: need to update threshold with newPitch for current practice session
+        self.currentSession.update_threshold(newPitch)
         noise_filter_level = newFilterLevel
         oldSettingsView.destroy()
 
-    def __init__(self, master, obj):
-        self.master = master
-        tuner_settings_window = tk.Toplevel(master)
+    def __init__(self, mainWindow):
+        self.currentSession = mainWindow.currentPracticeSession
+        self.master = mainWindow.master
+        tuner_settings_window = tk.Toplevel(self.master)
         tuner_settings_window.geometry("500x300")
 
         top_frame = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
@@ -73,9 +76,6 @@ class TunerSettingsWindow:
         in_cents.config(bg=background_color, fg="white")
         in_cents.pack()
 
-        done_button = ttk.Button(bottomest_frame, text="Apply",
-                                command=lambda: self.update_pitch_settings(pitch_sensitivity_scale.get(),
-                                                                      outside_noise_scale.get(), tuner_settings_window,
-                                                                      obj))
+        done_button = ttk.Button(bottomest_frame, text="Apply", command=lambda: self.update_pitch_settings(pitch_sensitivity_scale.get(), outside_noise_scale.get(), tuner_settings_window,))
         done_button.pack()
-        tuner_settings_window.lift(master)
+        tuner_settings_window.lift(self.master)

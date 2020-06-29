@@ -8,7 +8,7 @@ class MoreInfoWindow:
         MoreInfoWindow(mainWindow)
 
     def __init__(self, mainWindow):
-        my_window = tk.Toplevel(mainWindow)
+        my_window = tk.Toplevel(mainWindow.master)
         currentSession = mainWindow.currentPracticeSession
 
         print(currentSession._name, '**************************', currentSession._overall_count)
@@ -38,4 +38,4 @@ class MoreInfoWindow:
         exit_button.pack()
         refresh_button = tk.Button(my_window, text="Refresh", command=lambda: self.refresh(my_window, mainWindow))
         refresh_button.pack()
-        my_window.lift(mainWindow)
+        my_window.lift(mainWindow.master)
