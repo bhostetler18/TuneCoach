@@ -36,6 +36,13 @@ def cleanup(mainWindow):
         mainWindow.audio_manager.destroy()
     mainWindow.master.destroy()
 
+def score_update(mainWindow):
+    if not mainWindow.isPaused:
+        mainWindow.myDiagnosticObject.overallScoreLabel.config(text="Overall Score: %.2f" % mainWindow.currentPracticeSession.get_overall())
+        mainWindow.myDiagnosticObject.update_plot(int(mainWindow.currentPracticeSession.get_overall()), mainWindow)
+        print(mainWindow.currentPracticeSession.get_overall())
+    mainWindow.master.after(500, lambda: score_update(mainWindow))
+
 
 def main():
     def score_update(mainWindow):
@@ -45,10 +52,13 @@ def main():
             print(mainWindow.currentPracticeSession.get_overall())
         root.after(1000, lambda: score_update(mainWindow))
 
-    def piano_update(mainWindow):
-        mainWindow.myHistoryObject.update(mainWindow.currentPracticeSession)
-        root.after(20, lambda: piano_update(mainWindow))
+def piano_update(mainWindow):
+    mainWindow.myHistoryObject.update(mainWindow.currentPracticeSession)
+    mainWindow.master.after(20, lambda: piano_update(mainWindow))
 
+
+
+def main():
     start = time.time()
     root = Tk()
     root.title("TuneCoach")
