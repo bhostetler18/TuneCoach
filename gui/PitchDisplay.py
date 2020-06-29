@@ -126,25 +126,26 @@ class PitchDisplay:
         self._centsValue = value
 
     def update_data(self): #event
-        hz = self.mainWindow.audio_manager.peek()
-        if hz != 0:
-            self._clearing = False
-            midi = hz_to_midi(hz)
-            pitch_class = midi_to_pitch_class(midi)
-            desired_hz = closest_in_tune_frequency(hz)
-            cent = cents(desired_hz, hz)
-            name = pitch_class_to_name(pitch_class, Accidental.SHARP) #TODO: coordinate accidental with FeedbackManager
-            self.update_cents(cent)
-            self.update_hertz(f"{round(hz)} Hz")
-            self.update_pitch(name)
-            self.display_current_gui()
-            self._last_time = time.time()
-        else:
-            self._clearing = True
-            if self._centsValue != -50 and time.time() - self._last_time > 1.5:
-                self.update_cents(max(-50,self._centsValue - 3))
-                self.update_pitch('---')
-                self.update_hertz('')
+        if self.mainWindow.audio_manager is not None:
+            hz = self.mainWindow.audio_manager.peek()
+            if hz != 0:
+                self._clearing = False
+                midi = hz_to_midi(hz)
+                pitch_class = midi_to_pitch_class(midi)
+                desired_hz = closest_in_tune_frequency(hz)
+                cent = cents(desired_hz, hz)
+                name = pitch_class_to_name(pitch_class, Accidental.SHARP) #TODO: coordinate accidental with FeedbackManager
+                self.update_cents(cent)
+                self.update_hertz(f"{round(hz)} Hz")
+                self.update_pitch(name)
                 self.display_current_gui()
+                self._last_time = time.time()
+            else:
+                self._clearing = True
+                if self._centsValue != -50 and time.time() - self._last_time > 1.5:
+                    self.update_cents(max(-50,self._centsValue - 3))
+                    self.update_pitch('---')
+                    self.update_hertz('')
+                    self.display_current_gui()
 
         self.mainWindow.master.after(10, self.update_data)
