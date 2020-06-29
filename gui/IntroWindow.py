@@ -38,7 +38,8 @@ class IntroWindow:
          introLabel = tk.Label(topFrame, text = "Welcome to Tune Coach!", anchor = "e",fg = "white", bg = background_color)
          introLabel.configure(font = ( "Calibri", 20))
          introLabel.pack(side = tk.TOP)
-         explainLabel = tk.Label(middleFrame, text = "Please create a new session or load a previous session to begin using the application.", wraplength = 350, bg = background_color, fg = "white")
+         text = "Please create a new session or load a previous session to begin using the application. If you don't create or load a session, a temporary session will be used."
+         explainLabel = tk.Label(middleFrame, text = text, wraplength = 350, bg = background_color, fg = "white")
          explainLabel.pack()
          okButton = tk.Button(bottomFrame, text = "Ok", command = lambda:  introWindow.destroy())
          okButton.pack(side = tk.RIGHT, padx = 20, pady = 20)
