@@ -1,6 +1,6 @@
 import tkinter as tk
 from gui.constants import *
-from NewSessionWindow import *
+from gui.NewSessionWindow import *
 
 # Settings window to load new session
 class LoadSessionWindow:
@@ -56,6 +56,6 @@ class LoadSessionWindow:
             stand_in_label = tk.Label(middle_frame, text="No sessions to choose from. \n Create a new session first.", fg="white", bg=background_color)
             stand_in_label.pack()
             new_session_button = tk.Button(right_frame, text = "New Session", command = lambda: self.load_new_session(load_window))
-            
+            new_session_button.pack() 
 
         load_window.lift(self.master)
