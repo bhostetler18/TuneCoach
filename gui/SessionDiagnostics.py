@@ -55,7 +55,7 @@ class SessionDiagnostics:
 
         title_label = tk.Label(topest_frame, text="Session Diagnostics", bg=background_color, fg="white", font=("calibri", 20))
         title_label.pack(side=tk.TOP)
-        self.sessionName = tk.Label(topest_frame, text="No Practice Session Selected", bg=background_color, fg="white")
+        self.sessionName = tk.Label(topest_frame, text=mainWindow.currentPracticeSession._name, bg=background_color, fg="white")
         self.sessionName.pack(side=tk.BOTTOM)
 
         if currentSession is None:

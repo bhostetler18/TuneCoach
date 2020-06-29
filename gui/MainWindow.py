@@ -21,6 +21,7 @@ from gui.TunerSettingsWindow import *
 from gui.LoadSessionWindow import *
 from gui.FAQWindow import *
 from gui.TutorialWindow import *
+from gui.IntroWindow import *
 
 # Stand-in variable for noise-filter level, when we come up with some sort of filter, 
 # then can initialize real variable like the threshold variable in main of master.py 
@@ -30,7 +31,7 @@ noise_filter_level = 20
 class MainWindow:
     def __init__(self, master):
         self.practiceSessionList = []
-        self.currentPracticeSession = Session(15, "temp") # TODO: don't hardcode threshold
+        self.currentPracticeSession = Session(15, "Temporary Session") # TODO: don't hardcode threshold
         self.audio_manager = AudioManager(self.currentPracticeSession)
         self.threshold = 15
         
@@ -39,9 +40,13 @@ class MainWindow:
 
         self.master = master
 
+        #master.update_idletasks() dont think that this line is necessary
+        master.attributes('-fullscreen', True)
+        master.state('iconic')
         self.screen_width = master.winfo_screenwidth()
         self.screen_height = master.winfo_screenheight()
-
+        master.attributes('-fullscreen', False)
+        master.deiconify()
         master.title("TuneCoach")
         master.geometry(f'{self.screen_width}x{self.screen_height}')
         master.minsize(width = int(self.screen_width/2), height = int(self.screen_height/2))
@@ -51,6 +56,7 @@ class MainWindow:
 
         self.layout_frames(self.screen_width, self.screen_height)
 
+        IntroWindow(self)
     # adding menu options to the top of the screen.
     def save_practice_session(self):
         SaveWindow(self)
@@ -61,13 +67,7 @@ class MainWindow:
     def tuner_settings(self):
         TunerSettingsWindow(self)
 
-    def change_layout(self):
-        print("this will change the layout")
-
-    def user_settings(self):
-        print("function to display menu to change user settings")
-
-    def load_faq(self):
+    def load_FAQ(self):
         FAQWindow(self)
 
     def load_tutorial(self):
@@ -108,20 +108,10 @@ class MainWindow:
 
         settings_menu.add_command(label="Tuner Settings", command = self.tuner_settings)
 
-        settings_menu.add_separator
-        settings_menu.add_command(label="User Settings", command=self.user_settings)
-        settings_menu.add_separator
-
-        # View menubar
-        view_menu = tk.Menu(menubar)
-        menubar.add_cascade(label="View", menu=view_menu)
-        view_menu.add_command(label="Change layout", command=self.change_layout)
-        view_menu.add_separator
-
         # Help menubar
         help_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Help", menu=help_menu)
-        help_menu.add_command(label="FAQ", command=self.load_faq)
+        help_menu.add_command(label = "FAQ", command = self.load_FAQ)
         help_menu.add_separator
         help_menu.add_command(label="Tutorial", command=self.load_tutorial)
         help_menu.add_separator
