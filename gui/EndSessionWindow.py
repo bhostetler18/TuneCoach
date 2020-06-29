@@ -11,7 +11,7 @@ class EndSessionWindow:
         mainWindow.myDiagnosticObject.canvas.draw()
         mainWindow.myDiagnosticObject.sessionName.configure(text="No Practice Session Selected")
 
-        self.end_sesh_window = tk.Toplevel(mainWindow)
+        self.end_sesh_window = tk.Toplevel(mainWindow.master)
         self.end_sesh_window.configure(bg = background_color)
         self.end_sesh_window.geometry("200x100")
 

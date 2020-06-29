@@ -40,7 +40,7 @@ class MainWindow(tk.Frame):
         master.title("TuneCoach")
         master.geometry(f'{screen_width}x{screen_height}')
     
-        self.create_menubar(self.master, session)
+        self.create_menubar()
         self.layout_frames(screen_width, screen_height)
 
     # adding menu options to the top of the screen.
@@ -50,8 +50,8 @@ class MainWindow(tk.Frame):
     def remove_practice_session(self):
         RemoveWindow(self)
 
-    def tuner_settings(self, feedback_data):
-        TunerSettingsWindow(self.master, feedback_data)
+    def tuner_settings(self):
+        TunerSettingsWindow(self.master)
 
     def change_layout(self):
         print("this will change the layout")
@@ -65,30 +65,30 @@ class MainWindow(tk.Frame):
     def load_tutorial(self):
         TutorialWindow(self)
 
-    def new_practice_session(self, feedback_data):
+    def new_practice_session(self):
         NewSessionWindow(self)
 
-    def load_practice_session(self, feedback_data):
+    def load_practice_session(self):
         LoadSessionWindow(self.master, self)
 
-    def end_practice_session(self, feedback_data):
+    def end_practice_session(self):
         EndSessionWindow(self)
     
-    def create_menubar(self, master, feedback_data):
-        menubar = tk.Menu(master)    
+    def create_menubar(self):
+        menubar = tk.Menu(self.master)
 
-        master.config(menu=menubar)
+        self.master.config(menu=menubar)
 
         file_menu = tk.Menu(menubar)
 
         # File menubar
         menubar.add_cascade(label="File", menu=file_menu)
 
-        file_menu.add_command(label="New Practice Session", command = lambda: self.new_practice_session(feedback_data))
+        file_menu.add_command(label="New Practice Session", command = lambda: self.new_practice_session)
         file_menu.add_separator
-        file_menu.add_command(label="End Practice Session", command = lambda: self.end_practice_session(feedback_data))
+        file_menu.add_command(label="End Practice Session", command = lambda: self.end_practice_session)
         file_menu.add_separator
-        file_menu.add_command(label="Load Practice Session", command = lambda: self.load_practice_session(feedback_data))
+        file_menu.add_command(label="Load Practice Session", command = lambda: self.load_practice_session)
         file_menu.add_separator
         file_menu.add_command(label = "Save Practice Session", command = lambda: self.save_practice_session)
         file_menu.add_separator
@@ -98,7 +98,7 @@ class MainWindow(tk.Frame):
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
 
-        settings_menu.add_command(label="Tuner Settings", command = lambda: self.tuner_settings(feedback_data))
+        settings_menu.add_command(label="Tuner Settings", command = lambda: self.tuner_settings)
 
         settings_menu.add_separator
         settings_menu.add_command(label="User Settings", command=self.user_settings)
