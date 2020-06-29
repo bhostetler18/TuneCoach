@@ -161,6 +161,6 @@ class MainWindow:
         self.master.grid_columnconfigure(1, weight=4)
 
         # Here we can work on creating the functionality for each frame, ex: tuner, pitch history, information
-        self.myHistoryObject = SessionHistory(self.bottom_frame)
+        self.myHistoryObject = SessionHistory(self, self.bottom_frame)
         self.myDiagnosticObject = SessionDiagnostics(self)
         self.pitchDisplay = PitchDisplay(self)
