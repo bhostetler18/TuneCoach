@@ -130,12 +130,12 @@ class MainWindow:
         if self.audio_manager.is_paused():
             print("Resuming")
             self.isPaused = False
-            self.pitchDisplay.light.start_flashing()
+            self.pitchDisplay.resume()
             self.audio_manager.resume()
         else:
             print("Pausing")
             self.isPaused = True
-            self.pitchDisplay.light.stop()
+            self.pitchDisplay.pause()
             self.audio_manager.pause()
 
     def force_pause(self):

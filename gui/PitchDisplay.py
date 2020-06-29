@@ -33,7 +33,7 @@ class PitchDisplay:
         self.canvas.pack(fill=BOTH, expand=True)
         self.canvas.bind("<Configure>", self.configure)
 
-        self.light = IndicatorLight(self.canvas, 50)
+        self.light = IndicatorLight(self.canvas, 35)
         self.light.pack(anchor='w', side='top')
 
         self.showsHertz = BooleanVar()
@@ -46,6 +46,14 @@ class PitchDisplay:
 
         self.display_default_gui()
         self.update_data()
+
+    def pause(self):
+        self.light.stop()
+        self.canvas.itemconfig(self.help_text, text='Press \'space\' to accept audio input')
+
+    def resume(self):
+        self.light.start_flashing()
+        self.canvas.itemconfig(self.help_text, text='Press \'space\' to pause audio input')
 
     def cents_to_angle(self, cents):
         return cents/50 * self._span
@@ -75,6 +83,8 @@ class PitchDisplay:
         self.current_pitch_display = self.canvas.create_text(self.width/2, self.height/2 + self.pitchOffset, font=self.font, text='---')
         if self.showsHertz.get():
             self.hertzDisplay = self.canvas.create_text(self.width/2, self.height/2 + 3*self.pitchOffset, font=(None, 14), text='')
+
+        self.help_text = self.canvas.create_text(self.width/2, self.height-25, text='Press \'space\' to accept audio input')
 
         x0 = self.centerX - self.radius
         y0 = self.centerY - self.radius
