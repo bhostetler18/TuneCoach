@@ -32,7 +32,8 @@ def kill_pressed(event, mainWindow):
 
 
 def cleanup(mainWindow):
-    mainWindow.audio_manager.destroy()
+    if mainWindow.audio_manager is not None:
+        mainWindow.audio_manager.destroy()
     mainWindow.master.destroy()
 
 

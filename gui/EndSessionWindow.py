@@ -8,6 +8,8 @@ class EndSessionWindow:
             mainWindow.force_pause() # TODO: May need to fix in relation to destroying
             mainWindow.currentPracticeSession = None
             mainWindow.audio_manager.destroy()
+            mainWindow.audio_manager = None
+            mainWindow.myHistoryObject.clear()
             mainWindow.myDiagnosticObject.a.clear()
             mainWindow.myDiagnosticObject.a.set_title("Score Over Time")
             mainWindow.myDiagnosticObject.a.set_ylabel("Score")
