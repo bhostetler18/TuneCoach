@@ -8,11 +8,11 @@ class NewSessionWindow:
     def creating_a_new_session(self, mainWindow, popup, newName):
         # Cleanup Code:
         x = 0
-        for session in mainWindow.practicesessionList:
+        for session in mainWindow.practiceSessionList:
             if session._name == newName:
-                self.text_entry_label.cofigure(text = "Session already exists.\n Please enter a new session name.")
+                self.text_entry_label.configure(text = "Session already exists.\n Please enter a new session name.")
                 x += 1 
-        if x > 0:
+        if x == 0:
             if mainWindow.audio_manager is not None:
                 mainWindow.audio_manager.destroy()
         
@@ -52,7 +52,7 @@ class NewSessionWindow:
         self.text_entry_label = tk.Label(left_frame, text="Enter name of new Session", fg="white", bg=background_color)
         self.text_entry_label.pack()
         text_entry = tk.Entry(middle_frame)
-        text_entry.insert(tk.END, "new-session-1")
+        text_entry.insert(tk.END, "new-session-%d" % len(mainWindow.practiceSessionList))
         text_entry.pack()
         enter_entry = tk.Button(right_frame, text="Enter",
                                command=lambda: self.creating_a_new_session(mainWindow, new_sesh_window, text_entry.get()))

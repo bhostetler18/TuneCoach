@@ -1,10 +1,12 @@
 import tkinter as tk
 from gui.constants import *
+from gui.NewSessionWindow import *
+from gui.LoadSessionWindow import *
 
 class IntroWindow:
      def intro_load_session(self, mainWindow, oldFrame):
          oldFrame.destroy()
-         LoadSessionWindow(self.master, self)
+         LoadSessionWindow(mainWindow)
      def intro_new_session(self, mainWindow, oldFrame):
          oldFrame.destroy()
          NewSessionWindow(mainWindow)
