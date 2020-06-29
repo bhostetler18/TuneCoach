@@ -28,16 +28,19 @@ noise_filter_level = 20
 
 
 # main gui
-class MainWindow(tk.Frame):
+class MainWindow():
     def __init__(self, master):
         self.practiceSessionList = []
         self.practiceSessionNameList = []
         self.currentPracticeSession = Session(15, "temp") # TODO: don't hardcode threshold
+        self.audio_manager = AudioManager(self.currentPracticeSession)
+        self.threshold = 15
+        
         self.isPaused = False
-        tk.Frame.__init__(self, master)
+
         self.master = master
 
-        self.audio_manager = AudioManager(self.currentPracticeSession)
+
         screen_width = master.winfo_screenwidth()
         screen_height = master.winfo_screenheight()
 
@@ -54,8 +57,8 @@ class MainWindow(tk.Frame):
     def remove_practice_session(self):
         RemoveWindow(self)
 
-    def tuner_settings(self, feedback_data):
-        TunerSettingsWindow(self.master, feedback_data)
+    def tuner_settings(self):
+        TunerSettingsWindow(self)
 
     def change_layout(self):
         print("this will change the layout")
@@ -69,13 +72,13 @@ class MainWindow(tk.Frame):
     def load_tutorial(self):
         TutorialWindow(self)
 
-    def new_practice_session(self, feedback_data):
+    def new_practice_session(self):
         NewSessionWindow(self)
 
-    def load_practice_session(self, feedback_data):
+    def load_practice_session(self):
         LoadSessionWindow(self.master, self)
 
-    def end_practice_session(self, feedback_data):
+    def end_practice_session(self):
         EndSessionWindow(self)
     
     def create_menubar(self, master, feedback_data):
@@ -88,11 +91,11 @@ class MainWindow(tk.Frame):
         # File menubar
         menubar.add_cascade(label="File", menu=file_menu)
 
-        file_menu.add_command(label="New Practice Session", command = lambda: self.new_practice_session(feedback_data))
+        file_menu.add_command(label="New Practice Session", command = lambda: self.new_practice_session)
         file_menu.add_separator
-        file_menu.add_command(label="End Practice Session", command = lambda: self.end_practice_session(feedback_data))
+        file_menu.add_command(label="End Practice Session", command = lambda: self.end_practice_session)
         file_menu.add_separator
-        file_menu.add_command(label="Load Practice Session", command = lambda: self.load_practice_session(feedback_data))
+        file_menu.add_command(label="Load Practice Session", command = lambda: self.load_practice_session)
         file_menu.add_separator
         file_menu.add_command(label = "Save Practice Session", command = lambda: self.save_practice_session)
         file_menu.add_separator
@@ -102,7 +105,7 @@ class MainWindow(tk.Frame):
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
 
-        settings_menu.add_command(label="Tuner Settings", command = lambda: self.tuner_settings(feedback_data))
+        settings_menu.add_command(label="Tuner Settings", command=self.tuner_settings)
 
         settings_menu.add_separator
         settings_menu.add_command(label="User Settings", command=self.user_settings)
@@ -142,4 +145,4 @@ class MainWindow(tk.Frame):
         # Here we can work on creating the functionality for each frame, ex: tuner, pitch history, information
         self.myHistoryObject = SessionHistory(bottom_frame, screen_width, screen_height)
         self.myDiagnosticObject = SessionDiagnostics(left_frame, self)
-        self.pitchDisplay = PitchDisplay(self, right_frame, self.audio_manager)
+        self.pitchDisplay = PitchDisplay(self, right_frame, self.audio_manager, self.threshold)
