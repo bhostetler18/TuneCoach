@@ -12,40 +12,50 @@ class SessionHistory:
         y1 = y + r
         return canvasName.create_oval(x0, y0, x1, y1, fill=fillColor)
 
-    def __init__(self, workingFrame, width, height):
-        self.canvas = tk.Canvas(workingFrame, width=width / 2, height=height / 4, relief=tk.RIDGE, bd=5, bg="#bdd0df")
-        self.canvas.pack(side=tk.LEFT, padx=width / 4)
+    def __init__(self, workingFrame):
+        self.frame = workingFrame
+        self.canvas = tk.Canvas(workingFrame, bg="#bdd0df")
+        self.canvas.pack(expand=True, fill=tk.BOTH)
 
-        large_image = PIL.Image.open("./gui/piano.jpeg")
-        large_image = large_image.resize((int(width / 10), int(height / 3.9)), PIL.Image.ANTIALIAS)
-        piano_image = PIL.ImageTk.PhotoImage(large_image)
+        self.width = self.frame.winfo_width()
+        self.height = self.frame.winfo_height()
 
-        self.width = width
-        self.height = height
+        self.large_image = PIL.Image.open("./gui/piano.jpeg")
+        self.aspect_ratio = self.large_image.width / self.large_image.height
+        self.piano_image = PIL.ImageTk.PhotoImage(self.large_image)
 
-        self.canvas.create_image(0, 0, anchor=tk.NW, image=piano_image)
+        self.circle_list = [None] * 64  # TODO: don't hardcode size and coordinate with Feedback buffer
+        #self.canvas.image = piano_image
+        self.frame.bind("<Configure>", self.setup)
 
+
+    def setup(self, event):
+        self.clear()
+        self.canvas.delete("all")
+        self.width = self.frame.winfo_width()
+        self.height = self.frame.winfo_height()
+        resized = self.large_image.resize((int(self.height*self.aspect_ratio), int(self.height)), PIL.Image.ANTIALIAS)
+        self.piano_image = PIL.ImageTk.PhotoImage(resized)
+        #self.large_image.thumbnail(max, PIL.Image.ANTIALIAS)
+        self.canvas.create_image(0, 0, anchor=tk.NW, image=self.piano_image)
+        
         self.noteDict = {
-            "C": height / 3.9 / 15,
-            "C#": height / 3.9 / 15 * 2.1,
-            "D": height / 3.9 / 15 * 3.2,
-            "D#": height / 3.9 / 15 * 4.3,
-            "E": height / 3.9 / 15 * 5.6,
-            "F": height / 3.9 / 15 * 7.1,
-            "F#": height / 3.9 / 15 * 8.4,
-            "G": height / 3.9 / 15 * 9.5,
-            "G#": height / 3.9 / 15 * 10.6,
-            "A": height / 3.9 / 15 * 11.7,
-            "A#": height / 3.9 / 15 * 12.7,
-            "B": height / 3.9 / 15 * 14
-
+            "C": self.height / 14,
+            "C#": self.height / 7,
+            "D": self.height / 14 * 3,
+            "D#": self.height / 7 * 2,
+            "E": self.height / 14 * 5,
+            "F": self.height / 14 * 7,
+            "F#": self.height / 7 * 4,
+            "G": self.height / 14 * 9,
+            "G#": self.height / 7 * 5,
+            "A": self.height / 14 * 11,
+            "A#": self.height / 7 * 6,
+            "B": self.height / 14 * 13
         }
 
         for note in self.noteDict:
-            self.canvas.create_line(width / 10, self.noteDict[note], width / 2, self.noteDict[note], width=3)
-
-        self.circle_list = [None] * 64  # TODO: don't hardcode size and coordinate with Feedback buffer
-        self.canvas.image = piano_image
+            self.canvas.create_line(self.piano_image.width(), self.noteDict[note], self.width, self.noteDict[note], width=3)
 
     def update(self, data):
         if data is not None:
