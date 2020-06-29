@@ -31,7 +31,7 @@ noise_filter_level = 20
 class MainWindow:
     def __init__(self, master):
         self.practiceSessionList = []
-        self.currentPracticeSession = Session(15, "temp") # TODO: don't hardcode threshold
+        self.currentPracticeSession = Session(15, "Temporary Session") # TODO: don't hardcode threshold
         self.audio_manager = AudioManager(self.currentPracticeSession)
         self.threshold = 15
         

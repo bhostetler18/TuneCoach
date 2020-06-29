@@ -11,31 +11,40 @@ class MoreInfoWindow:
         my_window = tk.Toplevel(mainWindow.master)
         currentSession = mainWindow.currentPracticeSession
 
-        print(currentSession._name, '**************************', currentSession._overall_count)
+        topFrame = tk.Frame(my_window, bg = background_color)
+        middleFrame = tk.Frame(my_window, bg = background_color)
+        bottomFrame = tk.Frame(my_window, bg = background_color)
 
+        topFrame.grid(row = 0, sticky = "nsew")
+        middleFrame.grid(row = 1, sticky = "nsew")
+        bottomFrame.grid(row = 2, sticky = "nsew")
+
+        print(currentSession._name, '**************************', currentSession._overall_count)
         final_string = ""
-        # if currentSession._practice_session is None:
+        title_string = ""
         if currentSession is None:
-            final_string += "\n No Input Yet"
-        # elif currentSession._practice_session._total_count > 0:
-        elif currentSession._overall_count > 0:
-            avg_cents= currentSession._cents / currentSession._overall_count
-            for i in range(12):
-                if currentSession._pitch_count[i] == 0:
-                    final_string += ("\n" + currentSession._notes[i] + " was not played/sung in the session.")
-                else:
-                    pitch_error = (100.0*currentSession._in_tune_count[i]) / currentSession._pitch_count[i]
-                    final_string += ("\n%s was in tune for %.2f %% of the time." % (currentSession._notes[i], pitch_error))
-            final_string += "\n"
-            final_string += "\nOverall"
-            final_string += "\nYou were in tune for %.2f %% of the time." % currentSession.get_overall()
-            final_string += "\nYou were off by an average of %.2f cents." % avg_cents
+           title_string  += "No Session Currently Active"
         else:
-            final_string += "\nno input yet"
-        my_label = tk.Label(my_window, text=final_string, bg=background_color, fg="white")
+            title_string += currentSession._name + " Information:"
+            if currentSession._overall_count > 0:
+                avg_cents= currentSession._cents / currentSession._overall_count
+                for i in range(12):
+                    if currentSession._pitch_count[i] == 0:
+                        final_string += ( currentSession._notes[i] + " was not played/sung in the session.\n")
+                    else:
+                        pitch_error = (100.0*currentSession._in_tune_count[i]) / currentSession._pitch_count[i]
+                        final_string += ("%s was in tune for %.2f %% of the time.\n" % (currentSession._notes[i], pitch_error))
+                final_string += "\nOverall"
+                final_string += "\nYou were in tune for %.2f %% of the time." % currentSession.get_overall()
+                final_string += "\nYou were off by an average of %.2f cents." % avg_cents
+            else:
+                final_string += "no input yet"
+        titleLabel = tk.Label(topFrame, text = title_string, bg = background_color, fg = "white")
+        titleLabel.pack()
+        my_label = tk.Label(middleFrame, text=final_string, bg="#B0AFAF", fg="black", bd = 5, relief = tk.RIDGE)
         my_label.pack()
-        exit_button = tk.Button(my_window, text="Exit", command=lambda: my_window.destroy())
-        exit_button.pack()
-        refresh_button = tk.Button(my_window, text="Refresh", command=lambda: self.refresh(my_window, mainWindow))
-        refresh_button.pack()
+        exit_button = tk.Button(bottomFrame, text="Exit", command=lambda: my_window.destroy())
+        exit_button.pack(side = tk.LEFT, padx = 5, pady = 5)
+        refresh_button = tk.Button(bottomFrame, text="Refresh", command=lambda: self.refresh(my_window, mainWindow))
+        refresh_button.pack(side = tk.RIGHT, padx = 5, pady = 5)
         my_window.lift(mainWindow.master)
