@@ -14,7 +14,7 @@ pitch_detection = Extension('TuneCoach.pitch_detection',
     define_macros = [('USE_PULSE', '1')])
 
 setup(
-    name="TuneCoach", # Replace with your own username
+    name="TuneCoach",
     version="0.0.1",
     author="Jamm Hostetler , James Eschrich, Joe Gravelle, Jenny Baik, Gavin Gui",
     author_email="jeschrich@ufl.edu",
@@ -37,10 +37,6 @@ setup(
         'Pillow>=7.1.2'
     ],
     include_package_data=True,
-    package_data={
-        'TuneCoach.gui': ['piano.jpeg'],
-        "": ["README.md"]
-    },
     entry_points = {
         'console_scripts': ['TuneCoach=TuneCoach.main:main'],
     }

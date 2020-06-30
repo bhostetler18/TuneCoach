@@ -1,2 +1,3 @@
 include README.md
-include src/gui/piano.jpeg
+include TuneCoach/gui/piano.jpeg
+include TuneCoach/pitch_detection/*.h

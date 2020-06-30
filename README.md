@@ -4,6 +4,7 @@ An interactive tuner that lets musicians practice intotation while performing.
 # Install Prerequisites
 TuneCoach requires the following libraries to be present in order to be installed:
 * ```python3-tk```
+* ```libpulse-dev```
 
 # Install Instructions
 To install using PyPI:
