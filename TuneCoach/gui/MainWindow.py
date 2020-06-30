@@ -58,8 +58,13 @@ class MainWindow:
         IntroWindow(self)
     # adding menu options to the top of the screen.
     def save_practice_session(self):
-        self.currentPracticeSession.save_to_file()
-        SaveWindow(self)
+        if self.currentPracticeSession._name == "Temporary Session":
+            SaveWindow(self, 0)
+        elif self.currentPracticeSession is not None:
+            self.currentPracticeSession.save_to_file()
+            SaveWindow(self,1)
+        else:
+            SaveWindow(self, -1)
 
     def remove_practice_session(self):
         RemoveWindow(self)

@@ -41,7 +41,7 @@ def score_update(mainWindow):
         mainWindow.myDiagnosticObject.overallScoreLabel.config(text="Overall Score: %.2f" % mainWindow.currentPracticeSession.get_overall())
         mainWindow.myDiagnosticObject.update_plot(int(mainWindow.currentPracticeSession.get_overall()))
         print(mainWindow.currentPracticeSession.get_overall())
-    mainWindow.master.after(1000, lambda: score_update(mainWindow))
+    mainWindow.master.after(500, lambda: score_update(mainWindow))
 
 
 def main():
