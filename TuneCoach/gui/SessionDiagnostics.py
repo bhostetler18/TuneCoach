@@ -95,9 +95,9 @@ class SessionDiagnostics:
         self.a.set_xlim([0, 10])
         my_fontsize = 16
         my_axissize = 14
-        if mainWindow.screen_width < 1000:
-            my_fontsize = 3
-            my_axissize = 3
+        #if mainWindow.screen_width < 1000:
+        #    my_fontsize = 3
+        #    my_axissize = 3
         self.a.set_title("Score Over Time", fontsize=my_fontsize)
         self.a.set_ylabel("Score", fontsize=my_axissize)
         self.a.set_autoscale_on(False)
