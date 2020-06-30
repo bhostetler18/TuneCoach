@@ -109,14 +109,16 @@ static PyObject *TunerStream_py_is_paused(TunerStream_py *self, PyObject *Py_UNU
 static PyObject *TunerStream_py_read(TunerStream_py *self, PyObject *Py_UNUSED(ignored))
 {
     double ret = 0;
-    PyObject *success = Py_False;
+    bool success = false;
     Py_BEGIN_ALLOW_THREADS
     if (self->stream && self->stream->fetch_freq(ret)) {
-        success = Py_True;
+        success = true;
     }
     Py_END_ALLOW_THREADS
-    Py_INCREF(success);
-    return PyTuple_Pack(2, PyFloat_FromDouble(ret), success);
+    PyObject *val = PyFloat_FromDouble(ret);
+    PyObject *tuple = PyTuple_Pack(2, val, success ? Py_True : Py_False);
+    Py_DECREF(val);
+    return tuple;
 }
 
 static PyObject *TunerStream_py_peek(TunerStream_py *self, PyObject *Py_UNUSED(ignored))
