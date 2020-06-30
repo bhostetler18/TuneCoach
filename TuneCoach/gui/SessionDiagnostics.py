@@ -86,7 +86,7 @@ class SessionDiagnostics:
         if mainWindow.screen_width > 1000:
             self.fig = Figure(figsize=(3, 3))
         else:
-            self.fig = Figure(figsize=(2,2))
+            self.fig = Figure(figsize=(3,3))
         self.a = self.fig.add_subplot(111)
         self.a.plot(defaultX, defaultY, color='blue')
 
