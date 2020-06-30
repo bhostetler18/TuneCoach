@@ -38,7 +38,7 @@ def cleanup(mainWindow):
 
 def score_update(mainWindow):
     if mainWindow.audio_manager is not None and not mainWindow.isPaused:
-        mainWindow.myDiagnosticObject.overallScoreLabel.config(text="Overall Score: %.2f" % mainWindow.currentPracticeSession.get_overall())
+        mainWindow.myDiagnosticObject.overallScoreLabel.set_text("Overall Score: %.2f" % mainWindow.currentPracticeSession.get_overall())
         mainWindow.myDiagnosticObject.update_plot(int(mainWindow.currentPracticeSession.get_overall()))
         print(mainWindow.currentPracticeSession.get_overall())
     mainWindow.master.after(1000, lambda: score_update(mainWindow))
