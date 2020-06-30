@@ -1,6 +1,7 @@
 from TuneCoach.gui.MoreInfoWindow import *
 import tkinter as tk
 from TuneCoach.gui.constants import *
+from TuneCoach.gui.ScoreLabel import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -76,7 +77,7 @@ class SessionDiagnostics:
         else:
             v = "Overall Score: %.2f" % currentSession.get_overall()
 
-        self.overallScoreLabel = tk.Label(top_frame, text=v, bg=background_color, fg="white")
+        self.overallScoreLabel = ScoreLabel(top_frame, v, 150, 60)
         self.overallScoreLabel.pack()
         more_info_button = tk.Button(middle_frame, text="More info", command=lambda: self.more_info_window_caller(mainWindow))
         more_info_button.pack()
