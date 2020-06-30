@@ -71,7 +71,7 @@ class Session:
         name = pitch_class_to_name(index, Accidental.SHARP)
         octave = 2 + math.floor(math.log2(desired_hz / 65.4))
 
-        print(f"{name}{octave}: {round(hz, 2)} Hz ({round(cent)} cents)")
+        # print(f"{name}{octave}: {round(hz, 2)} Hz ({round(cent)} cents)")
 
         # Gets counts of everything to calculate accuracy
         if abs(cent) <= self._threshold:

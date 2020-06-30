@@ -7,10 +7,7 @@ class FAQWindow:
         faq_window = tk.Toplevel(mainWindow.master)
         faq_window.geometry()
 
-        message = "Q: Why am I not in tune?\n" \
-                  "A: Git gud\n" \
-                  "\n" \
-                  "Q: How do I use TuneCoach?\n" \
+        message = "Q: How do I use TuneCoach?\n" \
                   "A: Thorough instructions can be found in \"Tutorial\" under the \"Help\" dropdown menu.\n" \
                   "\n" \
                   "Q: Is there any way to change the intonation threshold?\n" \
@@ -27,7 +24,10 @@ class FAQWindow:
                   "    to allow the microphone to be used with TuneCoach.\n" \
                   "\n" \
                   "Q: Do I need internet to use TuneCoach?\n" \
-                  "A: No! Once TuneCoach is downloaded and installed, it can be used at any time!\n"
+                  "A: No! Once TuneCoach is downloaded and installed, it can be used at any time!\n" \
+                  "\n" \
+                  "Q: Why am I not in tune?\n" \
+                  "A: Git gud bro\n"
 
         faq_label = tk.Label(faq_window, text=message, font=("Calibri", 12), justify=tk.LEFT)
         faq_label.config(bg=background_color, fg="white")

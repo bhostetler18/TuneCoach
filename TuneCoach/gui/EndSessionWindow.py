@@ -1,6 +1,7 @@
 import tkinter as tk
 from TuneCoach.gui.constants import *
 
+
 # Settings window to end current session
 class EndSessionWindow:
     def __init__(self, mainWindow):
@@ -11,12 +12,11 @@ class EndSessionWindow:
             mainWindow.audio_manager = None
             mainWindow.myHistoryObject.clear()
             mainWindow.myDiagnosticObject.sessionName.configure(text="No Practice Session Selected")
-
         else:
             pass
 
         self.end_sesh_window = tk.Toplevel(mainWindow.master)
-        self.end_sesh_window.configure(bg = background_color)
+        self.end_sesh_window.configure(bg=background_color)
         self.end_sesh_window.geometry("200x100")
 
         top_frame = tk.Frame(self.end_sesh_window, bg=background_color, bd=5)

@@ -3,6 +3,7 @@ from TuneCoach.python_bridge.Session import *
 from TuneCoach.gui.constants import *
 from TuneCoach.python_bridge.AudioManager import *
 
+
 # Settings window to create a new session
 class NewSessionWindow:
     def creating_a_new_session(self, mainWindow, popup, newName):

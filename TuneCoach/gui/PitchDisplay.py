@@ -1,10 +1,6 @@
 from tkinter import *
 from tkinter.font import Font
 import tkinter.ttk as ttk
-from math import sin, cos, radians
-from ctypes import *
-import threading
-from TuneCoach.gui.constants import Colors
 from TuneCoach.python_bridge.pitch_utilities import *
 from math import sin, cos, radians
 import time
@@ -21,12 +17,12 @@ class PitchDisplay:
         self.font = Font(size=20)
         self.pitchOffset = self.font.metrics('linespace')/2
 
-        self._pitchValue = '---' # default display
+        self._pitchValue = '---'  # default display
         self._centsValue = -50
         self._hertzValue = 0
         self._octaveValue = ''
 
-        self._span = 75 # Size of tuner arc in degrees, starting at vertical
+        self._span = 75  # Size of tuner arc in degrees, starting at vertical
 
         self.canvas = Canvas(self.frame)
         self.canvas.pack(fill=BOTH, expand=True)
@@ -91,7 +87,7 @@ class PitchDisplay:
         x1 = self.centerX + self.radius
         y1 = self.centerY + self.radius
 
-        #rect = self.canvas.create_rectangle(x0, y0, x1, y1)
+        # rect = self.canvas.create_rectangle(x0, y0, x1, y1)
 
         rStart = 90 - self._span
         rSpan = 2 * self._span
@@ -109,11 +105,9 @@ class PitchDisplay:
         self.green_arc = self.canvas.create_arc(x0, y0, x1, y1)
         self.canvas.itemconfig(self.green_arc, start=gStart, fill="#ccffbf", extent=gSpan, outline='')
 
-
         self.line = self.canvas.create_line(0, 0, 0, 0, fill="#452A23", width=4, 
                                             arrow=FIRST, arrowshape=(self.radius,10,5))
         self.update_line(-50)
-
 
     def update_line(self, cents):
         deg = self.cents_to_angle(cents)
@@ -126,7 +120,7 @@ class PitchDisplay:
         self.threshold = thresh
         self.display_default_gui()
 
-    def update_pitch(self, value): # event as parameter
+    def update_pitch(self, value):  # event as parameter
         self._pitchValue = value
 
     def update_hertz(self, value):
@@ -138,7 +132,7 @@ class PitchDisplay:
     def update_octave(self, value):
         self._octaveValue = value
 
-    def update_data(self): #event
+    def update_data(self):  # event
         if self.mainWindow.audio_manager is not None:
             hz = self.mainWindow.audio_manager.peek()
             if hz != 0:
@@ -147,7 +141,7 @@ class PitchDisplay:
                 pitch_class = midi_to_pitch_class(midi)
                 desired_hz = closest_in_tune_frequency(hz)
                 cent = cents(desired_hz, hz)
-                name = pitch_class_to_name(pitch_class, Accidental.SHARP) #TODO: coordinate accidental with FeedbackManager
+                name = pitch_class_to_name(pitch_class, Accidental.SHARP)  # TODO: coordinate accidental with Session
                 self.update_cents(cent)
                 self.update_hertz(f"{round(hz)} Hz")
                 self.update_octave(f"{get_octave(midi)}")
@@ -157,7 +151,7 @@ class PitchDisplay:
             else:
                 self._clearing = True
                 if self._centsValue != -50 and time.time() - self._last_time > 1.5:
-                    self.update_cents(max(-50,self._centsValue - 3))
+                    self.update_cents(max(-50, self._centsValue - 3))
                     self.update_pitch('---')
                     self.update_hertz('')
                     self.update_octave('')

@@ -8,6 +8,7 @@ from importlib.resources import open_binary
 # feature
 image = open_binary(gui, 'piano.jpeg')
 
+
 # Different classes for pop-up windows.
 class SessionHistory:
     def create_circle(self, x, y, r, canvasName, fillColor):  # center coordinates, radius
@@ -37,14 +38,12 @@ class SessionHistory:
 
         self.frame.bind("<Configure>", self.setup)
 
-
     def setup(self, event):
         self.clear()
         self.canvas.delete("all")
 
         self.width = self.frame.winfo_width()
         self.height = self.frame.winfo_height()
-
 
         resized = self.large_image.resize((int(self.height*self.aspect_ratio), int(self.height)), PIL.Image.ANTIALIAS)
         self.piano_image = PIL.ImageTk.PhotoImage(resized)

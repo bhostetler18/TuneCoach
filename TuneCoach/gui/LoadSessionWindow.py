@@ -3,13 +3,13 @@ from TuneCoach.gui.constants import *
 from TuneCoach.gui.NewSessionWindow import *
 from TuneCoach.python_bridge import Session
 
+
 # Settings window to load new session
 class LoadSessionWindow:
     def load_practice_session(self, oldWindow):
-        #print(something)
         session = Session.load_from_file(self.selected_session.get())
         if session is None:
-            pass #handle error, display to user
+            pass  # TODO: Handle error, display to user
         else:
             self.mainWindow.currentPracticeSession = session
             if self.mainWindow.audio_manager is not None:
@@ -18,6 +18,7 @@ class LoadSessionWindow:
             self.mainWindow.audio_manager = AudioManager(session)
             self.mainWindow.myDiagnosticObject.sessionName.configure(text=session._name)
             oldWindow.destroy()
+
     def load_new_session(self, oldWindow):
         oldWindow.destroy()
         NewSessionWindow(self.mainWindow)
@@ -43,8 +44,6 @@ class LoadSessionWindow:
         load_window.grid_columnconfigure(1, weight=1)
         load_window.grid_columnconfigure(2, weight=1)
 
-        # will sub out these stand-ins for values once we get set up how and where we will store practice sessions.
-
         create_session_label = tk.Label(top_frame, text="Load Previous Session", bg=background_color, fg="white")
         create_session_label.pack()
 
@@ -58,7 +57,7 @@ class LoadSessionWindow:
 
             load_session_dropdown = tk.OptionMenu(middle_frame, self.selected_session, *session_files)
             load_session_dropdown.pack()
-            #TODO: complete functionality for acceptButton
+
             acceptButton = tk.Button(right_frame, text = "Select", command = lambda: self.load_practice_session(load_window))
             acceptButton.pack()
         else:

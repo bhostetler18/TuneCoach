@@ -5,10 +5,9 @@ from TuneCoach.gui.constants import *
 class TutorialWindow:
     def __init__(self, mainWindow):
         tutorial_window = tk.Toplevel(mainWindow.master)
-
         tutorial_window.geometry()
 
-        message = "Welcome to TuneCoach!\n" \
+        message = "                                             Welcome to TuneCoach!\n" \
                   "TuneCoach is convenient PC-based tuning application that records sessions for intonation\n" \
                   "and provides detailed feedback for your performance. \n" \
                   "\n" \
@@ -29,7 +28,7 @@ class TutorialWindow:
                   "Keyboard Shortcuts:\n" \
                   "------------------------------------------\n" \
                   "Space: Pause or resume the session.\n" \
-                  "q: Stops a session."
+
 
         tutorial_label = tk.Label(tutorial_window, text=message, font=("Calibri", 12), justify=tk.LEFT)
         tutorial_label.config(bg=background_color, fg="white")

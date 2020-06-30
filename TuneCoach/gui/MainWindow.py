@@ -1,45 +1,26 @@
 # main gui for TuneCoach. Made by the group, Jamm Hostetler, James Eschrich, Joe Gravelle, Jenny Baik, Gavin Gui
-
-import tkinter as tk
-import tkinter.ttk as ttk
-# import PIL.Image
-# import PIL.ImageTk
-import numpy as np
-
 from TuneCoach.gui.PitchDisplay import *
 from TuneCoach.python_bridge.Session import *
-from TuneCoach.python_bridge.AudioManager import *
-from TuneCoach.gui.constants import *
 from TuneCoach.gui.SessionHistory import *
-from TuneCoach.gui.MoreInfoWindow import *
 from TuneCoach.gui.SessionDiagnostics import *
-from TuneCoach.gui.NewSessionWindow import *
-from TuneCoach.gui.EndSessionWindow import *
 from TuneCoach.gui.SaveWindow import *
 from TuneCoach.gui.RemoveWindow import *
 from TuneCoach.gui.TunerSettingsWindow import *
-from TuneCoach.gui.LoadSessionWindow import *
 from TuneCoach.gui.FAQWindow import *
 from TuneCoach.gui.TutorialWindow import *
 from TuneCoach.gui.IntroWindow import *
 
-# Stand-in variable for noise-filter level, when we come up with some sort of filter, 
-# then can initialize real variable like the threshold variable in main of master.py 
-noise_filter_level = 20
 
-# main gui
+# Main GUI
 class MainWindow:
     def __init__(self, master):
         self.practiceSessionList = []
-        self.currentPracticeSession = Session(15, "Temporary Session") # TODO: don't hardcode threshold
+        self.currentPracticeSession = Session(15, "Temporary Session")  # TODO: don't hardcode threshold
         self.audio_manager = AudioManager(self.currentPracticeSession)
         self.threshold = 15
-        
         self.isPaused = True
-
         self.master = master
 
-        #master.update_idletasks() dont think that this line is necessary
         master.attributes('-fullscreen', True)
         master.state('iconic')
         self.screen_width = master.winfo_screenwidth()
@@ -48,15 +29,14 @@ class MainWindow:
         master.deiconify()
         master.title("TuneCoach")
         master.geometry(f'{self.screen_width}x{self.screen_height}')
-        master.minsize(width = int(self.screen_width/2), height = int(self.screen_height/2))
-        master.maxsize(width = self.screen_width, height = self.screen_height)
+        master.minsize(width=int(self.screen_width/2), height=int(self.screen_height/2))
+        master.maxsize(width=self.screen_width, height=self.screen_height)
 
         self.create_menubar()
-
         self.layout_frames(self.screen_width, self.screen_height)
-
         IntroWindow(self)
-    # adding menu options to the top of the screen.
+
+    # Adding menu options to the top of the screen.
     def save_practice_session(self):
         self.currentPracticeSession.save_to_file()
         SaveWindow(self)
@@ -81,35 +61,28 @@ class MainWindow:
     
     def create_menubar(self):
         menubar = tk.Menu(self.master)
-
         self.master.config(menu=menubar)
-
         file_menu = tk.Menu(menubar)
 
         # File menubar
         menubar.add_cascade(label="File", menu=file_menu)
-
-        file_menu.add_command(label="New Practice Session", command = self.new_practice_session)
-        file_menu.add_separator
-        file_menu.add_command(label = "Save Current Session", command = self.save_practice_session)
-        file_menu.add_separator
-        file_menu.add_command(label="Load Existing Session", command = self.load_practice_session)
+        file_menu.add_command(label="New Practice Session", command=self.new_practice_session)
+        file_menu.add_command(label="Save Current Session", command=self.save_practice_session)
+        file_menu.add_command(label="Load Existing Session", command=self.load_practice_session)
+        # TODO: Add functionality to remove sessions
         # file_menu.add_separator
         # file_menu.add_command(label = "Remove Practice Session", command = self.remove_practice_session)
 
         # Settings menubar
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
-
-        settings_menu.add_command(label="Tuner Settings", command = self.tuner_settings)
+        settings_menu.add_command(label="Tuner Settings", command=self.tuner_settings)
 
         # Help menubar
         help_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Help", menu=help_menu)
-        help_menu.add_command(label = "FAQ", command = self.load_FAQ)
-        help_menu.add_separator
+        help_menu.add_command(label="FAQ", command=self.load_FAQ)
         help_menu.add_command(label="Tutorial", command=self.load_tutorial)
-        help_menu.add_separator
 
     def toggle_pause(self):
         if self.audio_manager is not None:
