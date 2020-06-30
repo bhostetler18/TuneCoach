@@ -73,7 +73,11 @@ class NewSessionWindow:
         self.text_entry_label = tk.Label(left_frame, text="Enter name of new Session", fg="white", bg=background_color)
         self.text_entry_label.pack()
         text_entry = tk.Entry(middle_frame)
-        text_entry.insert(tk.END, "new-session-%d" % len(mainWindow.currentPracticeSession.get_existing_sessions()))
+        if  mainWindow.currentPracticeSession._name != "new-session-%d" % len(mainWindow.currentPracticeSession.get_existing_sessions()):
+            defaultText = "new-session-%d" % len(mainWindow.currentPracticeSession.get_existing_sessions())
+        else:
+            defaultText = "new-session-%d" % (len(mainWindow.currentPracticeSession.get_existing_sessions())+1)
+        text_entry.insert(tk.END, defaultText)
         text_entry.pack()
         #enter_entry = tk.Button(right_frame, text="Enter",
                                #command=lambda: self.creating_a_new_session(mainWindow, new_sesh_window, text_entry.get()))
