@@ -35,6 +35,11 @@ class SessionDiagnostics:
         else:
             self.clear_plot()
 
+    def reset(self):
+        self.a.clear()
+        self.canvas.draw()
+        self.overallScoreLabel.config(text="Overall Score: 0.00")
+
     def __init__(self, mainWindow):
         self.mainWindow = mainWindow
         workingFrame = mainWindow.left_frame

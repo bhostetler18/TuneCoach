@@ -14,7 +14,6 @@ from gui.SessionHistory import *
 from gui.MoreInfoWindow import *
 from gui.SessionDiagnostics import *
 from gui.NewSessionWindow import *
-from gui.EndSessionWindow import *
 from gui.SaveWindow import *
 from gui.RemoveWindow import *
 from gui.TunerSettingsWindow import *
@@ -35,8 +34,7 @@ class MainWindow:
         self.audio_manager = AudioManager(self.currentPracticeSession)
         self.threshold = 15
         
-        self.isPaused = False
-
+        self.isPaused = True
 
         self.master = master
 
@@ -59,6 +57,7 @@ class MainWindow:
         IntroWindow(self)
     # adding menu options to the top of the screen.
     def save_practice_session(self):
+        self.currentPracticeSession.save_to_file()
         SaveWindow(self)
 
     def remove_practice_session(self):
@@ -78,9 +77,6 @@ class MainWindow:
 
     def load_practice_session(self):
         LoadSessionWindow(self)
-
-    def end_practice_session(self):
-        EndSessionWindow(self)
     
     def create_menubar(self):
         menubar = tk.Menu(self.master)
@@ -94,13 +90,11 @@ class MainWindow:
 
         file_menu.add_command(label="New Practice Session", command = self.new_practice_session)
         file_menu.add_separator
-        file_menu.add_command(label="End Practice Session", command = self.end_practice_session)
+        file_menu.add_command(label = "Save Current Session", command = self.save_practice_session)
         file_menu.add_separator
-        file_menu.add_command(label="Load Practice Session", command = self.load_practice_session)
-        file_menu.add_separator
-        file_menu.add_command(label = "Save Practice Session", command = self.save_practice_session)
-        file_menu.add_separator
-        file_menu.add_command(label = "Remove Practice Session", command = self.remove_practice_session)
+        file_menu.add_command(label="Load Existing Session", command = self.load_practice_session)
+        # file_menu.add_separator
+        # file_menu.add_command(label = "Remove Practice Session", command = self.remove_practice_session)
 
         # Settings menubar
         settings_menu = tk.Menu(menubar)
@@ -117,23 +111,29 @@ class MainWindow:
         help_menu.add_separator
 
     def toggle_pause(self):
-        if self.audio_manager.is_paused():
-            print("Resuming")
-            self.isPaused = False
-            self.pitchDisplay.resume()
-            self.audio_manager.resume()
-        else:
+        if self.audio_manager is not None:
+            if self.audio_manager.is_paused():
+                print("Resuming")
+                self.isPaused = False
+                self.pitchDisplay.resume()
+                self.audio_manager.resume()
+            else:
+                print("Pausing")
+                self.isPaused = True
+                self.pitchDisplay.pause()
+                self.audio_manager.pause()
+
+    def force_pause(self):
+        if self.audio_manager is not None and not self.audio_manager.is_paused():
             print("Pausing")
             self.isPaused = True
             self.pitchDisplay.pause()
             self.audio_manager.pause()
 
-    def force_pause(self):
-        if not self.audio_manager.is_paused():
-            print("Pausing")
-            self.isPaused = True
-            self.pitchDisplay.light.stop()
-            self.audio_manager.pause()
+    def reset_everything(self):
+        self.myHistoryObject.clear()
+        self.myDiagnosticObject.reset()
+        self.force_pause()
 
         # Creating frames to organize the screen.
     def layout_frames(self, screen_width, screen_height):

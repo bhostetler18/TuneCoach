@@ -3,6 +3,8 @@ from python_bridge.pitch_utilities import *
 from gui.MainWindow import *
 import math
 import datetime
+import pickle
+import os
 
 
 class Session:
@@ -25,6 +27,27 @@ class Session:
         self._cent_history = []
         self._scoreList = []
         self._scoreIndex = []
+
+    def save_to_file(self):
+        with open(f"./user_sessions/{self._name}.session", "wb") as file:
+            pickle.dump(self, file)
+
+    @staticmethod
+    def load_from_file(filename):
+        try:
+            with open(f"./user_sessions/{filename}", "rb") as file:
+                session = pickle.load(file)
+                return session
+        except Exception as e:
+            print(e)
+            return None
+
+    @staticmethod
+    def get_existing_sessions():
+        session_list = []
+        for file in os.listdir("./user_sessions"):
+            session_list.append(file)
+        return session_list
 
     def get_overall(self):
         if self._overall_count == 0:

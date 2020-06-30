@@ -5,15 +5,11 @@ from gui.constants import *
 class EndSessionWindow:
     def __init__(self, mainWindow):
         if mainWindow.currentPracticeSession is not None:
-            mainWindow.force_pause() # TODO: May need to fix in relation to destroying
+            mainWindow.reset_everything()
             mainWindow.currentPracticeSession = None
             mainWindow.audio_manager.destroy()
             mainWindow.audio_manager = None
             mainWindow.myHistoryObject.clear()
-            mainWindow.myDiagnosticObject.a.clear()
-            mainWindow.myDiagnosticObject.a.set_title("Score Over Time")
-            mainWindow.myDiagnosticObject.a.set_ylabel("Score")
-            mainWindow.myDiagnosticObject.canvas.draw()
             mainWindow.myDiagnosticObject.sessionName.configure(text="No Practice Session Selected")
 
         else:
