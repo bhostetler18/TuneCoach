@@ -1,0 +1,13 @@
+Metadata-Version: 1.2
+Name: tunecoach
+Version: 0.0.1
+Summary: An interactive tool for practicing intonation
+Home-page: UNKNOWN
+Author: Jamm Hostetler , James Eschrich, Joe Gravelle, Jenny Baik, Gavin Gui
+Author-email: TODO
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8

@@ -1,0 +1,9 @@
+setup.py
+./PitchDetection/PitchDetector.cpp
+./PitchDetection/TunerStream.cpp
+./PitchDetection/bridge.cpp
+./PitchDetection/processing_utilities.cpp
+tunecoach.egg-info/PKG-INFO
+tunecoach.egg-info/SOURCES.txt
+tunecoach.egg-info/dependency_links.txt
+tunecoach.egg-info/top_level.txt
