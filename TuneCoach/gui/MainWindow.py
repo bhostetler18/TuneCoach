@@ -18,6 +18,8 @@ class MainWindow:
         self.currentPracticeSession = Session(15, "Temporary Session")  # TODO: don't hardcode threshold
         self.audio_manager = AudioManager(self.currentPracticeSession)
         self.threshold = 15
+        self.yellow_threshold = 35
+
         self.isPaused = True
         self.master = master
 

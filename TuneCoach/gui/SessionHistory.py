@@ -74,7 +74,7 @@ class SessionHistory:
     def update(self, data):
         if data is not None:
             recent = list(data.display_buffer)
-            thresh2 = 25 # TODO: Coordinate with pitchdisplay!
+            thresh2 = self.mainWindow.yellow_threshold
             for i, (note, cents) in enumerate(recent):
                 color = "red"
                 if abs(cents) <= self.mainWindow.threshold:

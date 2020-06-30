@@ -1,6 +1,7 @@
 from TuneCoach.gui.MoreInfoWindow import *
 import tkinter as tk
 from TuneCoach.gui.constants import *
+from TuneCoach.gui.ScoreLabel import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -17,10 +18,9 @@ class SessionDiagnostics:
         self.a.set_autoscale_on(False)
         self.a.set_title("Score Over Time")
         if self.mainWindow.currentPracticeSession is not None:
-            self.overallScoreLabel.configure(
-                text="Overall Score: %.2f" % self.mainWindow.currentPracticeSession.get_overall())
+            self.overallScoreLabel.set_text("Overall Score: %.2f" % self.mainWindow.currentPracticeSession.get_overall())
         else:
-            self.overallScoreLabel.configure(text="N/A")
+            self.overallScoreLabel.set_text("N/A")
 
     def update_plot(self, new_score):
         if self.mainWindow.currentPracticeSession is not None:
@@ -41,7 +41,7 @@ class SessionDiagnostics:
 
     def reset(self):
         self.update_plot(-1)
-        self.overallScoreLabel.config(text="Overall Score: %.2f" % self.mainWindow.currentPracticeSession.get_overall())
+        self.overallScoreLabel.set_text("Overall Score: %.2f" % self.mainWindow.currentPracticeSession.get_overall())
 
     def __init__(self, mainWindow):
         self.mainWindow = mainWindow
@@ -79,7 +79,7 @@ class SessionDiagnostics:
         else:
             v = "Overall Score: %.2f" % currentSession.get_overall()
 
-        self.overallScoreLabel = tk.Label(top_frame, text=v, bg=background_color, fg="white")
+        self.overallScoreLabel = ScoreLabel(top_frame, v, 150, 60)
         self.overallScoreLabel.pack()
         more_info_button = tk.Button(middle_frame, text="More info",
                                      command=lambda: self.more_info_window_caller(mainWindow))
@@ -90,7 +90,8 @@ class SessionDiagnostics:
         if mainWindow.screen_width > 1000:
             self.fig = Figure(figsize=(3, 3))
         else:
-            self.fig = Figure(figsize=(2, 2))
+            self.fig = Figure(figsize=(3, 3))
+
         self.a = self.fig.add_subplot(111)
         self.a.plot(defaultX, defaultY, color='blue')
 
@@ -99,9 +100,9 @@ class SessionDiagnostics:
         self.a.set_xlim([0, 10])
         my_fontsize = 16
         my_axissize = 14
-        if mainWindow.screen_width < 1000:
-            my_fontsize = 3
-            my_axissize = 3
+        #if mainWindow.screen_width < 1000:
+        #    my_fontsize = 3
+        #    my_axissize = 3
         self.a.set_title("Score Over Time", fontsize=my_fontsize)
         self.a.set_ylabel("Score", fontsize=my_axissize)
         self.a.set_autoscale_on(False)
