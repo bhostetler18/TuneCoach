@@ -1,18 +1,23 @@
 import tkinter as tk
 from TuneCoach.gui.constants import *
 from TuneCoach.gui.NewSessionWindow import *
+from TuneCoach.python_bridge import Session
 
 # Settings window to load new session
 class LoadSessionWindow:
-    def call_function(self, optionName):
-        self.reset_practice_session(self.mainWindow, optionName)
-
-    def reset_practice_session(self, mainWindow, practiceSessionName):
-        for practiceSession in mainWindow.practiceSessionList:
-            if practiceSession._name == practiceSessionName:
-                mainWindow.currentPracticeSession = practiceSession
-                mainWindow.myDiagnosticObject.sessionName.configure(text=practiceSessionName)
-
+    def load_practice_session(self, oldWindow):
+        #print(something)
+        session = Session.load_from_file(self.selected_session.get())
+        if session is None:
+            pass #handle error, display to user
+        else:
+            self.mainWindow.currentPracticeSession = session
+            if self.mainWindow.audio_manager is not None:
+                self.mainWindow.audio_manager.destroy()
+            self.mainWindow.reset_everything()
+            self.mainWindow.audio_manager = AudioManager(session)
+            self.mainWindow.myDiagnosticObject.sessionName.configure(text=session._name)
+            oldWindow.destroy()
     def load_new_session(self, oldWindow):
         oldWindow.destroy()
         NewSessionWindow(self.mainWindow)
@@ -42,15 +47,19 @@ class LoadSessionWindow:
 
         create_session_label = tk.Label(top_frame, text="Load Previous Session", bg=background_color, fg="white")
         create_session_label.pack()
-        if len(mainWindow.practiceSessionList) > 0:
+
+        session_files = Session.get_existing_sessions()
+        session_names = list(map(lambda filename: os.path.splitext(filename)[0], session_files))
+        if len(session_files) > 0:
             select_session_label = tk.Label(left_frame, text="Select a session to load", bg=background_color, fg="white")
             select_session_label.pack()
-            first_session = tk.StringVar(self.master)
-            first_session.set(mainWindow.practiceSessionList[0]._name)
-            load_session_dropdown = tk.OptionMenu(middle_frame, first_session, *map(lambda session: session._name, mainWindow.practiceSessionList), command=self.call_function)
+            self.selected_session = tk.StringVar()
+            self.selected_session.set(session_files[0]) # strip out extension
+
+            load_session_dropdown = tk.OptionMenu(middle_frame, self.selected_session, *session_files)
             load_session_dropdown.pack()
             #TODO: complete functionality for acceptButton
-            acceptButton = tk.Button(right_frame, text = "Select", command = lambda: load_window.destroy())
+            acceptButton = tk.Button(right_frame, text = "Select", command = lambda: self.load_practice_session(load_window))
             acceptButton.pack()
         else:
             stand_in_label = tk.Label(middle_frame, text="No sessions to choose from. \n Create a new session first.", fg="white", bg=background_color)

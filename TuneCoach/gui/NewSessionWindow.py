@@ -11,18 +11,21 @@ class NewSessionWindow:
         for session in mainWindow.practiceSessionList:
             if session._name == newName:
                 self.text_entry_label.configure(text = "Session already exists.\n Please enter a new session name.")
-                x += 1 
+                x += 1
         if x == 0:
             if mainWindow.audio_manager is not None:
                 mainWindow.audio_manager.destroy()
         
             # New Session Code:
+            mainWindow.reset_everything()
             new_session = Session(mainWindow.threshold, newName) # TODO: Make threshold setting in the popup for new session
             mainWindow.currentPracticeSession = new_session
             mainWindow.practiceSessionList.append(new_session)
             mainWindow.audio_manager = AudioManager(new_session)
             print("new session is created, it is set to our current practice session variable")
             mainWindow.myDiagnosticObject.sessionName.configure(text=newName)
+            mainWindow.myDiagnosticObject.update_plot(-1)
+            mainWindow.myHistoryObject.clear()
             popup.destroy()
 
     def __init__(self, mainWindow):

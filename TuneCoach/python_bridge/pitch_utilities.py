@@ -14,6 +14,9 @@ def midi_to_hz(midi):
 def midi_to_pitch_class(midi):
     return midi % 12
 
+def get_octave(midi):
+    return int(midi/12) - 1
+
 def pitch_class_to_name(pitch, acc):
     flat = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]
     sharp = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]

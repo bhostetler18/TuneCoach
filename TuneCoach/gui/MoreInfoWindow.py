@@ -19,7 +19,6 @@ class MoreInfoWindow:
         middleFrame.grid(row = 1, sticky = "nsew")
         bottomFrame.grid(row = 2, sticky = "nsew")
 
-        print(currentSession._name, '**************************', currentSession._overall_count)
         final_string = ""
         title_string = ""
         if currentSession is None:
