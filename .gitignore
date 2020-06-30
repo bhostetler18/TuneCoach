@@ -7,6 +7,12 @@ build/
 dist/
 TuneCoach.egg-info
 
+bin
+lib
+lib64
+share
+include
+
 PitchDetection/CMake*
 PitchDetection/Makefile
 PitchDetection/cmake*
@@ -14,3 +20,4 @@ PitchDetection/PitchDetection.cbp
 PitchDetection/PitchDetection
 PitchDetection/.idea
 bridge/__pycache__/
+.DS_Store

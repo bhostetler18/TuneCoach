@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 sources = ['bridge.cpp', 'TunerStream.cpp', 'PitchDetector.cpp', 'processing_utilities.cpp']
-sources_root = './src/pitch_detection'
+sources_root = './TuneCoach/pitch_detection'
 pitch_detection = Extension('TuneCoach.pitch_detection', 
     sources = [join(sources_root, stem) for stem in sources],
     include_dirs = [sources_root],
@@ -22,9 +22,6 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/bhostetler18/TuneCoach/",
-    package_dir = {
-        'TuneCoach': 'src/'
-    },
     packages=['TuneCoach.gui', 'TuneCoach.python_bridge'],
     py_modules=["TuneCoach.main"],
     classifiers=[

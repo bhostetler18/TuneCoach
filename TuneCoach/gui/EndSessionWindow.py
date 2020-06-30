@@ -4,14 +4,22 @@ from TuneCoach.gui.constants import *
 # Settings window to end current session
 class EndSessionWindow:
     def __init__(self, mainWindow):
-        mainWindow.currentPracticeSession = None
-        mainWindow.myDiagnosticObject.a.clear()
-        mainWindow.myDiagnosticObject.a.set_title("Score Over Time")
-        mainWindow.myDiagnosticObject.a.set_ylabel("Score")
-        mainWindow.myDiagnosticObject.canvas.draw()
-        mainWindow.myDiagnosticObject.sessionName.configure(text="No Practice Session Selected")
+        if mainWindow.currentPracticeSession is not None:
+            mainWindow.force_pause() # TODO: May need to fix in relation to destroying
+            mainWindow.currentPracticeSession = None
+            mainWindow.audio_manager.destroy()
+            mainWindow.audio_manager = None
+            mainWindow.myHistoryObject.clear()
+            mainWindow.myDiagnosticObject.a.clear()
+            mainWindow.myDiagnosticObject.a.set_title("Score Over Time")
+            mainWindow.myDiagnosticObject.a.set_ylabel("Score")
+            mainWindow.myDiagnosticObject.canvas.draw()
+            mainWindow.myDiagnosticObject.sessionName.configure(text="No Practice Session Selected")
 
-        self.end_sesh_window = tk.Toplevel(mainWindow)
+        else:
+            pass
+
+        self.end_sesh_window = tk.Toplevel(mainWindow.master)
         self.end_sesh_window.configure(bg = background_color)
         self.end_sesh_window.geometry("200x100")
 

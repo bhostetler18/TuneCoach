@@ -4,7 +4,7 @@ from TuneCoach.gui.constants import *
 
 class FAQWindow:
     def __init__(self, mainWindow):
-        faq_window = tk.Toplevel(mainWindow)
+        faq_window = tk.Toplevel(mainWindow.master)
         faq_window.geometry()
 
         message = "Q: Why am I not in tune?\n" \
@@ -32,4 +32,4 @@ class FAQWindow:
         faq_label = tk.Label(faq_window, text=message, font=("Calibri", 12), justify=tk.LEFT)
         faq_label.config(bg=background_color, fg="white")
         faq_label.pack()
-        faq_window.lift(mainWindow)
+        faq_window.lift(mainWindow.master)

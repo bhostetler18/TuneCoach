@@ -12,10 +12,9 @@ from TuneCoach.gui.indicatorlight import *
 
 
 class PitchDisplay:
-    def __init__(self, parent, frame, manager, threshold=10):
-        self.parent = parent
-        self.frame = frame
-        self.audio_manager = manager
+    def __init__(self, mainWindow, threshold=10):
+        self.frame = mainWindow.right_frame
+        self.mainWindow = mainWindow
 
         self.threshold = threshold
 
@@ -28,11 +27,11 @@ class PitchDisplay:
 
         self._span = 75 # Size of tuner arc in degrees, starting at vertical
 
-        self.canvas = Canvas(frame)
+        self.canvas = Canvas(self.frame)
         self.canvas.pack(fill=BOTH, expand=True)
         self.canvas.bind("<Configure>", self.configure)
 
-        self.light = IndicatorLight(self.canvas, 50)
+        self.light = IndicatorLight(self.canvas, 35)
         self.light.pack(anchor='w', side='top')
 
         self.showsHertz = BooleanVar()
@@ -45,6 +44,14 @@ class PitchDisplay:
 
         self.display_default_gui()
         self.update_data()
+
+    def pause(self):
+        self.light.stop()
+        self.canvas.itemconfig(self.help_text, text='Press \'space\' to accept audio input')
+
+    def resume(self):
+        self.light.start_flashing()
+        self.canvas.itemconfig(self.help_text, text='Press \'space\' to pause audio input')
 
     def cents_to_angle(self, cents):
         return cents/50 * self._span
@@ -74,6 +81,8 @@ class PitchDisplay:
         self.current_pitch_display = self.canvas.create_text(self.width/2, self.height/2 + self.pitchOffset, font=self.font, text='---')
         if self.showsHertz.get():
             self.hertzDisplay = self.canvas.create_text(self.width/2, self.height/2 + 3*self.pitchOffset, font=(None, 14), text='')
+
+        self.help_text = self.canvas.create_text(self.width/2, self.height-25, text='Press \'space\' to accept audio input')
 
         x0 = self.centerX - self.radius
         y0 = self.centerY - self.radius
@@ -125,26 +134,26 @@ class PitchDisplay:
         self._centsValue = value
 
     def update_data(self): #event
-        hz = self.audio_manager.peek()
-        if hz != 0:
-            self._clearing = False
-            midi = hz_to_midi(hz)
-            pitch_class = midi_to_pitch_class(midi)
-            desired_hz = closest_in_tune_frequency(hz)
-            cent = cents(desired_hz, hz)
-            name = pitch_class_to_name(pitch_class, Accidental.SHARP) #TODO: coordinate accidental with FeedbackManager
-            self.update_cents(cent)
-            self.update_hertz(f"{round(hz)} Hz")
-            self.update_pitch(name)
-            self.display_current_gui()
-            self._last_time = time.time()
-        else:
-            self._clearing = True
-            if self._centsValue != -50 and time.time() - self._last_time > 1.5:
-                self.update_cents(max(-50,self._centsValue - 3))
-                self.update_pitch('---')
-                self.update_hertz('')
+        if self.mainWindow.audio_manager is not None:
+            hz = self.mainWindow.audio_manager.peek()
+            if hz != 0:
+                self._clearing = False
+                midi = hz_to_midi(hz)
+                pitch_class = midi_to_pitch_class(midi)
+                desired_hz = closest_in_tune_frequency(hz)
+                cent = cents(desired_hz, hz)
+                name = pitch_class_to_name(pitch_class, Accidental.SHARP) #TODO: coordinate accidental with FeedbackManager
+                self.update_cents(cent)
+                self.update_hertz(f"{round(hz)} Hz")
+                self.update_pitch(name)
                 self.display_current_gui()
+                self._last_time = time.time()
+            else:
+                self._clearing = True
+                if self._centsValue != -50 and time.time() - self._last_time > 1.5:
+                    self.update_cents(max(-50,self._centsValue - 3))
+                    self.update_pitch('---')
+                    self.update_hertz('')
+                    self.display_current_gui()
 
-
-        self.parent.after(10, self.update_data)
+        self.mainWindow.master.after(10, self.update_data)
