@@ -15,7 +15,6 @@ class SessionDiagnostics:
         self.a.set_ylim([0,100])
         self.a.set_autoscale_on(False)
         self.a.set_title("Score Over Time")
-        self.canvas.draw()
         if self.mainWindow.currentPracticeSession is not None:
             self.overallScoreLabel.configure(text = "Overall Score: %.2f" % self.mainWindow.currentPracticeSession.get_overall())
         else:
@@ -34,11 +33,11 @@ class SessionDiagnostics:
             self.canvas.draw()
         else:
             self.clear_plot()
+            self.canvas.draw()
 
     def reset(self):
-        self.a.clear()
-        self.canvas.draw()
-        self.overallScoreLabel.config(text="Overall Score: 0.00")
+        self.update_plot(-1)
+        self.overallScoreLabel.config(text="Overall Score: %.2f" % self.mainWindow.currentPracticeSession.get_overall())
 
     def __init__(self, mainWindow):
         self.mainWindow = mainWindow

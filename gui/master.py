@@ -66,8 +66,8 @@ def main():
     root.bind('<space>', lambda event, arg=our_window: space_pressed(event, arg))
     root.bind('q', lambda event, arg=our_window: kill_pressed(event, arg))
     root.wm_protocol("WM_DELETE_WINDOW", lambda w=our_window: cleanup(w))
-    #score_update(our_window)
-    #piano_update(our_window)
+    score_update(our_window)
+    piano_update(our_window)
     root.mainloop()
 
 
