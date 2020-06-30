@@ -26,6 +26,7 @@ class PitchDisplay:
         self._pitchValue = '---' # default display
         self._centsValue = -50
         self._hertzValue = 0
+        self._octaveValue = ''
 
         self._span = 75 # Size of tuner arc in degrees, starting at vertical
 
@@ -62,7 +63,8 @@ class PitchDisplay:
         self.display_default_gui()
 
     def display_current_gui(self):
-        self.canvas.itemconfig(self.current_pitch_display, text=self._pitchValue)
+        pitch_and_octave = self._pitchValue + self._octaveValue
+        self.canvas.itemconfig(self.current_pitch_display, text=pitch_and_octave)
         if self.showsHertz.get():
             self.canvas.itemconfig(self.hertzDisplay, text=self._hertzValue)
         self.update_line(self._centsValue)
@@ -135,6 +137,9 @@ class PitchDisplay:
     def update_cents(self, value):
         self._centsValue = value
 
+    def update_octave(self, value):
+        self._octaveValue = value
+
     def update_data(self): #event
         if self.mainWindow.audio_manager is not None:
             hz = self.mainWindow.audio_manager.peek()
@@ -147,6 +152,7 @@ class PitchDisplay:
                 name = pitch_class_to_name(pitch_class, Accidental.SHARP) #TODO: coordinate accidental with FeedbackManager
                 self.update_cents(cent)
                 self.update_hertz(f"{round(hz)} Hz")
+                self.update_octave(f"{2 + math.floor(math.log2(desired_hz / 65.4))}")
                 self.update_pitch(name)
                 self.display_current_gui()
                 self._last_time = time.time()
@@ -156,6 +162,7 @@ class PitchDisplay:
                     self.update_cents(max(-50,self._centsValue - 3))
                     self.update_pitch('---')
                     self.update_hertz('')
+                    self.update_octave('')
                     self.display_current_gui()
 
         self.mainWindow.master.after(10, self.update_data)

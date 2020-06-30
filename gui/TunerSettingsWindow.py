@@ -14,7 +14,7 @@ class TunerSettingsWindow:
     def __init__(self, mainWindow):
         self.mainWindow = mainWindow
         tuner_settings_window = tk.Toplevel(self.mainWindow.master)
-        tuner_settings_window.geometry("500x300")
+        tuner_settings_window.geometry("500x200")
 
         top_frame = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
         middle_frame = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
