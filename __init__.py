@@ -1,1 +1,3 @@
-from python_bridge import pitch_utilities
+import pitch_detection
+import gui
+import python_bridge

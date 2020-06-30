@@ -3,6 +3,7 @@ cmake-build-debug/
 *.pyc
 /.idea/
 build/
+.vscode/
 
 PitchDetection/CMake*
 PitchDetection/Makefile

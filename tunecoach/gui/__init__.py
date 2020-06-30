@@ -1,0 +1,1 @@
+from tunecoach.gui.master import main
