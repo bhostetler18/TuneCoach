@@ -152,7 +152,7 @@ class PitchDisplay:
                 name = pitch_class_to_name(pitch_class, Accidental.SHARP) #TODO: coordinate accidental with FeedbackManager
                 self.update_cents(cent)
                 self.update_hertz(f"{round(hz)} Hz")
-                self.update_octave(f"{2 + math.floor(math.log2(desired_hz / 65.4))}")
+                self.update_octave(f"{get_octave(midi)}")
                 self.update_pitch(name)
                 self.display_current_gui()
                 self._last_time = time.time()
