@@ -9,10 +9,6 @@ import time
 def space_pressed(event, mainWindow):
     mainWindow.toggle_pause()
 
-
-def kill_pressed(event, mainWindow):
-    print("Killing")
-    print("")
     # end = time.time()
     # elapsed_time = end - start
     # minutes = int(elapsed_time) // 60
@@ -27,8 +23,6 @@ def kill_pressed(event, mainWindow):
     # else:
     #     print("This session lasted", minutes, "minutes and", seconds, "seconds.")
     # print("")
-    mainWindow.currentPracticeSession.display_all_data()
-    mainWindow.audio_manager.destroy()
 
 
 def cleanup(mainWindow):
@@ -36,26 +30,18 @@ def cleanup(mainWindow):
         mainWindow.audio_manager.destroy()
     mainWindow.master.destroy()
 
+
 def score_update(mainWindow):
     if mainWindow.audio_manager is not None and not mainWindow.isPaused:
-        mainWindow.myDiagnosticObject.overallScoreLabel.config(text="Overall Score: %.2f" % mainWindow.currentPracticeSession.get_overall())
+        mainWindow.myDiagnosticObject.overallScoreLabel.set_text("Overall Score: %.2f" % mainWindow.currentPracticeSession.get_overall())
         mainWindow.myDiagnosticObject.update_plot(int(mainWindow.currentPracticeSession.get_overall()))
-        print(mainWindow.currentPracticeSession.get_overall())
+        # print(mainWindow.currentPracticeSession.get_overall())
     mainWindow.master.after(500, lambda: score_update(mainWindow))
 
-
-def main():
-    def score_update(mainWindow):
-        if not mainWindow.isPaused:
-            mainWindow.myDiagnosticObject.overallScoreLabel.config(text="Overall Score: %.2f" % mainWindow.currentPracticeSession.get_overall())
-            mainWindow.myDiagnosticObject.update_plot(int(mainWindow.currentPracticeSession.get_overall()))
-            print(mainWindow.currentPracticeSession.get_overall())
-        root.after(1000, lambda: score_update(mainWindow))
 
 def piano_update(mainWindow):
     mainWindow.myHistoryObject.update(mainWindow.currentPracticeSession)
     mainWindow.master.after(20, lambda: piano_update(mainWindow))
-
 
 
 def main():
@@ -64,7 +50,6 @@ def main():
     root.title("TuneCoach")
     our_window = MainWindow(root)
     root.bind('<space>', lambda event, arg=our_window: space_pressed(event, arg))
-    root.bind('q', lambda event, arg=our_window: kill_pressed(event, arg))
     root.wm_protocol("WM_DELETE_WINDOW", lambda w=our_window: cleanup(w))
     score_update(our_window)
     piano_update(our_window)

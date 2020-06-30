@@ -4,7 +4,8 @@ from TuneCoach.gui.NewSessionWindow import *
 from TuneCoach.python_bridge import Session
 from TuneCoach.gui.SaveProgressWindow import *
 
-# Settings window to load new sessiion
+
+# Settings window to load new session
 class LoadSessionWindow:
     #will see if you want to save your current session before loading new session, then call load_practice_session
     def propose_save(self, oldWindow):
@@ -14,10 +15,9 @@ class LoadSessionWindow:
             self.load_practice_session(oldWindow)
     #actually loads the practice session
     def load_practice_session(self, oldWindow):
-        #print(something)
         session = Session.load_from_file(self.selected_session.get())
         if session is None:
-            pass #handle error, display to user
+            pass  # TODO: Handle error, display to user
         else:
             self.mainWindow.currentPracticeSession = session
             if self.mainWindow.audio_manager is not None:
@@ -51,8 +51,6 @@ class LoadSessionWindow:
         load_window.grid_columnconfigure(0, weight=1)
         load_window.grid_columnconfigure(1, weight=1)
         load_window.grid_columnconfigure(2, weight=1)
-
-        # will sub out these stand-ins for values once we get set up how and where we will store practice sessions.
 
         create_session_label = tk.Label(top_frame, text="Load Previous Session", bg=background_color, fg="white")
         create_session_label.pack()

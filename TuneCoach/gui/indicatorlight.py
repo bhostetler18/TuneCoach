@@ -1,5 +1,6 @@
 import tkinter as tk
 
+
 class IndicatorLight(tk.Canvas):
 	def __init__(self, parent, size=20):
 		super().__init__(parent, width=size, height=size)

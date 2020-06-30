@@ -4,6 +4,7 @@ from TuneCoach.gui.constants import *
 from TuneCoach.python_bridge.AudioManager import *
 from TuneCoach.gui.SaveProgressWindow import *
 
+
 # Settings window to create a new session
 class NewSessionWindow:
     #will check whether or not new session name is valid and whether or not you want to save your old session
