@@ -2,7 +2,7 @@ import tkinter as tk
 from array import array
 import pickle
 import zlib
-from gui.constants import *
+from TuneCoach.gui.constants import *
 
 
 class SaveWindow: #TODO Gavin and Jenny work on storing data
