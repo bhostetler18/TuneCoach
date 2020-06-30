@@ -1,5 +1,5 @@
 import tkinter as tk
-from tunecoach.gui.constants import *
+from TuneCoach.gui.constants import *
 
 # Settings window to end current session
 class EndSessionWindow:

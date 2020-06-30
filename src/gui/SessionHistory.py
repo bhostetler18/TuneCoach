@@ -1,7 +1,11 @@
 import tkinter as tk
 import PIL.Image
 import PIL.ImageTk
+from importlib.resources import open_binary
 
+# loads piano.jpeg using importlib's resources
+# feature
+image_path = open_binary('TuneCoach.gui', 'piano.jpeg')
 
 # Different classes for pop-up windows.
 class SessionHistory:
@@ -16,7 +20,7 @@ class SessionHistory:
         self.canvas = tk.Canvas(workingFrame, width=width / 2, height=height / 4, relief=tk.RIDGE, bd=5, bg="#bdd0df")
         self.canvas.pack(side=tk.LEFT, padx=width / 4)
 
-        large_image = PIL.Image.open("./gui/piano.jpeg")
+        large_image = PIL.Image.open(image_path)
         large_image = large_image.resize((int(width / 10), int(height / 3.9)), PIL.Image.ANTIALIAS)
         piano_image = PIL.ImageTk.PhotoImage(large_image)
 

@@ -1,0 +1,1 @@
+from TuneCoach.gui.master import main

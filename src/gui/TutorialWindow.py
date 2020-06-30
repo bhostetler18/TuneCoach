@@ -1,5 +1,5 @@
 import tkinter as tk
-from gui.constants import *
+from TuneCoach.gui.constants import *
 
 
 class TutorialWindow:

@@ -1,6 +1,6 @@
 import tkinter as tk
-from python_bridge.Session import *
-from gui.constants import *
+from TuneCoach.python_bridge.Session import *
+from TuneCoach.gui.constants import *
 
 
 # Settings window to create a new session

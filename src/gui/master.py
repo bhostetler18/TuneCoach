@@ -1,8 +1,8 @@
-from gui.MainWindow import *
-from gui.PitchDisplay import *
+from TuneCoach.gui.MainWindow import *
+from TuneCoach.gui.PitchDisplay import *
 from tkinter import *
-from python_bridge.Session import *
-from python_bridge.AudioManager import *
+from TuneCoach.python_bridge.Session import *
+from TuneCoach.python_bridge.AudioManager import *
 import time
 
 

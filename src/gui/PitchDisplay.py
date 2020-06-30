@@ -4,11 +4,11 @@ import tkinter.ttk as ttk
 from math import sin, cos, radians
 from ctypes import *
 import threading
-from tunecoach.gui.constants import Colors
-from tunecoach.python_bridge.pitch_utilities import *
+from TuneCoach.gui.constants import Colors
+from TuneCoach.python_bridge.pitch_utilities import *
 from math import sin, cos, radians
 import time
-from tunecoach.gui.indicatorlight import *
+from TuneCoach.gui.indicatorlight import *
 
 
 class PitchDisplay:

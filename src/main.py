@@ -1,4 +1,4 @@
-from tunecoach.gui import main
+from TuneCoach.gui import main
 
 if __name__ == "__main__":
     main()

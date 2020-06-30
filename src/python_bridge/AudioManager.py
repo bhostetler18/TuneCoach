@@ -1,8 +1,8 @@
 from ctypes import *
 import threading
-from tunecoach.python_bridge.pitch_utilities import *
-from tunecoach.python_bridge.Session import *
-from tunecoach.pitch_detection import TunerStream
+from TuneCoach.python_bridge.pitch_utilities import *
+from TuneCoach.python_bridge.Session import *
+from TuneCoach.pitch_detection import TunerStream
 
 
 def load_library():

@@ -4,6 +4,8 @@ cmake-build-debug/
 /.idea/
 build/
 .vscode/
+dist/
+TuneCoach.egg-info
 
 PitchDetection/CMake*
 PitchDetection/Makefile

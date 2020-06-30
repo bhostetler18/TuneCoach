@@ -1,5 +1,5 @@
 import tkinter as tk
-from tunecoach.gui.constants import *
+from TuneCoach.gui.constants import *
 
 # Settings window to load new session
 class LoadSessionWindow:

@@ -1,6 +1,6 @@
-from tunecoach.gui.MoreInfoWindow import *
+from TuneCoach.gui.MoreInfoWindow import *
 import tkinter as tk
-from tunecoach.gui.constants import *
+from TuneCoach.gui.constants import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 

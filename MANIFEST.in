@@ -1,2 +1,2 @@
 include README.md
-include tunecoach/gui/piano.jpeg
+include src/gui/piano.jpeg

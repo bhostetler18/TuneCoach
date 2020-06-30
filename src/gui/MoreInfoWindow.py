@@ -1,4 +1,4 @@
-from gui.constants import *
+from TuneCoach.gui.constants import *
 import tkinter as tk
 
 

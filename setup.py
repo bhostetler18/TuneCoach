@@ -1,20 +1,20 @@
 # code adapted from https://packaging.python.org/tutorials/packaging-projects/
-from distutils.core import setup, Extension
-from setuptools import find_packages
-
+from setuptools import setup, find_packages, Extension
+from os.path import join
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-pitch_detection = Extension('tunecoach.pitch_detection', 
-    sources = ['./tunecoach/pitch_detection/bridge.cpp', './tunecoach/pitch_detection/TunerStream.cpp', \
-        './tunecoach/pitch_detection/PitchDetector.cpp', './tunecoach/pitch_detection/processing_utilities.cpp'],
-    include_dirs = ['./tunecoach/PitchDetetion'],
+sources = ['bridge.cpp', 'TunerStream.cpp', 'PitchDetector.cpp', 'processing_utilities.cpp']
+sources_root = './src/pitch_detection'
+pitch_detection = Extension('TuneCoach.pitch_detection', 
+    sources = [join(sources_root, stem) for stem in sources],
+    include_dirs = [sources_root],
     libraries = ['pulse-simple'],
     define_macros = [('USE_PULSE', '1')])
 
 setup(
-    name="tunecoach", # Replace with your own username
+    name="TuneCoach", # Replace with your own username
     version="0.0.1",
     author="Jamm Hostetler , James Eschrich, Joe Gravelle, Jenny Baik, Gavin Gui",
     author_email="jeschrich@ufl.edu",
@@ -22,7 +22,11 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/bhostetler18/TuneCoach/",
-    packages=['tunecoach.gui', 'tunecoach.python_bridge'],
+    package_dir = {
+        'TuneCoach': 'src/'
+    },
+    packages=['TuneCoach.gui', 'TuneCoach.python_bridge'],
+    py_modules=["TuneCoach.main"],
     classifiers=[
         "Programming Language :: Python :: 3",
         # "License :: OSI Approved :: MIT License",
@@ -32,7 +36,15 @@ setup(
     python_requires='>=3.8',
     install_requires = [
         'numpy',
-        'matplotlib'
+        'matplotlib',
+        'Pillow>=7.1.2'
     ],
-    include_package_data=True
+    include_package_data=True,
+    package_data={
+        'TuneCoach.gui': ['piano.jpeg'],
+        "": ["README.md"]
+    },
+    entry_points = {
+        'console_scripts': ['TuneCoach=TuneCoach.main:main'],
+    }
 )

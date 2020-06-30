@@ -1,6 +1,6 @@
 import collections
-from tunecoach.python_bridge.pitch_utilities import *
-from tunecoach.gui.MainWindow import *
+from TuneCoach.python_bridge.pitch_utilities import *
+from TuneCoach.gui.MainWindow import *
 import math
 import datetime
 

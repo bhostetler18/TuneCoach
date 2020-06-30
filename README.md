@@ -1,4 +1,3 @@
-
 # TuneCoach
 An interactive tuner that lets musicians practice intotation while performing.
 
