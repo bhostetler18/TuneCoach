@@ -4,11 +4,17 @@ An interactive tuner that lets musicians practice intotation while performing.
 # Install Prerequisites
 TuneCoach requires the following libraries to be present in order to be installed:
 * ```python3-tk```
-* ```python3-pil.imagetk```
-* ```libpulse-dev```
 
 # Install Instructions
 To install using PyPI:
 ```
-$ sudo pip3 install TuneCoach
+$ pip install TuneCoach
 ``` 
+
+The application can now be launched from the terminal with the command ```TuneCoach```.
+# Developer Setup
+
+1. Clone the repository 
+2. (Optional) Set up a virtual environment by running ```python3 -m venv .```
+3. Run ```pip install -e .``` to install the application in editable mode (so that changes you make to the source sync to the locally instsalled package).
+4. Run the application by typing ```TuneCoach``` in the terminal.  
