@@ -8,31 +8,39 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 class SessionDiagnostics:
     def more_info_window_caller(self, mainWindow):
         MoreInfoWindow(mainWindow)
-        
-    def update_plot(self, new_score, mainWindow):
-        if mainWindow.currentPracticeSession is not None:
-            mainWindow.currentPracticeSession._scoreList.append(new_score)
-            if len(mainWindow.currentPracticeSession._scoreList) > 10:
-                mainWindow.currentPracticeSession._scoreList.pop(0)
-            else:
-                mainWindow.currentPracticeSession._scoreIndex.append(len(mainWindow.currentPracticeSession._scoreIndex))
-            self.a.clear()
-            self.a.set_xlim([0, 10])
-            self.a.set_ylim([0, 100])
-            self.a.set_autoscale_on(False)
-            self.a.set_title("Score Over Time")
-            self.a.set_ylabel("Score")
-            self.a.plot(mainWindow.currentPracticeSession._scoreIndex, mainWindow.currentPracticeSession._scoreList, color = "blue")
+
+    def clear_plot(self):
+        self.a.clear()
+        self.a.set_xlim([0,10])
+        self.a.set_ylim([0,100])
+        self.a.set_autoscale_on(False)
+        self.a.set_title("Score Over Time")
+        if self.mainWindow.currentPracticeSession is not None:
+            self.overallScoreLabel.configure(text = "Overall Score: %.2f" % self.mainWindow.currentPracticeSession.get_overall())
+        else:
+            self.overallScoreLabel.configure(text = "N/A")
+
+    def update_plot(self, new_score):
+        if self.mainWindow.currentPracticeSession is not None:
+            if new_score >= 0:
+                self.mainWindow.currentPracticeSession._scoreList.append(new_score)
+                if len(self.mainWindow.currentPracticeSession._scoreList) > 10:
+                    self.mainWindow.currentPracticeSession._scoreList.pop(0)
+                else:
+                    self.mainWindow.currentPracticeSession._scoreIndex.append(len(self.mainWindow.currentPracticeSession._scoreIndex))
+            self.clear_plot()
+            self.a.plot(self.mainWindow.currentPracticeSession._scoreIndex, self.mainWindow.currentPracticeSession._scoreList, color = "blue")
             self.canvas.draw()
         else:
-            self.reset()
+            self.clear_plot()
+            self.canvas.draw()
 
     def reset(self):
-        self.a.clear()
-        self.canvas.draw()
-        self.overallScoreLabel.config(text="Overall Score: 0.00")
+        self.update_plot(-1)
+        self.overallScoreLabel.config(text="Overall Score: %.2f" % self.mainWindow.currentPracticeSession.get_overall())
 
     def __init__(self, mainWindow):
+        self.mainWindow = mainWindow
         workingFrame = mainWindow.left_frame
         currentSession = mainWindow.currentPracticeSession
         topest_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
@@ -82,7 +90,7 @@ class SessionDiagnostics:
         self.a = self.fig.add_subplot(111)
         self.a.plot(defaultX, defaultY, color='blue')
 
-        # Not sure whether or not we want it to have the same axis the whole time
+        #Not sure whether or not we want it to have the same axis the whole time
         self.a.set_ylim([0, 100])
         self.a.set_xlim([0, 10])
         my_fontsize = 16

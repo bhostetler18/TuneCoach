@@ -39,13 +39,23 @@ def cleanup(mainWindow):
 def score_update(mainWindow):
     if mainWindow.audio_manager is not None and not mainWindow.isPaused:
         mainWindow.myDiagnosticObject.overallScoreLabel.config(text="Overall Score: %.2f" % mainWindow.currentPracticeSession.get_overall())
-        mainWindow.myDiagnosticObject.update_plot(int(mainWindow.currentPracticeSession.get_overall()), mainWindow)
+        mainWindow.myDiagnosticObject.update_plot(int(mainWindow.currentPracticeSession.get_overall()))
         print(mainWindow.currentPracticeSession.get_overall())
     mainWindow.master.after(1000, lambda: score_update(mainWindow))
+
+
+def main():
+    def score_update(mainWindow):
+        if not mainWindow.isPaused:
+            mainWindow.myDiagnosticObject.overallScoreLabel.config(text="Overall Score: %.2f" % mainWindow.currentPracticeSession.get_overall())
+            mainWindow.myDiagnosticObject.update_plot(int(mainWindow.currentPracticeSession.get_overall()))
+            print(mainWindow.currentPracticeSession.get_overall())
+        root.after(1000, lambda: score_update(mainWindow))
 
 def piano_update(mainWindow):
     mainWindow.myHistoryObject.update(mainWindow.currentPracticeSession)
     mainWindow.master.after(20, lambda: piano_update(mainWindow))
+
 
 
 def main():
@@ -56,8 +66,8 @@ def main():
     root.bind('<space>', lambda event, arg=our_window: space_pressed(event, arg))
     root.bind('q', lambda event, arg=our_window: kill_pressed(event, arg))
     root.wm_protocol("WM_DELETE_WINDOW", lambda w=our_window: cleanup(w))
-    #score_update(our_window)
-    #piano_update(our_window)
+    score_update(our_window)
+    piano_update(our_window)
     root.mainloop()
 
 

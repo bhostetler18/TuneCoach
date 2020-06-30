@@ -5,8 +5,8 @@ from python_bridge import Session
 
 # Settings window to load new session
 class LoadSessionWindow:
-    def load_practice_session(self, something):
-        print(something)
+    def load_practice_session(self, oldWindow):
+        #print(something)
         session = Session.load_from_file(self.selected_session.get())
         if session is None:
             pass #handle error, display to user
@@ -17,7 +17,7 @@ class LoadSessionWindow:
             self.mainWindow.reset_everything()
             self.mainWindow.audio_manager = AudioManager(session)
             self.mainWindow.myDiagnosticObject.sessionName.configure(text=session._name)
-
+            oldWindow.destroy()
     def load_new_session(self, oldWindow):
         oldWindow.destroy()
         NewSessionWindow(self.mainWindow)
@@ -56,10 +56,10 @@ class LoadSessionWindow:
             self.selected_session = tk.StringVar()
             self.selected_session.set(session_files[0]) # strip out extension
 
-            load_session_dropdown = tk.OptionMenu(middle_frame, self.selected_session, *session_files, command=self.load_practice_session)
+            load_session_dropdown = tk.OptionMenu(middle_frame, self.selected_session, *session_files)
             load_session_dropdown.pack()
             #TODO: complete functionality for acceptButton
-            acceptButton = tk.Button(right_frame, text = "Select", command = lambda: load_window.destroy())
+            acceptButton = tk.Button(right_frame, text = "Select", command = lambda: self.load_practice_session(load_window))
             acceptButton.pack()
         else:
             stand_in_label = tk.Label(middle_frame, text="No sessions to choose from. \n Create a new session first.", fg="white", bg=background_color)

@@ -31,17 +31,17 @@ class TunerSettingsWindow:
         middle_frame.grid(row=1, column=0, columnspan=1, sticky="nsew")
         middle_frame1.grid(row=1, column=1, sticky="nsew")
         middle_frame2.grid(row=1, column=2, sticky="snew")
-        bottom_frame.grid(row=2, column=0, sticky="nsew")
-        bottom_frame1.grid(row=2, column=1, sticky="nsew")
-        bottom_frame2.grid(row=2, column=2, sticky="nsew")
-        bottomest_frame.grid(row=3, column=0, columnspan=3, sticky="nsew")
+        #bottom_frame.grid(row=2, column=0, sticky="nsew")
+        #bottom_frame1.grid(row=2, column=1, sticky="nsew")
+        #bottom_frame2.grid(row=2, column=2, sticky="nsew")
+        bottomest_frame.grid(row=2, column=0, columnspan=3, sticky="nsew")
 
         # setting up grid weights.
 
         tuner_settings_window.grid_rowconfigure(0, weight=1)
         tuner_settings_window.grid_rowconfigure(1, weight=5)
-        tuner_settings_window.grid_rowconfigure(2, weight=5)
-        tuner_settings_window.grid_rowconfigure(3, weight=1)
+        tuner_settings_window.grid_rowconfigure(1, weight=5)
+        #tuner_settings_window.grid_rowconfigure(3, weight=1)
         tuner_settings_window.grid_columnconfigure(0, weight=1)
         tuner_settings_window.grid_columnconfigure(1, weight=1)
         tuner_settings_window.grid_columnconfigure(2, weight=1)
