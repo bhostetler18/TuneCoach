@@ -15,7 +15,7 @@ pitch_detection = Extension('TuneCoach.pitch_detection',
 
 setup(
     name="TuneCoach",
-    version="0.0.1",
+    version="0.0.2",
     author="Jamm Hostetler , James Eschrich, Joe Gravelle, Jenny Baik, Gavin Gui",
     author_email="jeschrich@ufl.edu",
     description="An interactive tool for practicing intonation",
@@ -27,13 +27,13 @@ setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         # "License :: OSI Approved :: MIT License",
-        "Operating System :: Ubuntu 20.04",
+        "Operating System :: POSIX :: Linux",
     ],
     ext_modules=[pitch_detection],
     python_requires='>=3.8',
     install_requires = [
-        'numpy',
-        'matplotlib',
+        'numpy>=1.19.0',
+        'matplotlib>=3.3.0rc1',
         'Pillow>=7.1.2'
     ],
     include_package_data=True,

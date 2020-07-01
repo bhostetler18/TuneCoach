@@ -13,9 +13,9 @@ class AudioThread(threading.Thread):
         # self.daemon = True
 
     def run(self):
-        print("Starting background audio thread")
+        # print("Starting background audio thread")
         self._stream.mainloop()
-        print("Exited background audio thread")
+        # print("Exited background audio thread")
 
 
 class Reader(threading.Thread):
@@ -28,14 +28,14 @@ class Reader(threading.Thread):
         self.session = session
 
     def run(self):
-        print("Starting reader")
+        # print("Starting reader")
         while (self._stream.is_alive()):
             response, success = self._stream.read()
             if success and response:
                 hz = response
                 self.session.collect_data(hz)
             sleep(.01)
-        print("Reader stopped")
+        # print("Reader stopped")
 
 
 class AudioManager(TunerStream):

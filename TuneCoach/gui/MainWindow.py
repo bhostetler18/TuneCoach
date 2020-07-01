@@ -168,21 +168,21 @@ class MainWindow:
     def toggle_pause(self):
         if self.audio_manager is not None:
             if self.audio_manager.is_paused():
-                print("Resuming")
+                # print("Resuming")
                 self.paused = False
                 self.pitch_display.resume()
                 self.audio_manager.resume()
                 self.piano_update()
                 self.score_update()
             else:
-                print("Pausing")
+                # print("Pausing")
                 self.paused = True
                 self.pitch_display.pause()
                 self.audio_manager.pause()
 
     def force_pause(self):
         if self.audio_manager is not None and not self.audio_manager.is_paused():
-            print("Pausing")
+            # print("Pausing")
             self.paused = True
             self.pitch_display.pause()
             self.audio_manager.pause()

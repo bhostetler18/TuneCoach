@@ -17,7 +17,7 @@ def load_from_file(path):
             session = pickle.load(file)
             return session
     except Exception as e:
-        print(e)
+        # print(e)
         return None
 
 class SessionData:

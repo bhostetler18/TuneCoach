@@ -40,7 +40,7 @@ class NewSessionWindow:
             mainWindow.currentPracticeSession = new_session
             mainWindow.practiceSessionList.append(new_session)
             mainWindow.audio_manager = AudioManager(new_session)
-            print("new session is created, it is set to our current practice session variable")
+            # print("new session is created, it is set to our current practice session variable")
             mainWindow.myDiagnosticObject.sessionName.configure(text=newName)
             mainWindow.myDiagnosticObject.update_plot(-1)
             mainWindow.myHistoryObject.clear()

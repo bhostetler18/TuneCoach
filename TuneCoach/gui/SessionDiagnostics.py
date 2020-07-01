@@ -67,7 +67,7 @@ class SessionDiagnostics:
         self.session_name.pack(side=tk.BOTTOM)
 
         if currentSession is None:
-            print("There is no session.")
+            # print("There is no session.")
             v = "Overall Score: 0.00"
         else:
             v = "Overall Score: %.2f" % currentSession.get_overall()
