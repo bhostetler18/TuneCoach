@@ -1,5 +1,6 @@
 # TuneCoach
 An interactive tuner that lets musicians practice intonation while performing.
+[Find us on github!](https://github.com/bhostetler18/TuneCoach)
 
 # Install Instructions
 ## Prerequisites
