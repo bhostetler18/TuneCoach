@@ -12,7 +12,6 @@ class SessionDiagnostics:
         MoreInfoWindow(mainWindow)
 
     def clear_plot(self):
-        print("cleared")
         self.plot.clear()
         self.plot.set_xlim([0, 10])
         self.plot.set_ylim([0, 100])
