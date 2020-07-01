@@ -25,7 +25,7 @@ class MoreInfoWindow:
         if currentSession is None:
             title_string += "No Session Currently Active"
         else:
-            title_string += currentSession._name + " Information:"
+            title_string += mainWindow.currentPracticeSessionName + " Information:"
             if currentSession._overall_count > 0:
                 avg_cents = currentSession._cents / currentSession._overall_count
                 for i in range(12):
