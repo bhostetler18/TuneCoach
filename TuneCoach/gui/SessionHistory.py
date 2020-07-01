@@ -72,7 +72,8 @@ class SessionHistory:
             self.canvas.create_line(self.piano_image.width(), self.noteDict[note], self.width, self.noteDict[note], width=3)
 
     def update(self, data):
-        if data is not None:
+        if data is not None and data.has_new_data:
+            data.has_new_data = False
             recent = list(data.display_buffer)
             thresh2 = self.mainWindow.yellow_threshold
             for i, (note, cents) in enumerate(recent):

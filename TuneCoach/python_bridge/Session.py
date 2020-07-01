@@ -33,6 +33,7 @@ class Session:
         self._timestamp = datetime.date.today()
         self._recent_notes = collections.deque([])
         self.display_buffer = collections.deque([])
+        self.has_new_data = False
 
         # Potential data storage
         self._note_history = []
@@ -62,6 +63,7 @@ class Session:
 
     # Takes in frequency and calculates and stores all data
     def collect_data(self, hz):
+        self.has_new_data = True
         self._freq_history.append(hz)
         midi = hz_to_midi(hz)
         index = midi_to_pitch_class(midi)
