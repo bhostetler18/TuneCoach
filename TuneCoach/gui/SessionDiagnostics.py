@@ -35,10 +35,6 @@ class SessionDiagnostics:
             self.clear_plot()
             self.canvas.draw()
 
-    def reset(self):
-        self.update_plot(-1)
-        self.overallScoreLabel.set_text("Overall Score: %.2f" % self.mainWindow.currentPracticeSession.get_overall())
-
     def __init__(self, mainWindow):
         self.mainWindow = mainWindow
         workingFrame = mainWindow.left_frame

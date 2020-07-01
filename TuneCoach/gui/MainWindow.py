@@ -77,7 +77,7 @@ class MainWindow:
         self.currentPracticeSessionName = Path(path).stem
         self.audio_manager = AudioManager(self.currentPracticeSession)
         self.myDiagnosticObject.sessionName.configure(text=self.currentPracticeSessionName)
-        self.myDiagnosticObject.update_plot(-1)
+        self.myDiagnosticObject.clear_plot()
         self.myHistoryObject.clear()
 
         self.piano_update()
@@ -156,7 +156,7 @@ class MainWindow:
 
     def reset_everything(self):
         self.myHistoryObject.clear()
-        self.myDiagnosticObject.reset()
+        self.myDiagnosticObject.clear_plot()
         self.force_pause()
 
         # Creating frames to organize the screen.
