@@ -77,16 +77,17 @@ class MainWindow:
     # returns False ONLY IF THE USER CANCELS
     def save_practice_session(self, ask=False):
         if self.session.path is None:
-            prompt = "Save current session?"
 
             # if ask if true, cancel if we say no at the messagebox or if we
             # cancel out of save_as. if ask is false, cancel only if we cancel out
             # of save_as
-            if ask and not messagebox.askyesno("", prompt):
+            if ask and not messagebox.askyesno("", "Save current session?"):
                 return True # "save" was successfully, because the user chose to not save
             if not self.save_as_practice_session():
                 return False # cancel save
         else:
+            if ask and not messagebox.askyesno("", "Save current session?"):
+                return True # "save" was successfully, because the user chose to not save
             save_session(self.session)
         
         messagebox.showinfo("Session Saved", f'Session saved to "{self.session.path}" successfully')
