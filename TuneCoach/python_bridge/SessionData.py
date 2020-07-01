@@ -33,12 +33,12 @@ class SessionData:
         self._timestamp = datetime.date.today()
         self._recent_notes = collections.deque([])
         self.display_buffer = collections.deque([])
+        self.has_new_data = False
 
         # Potential data storage
         self._note_history = []
         self._cent_history = []
-        self._scoreList = []
-        self._scoreIndex = []
+        self._score_history = []
 
 
     @staticmethod
@@ -63,8 +63,16 @@ class SessionData:
     @property
     def empty(self):
         return self._overall_count == 0
+    
+    def update_score_history(self):
+        new_score = self.get_overall()
+        self._score_history.append(new_score)
+        if len(self._score_history) > 10:
+                self._score_history.pop(0)
+
     # Takes in frequency and calculates and stores all data
     def collect_data(self, hz):
+        self.has_new_data = True
         self._freq_history.append(hz)
         midi = hz_to_midi(hz)
         index = midi_to_pitch_class(midi)

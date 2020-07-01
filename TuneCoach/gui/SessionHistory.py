@@ -71,15 +71,15 @@ class SessionHistory:
         for note in self.noteDict:
             self.canvas.create_line(self.piano_image.width(), self.noteDict[note], self.width, self.noteDict[note], width=3)
 
-    def update(self, data):
-        if data is not None:
+    def update(self, data, force=False):
+        if data is not None and (force or data.has_new_data):
+            data.has_new_data = False
             recent = list(data.display_buffer)
-            thresh2 = self.mainWindow.yellow_threshold
             for i, (note, cents) in enumerate(recent):
                 color = "red"
                 if abs(cents) <= self.mainWindow.threshold:
                     color = "green"
-                elif abs(cents) <= thresh2:
+                elif abs(cents) <= self.mainWindow.yellow_threshold:
                     color = "yellow"
 
                 circle = self.circle_list[i]

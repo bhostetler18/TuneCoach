@@ -19,7 +19,7 @@ class MainWindow:
     def __init__(self, master):
         self.practiceSessionList = []
         self.session = Session(SessionData(15), None)  # Temporary session! TODO: don't hardcode threshold
-        self.audio_manager = AudioManager(self.session)
+        self.audio_manager = AudioManager(self.session.data)
         self.threshold = 15
         self.yellow_threshold = 35
 
@@ -70,6 +70,7 @@ class MainWindow:
         self.session = self.session.with_path(path)
         # notify session name change
         self.diagnostics.session_name.configure(text=self.session.name)
+        save_session(self.session)
         return True # we did save
         
     # Adding menu options to the top of the screen.
@@ -114,8 +115,8 @@ class MainWindow:
         self.diagnostics.session_name.configure(text=self.session.name)
 
         if not self.session.data.empty:
-            self.piano_update()
-            self.score_update()
+            self.diagnostics.update_plot()
+            self.history.update(self.session.data, force=True)
 
     def new_practice_session(self, ask=True):
         if ask:
@@ -188,15 +189,13 @@ class MainWindow:
     def reset_everything(self):
         self.force_pause()
         self.history.clear()
-        self.diagnostics.reset()
+        self.diagnostics.clear_plot()
     
     def score_update(self):
         if self.audio_manager is not None and not self.paused:
-            self.diagnostics.overallScoreLabel.set_text("Overall Score: %.2f" % self.session.data.get_overall())
-            self.diagnostics.update_plot(int(self.session.data.get_overall()))
-            # print(self.session.get_overall())
+            self.diagnostics.update_plot()
         if not self.paused:
-            self.master.after(500, lambda: self.score_update())
+            self.master.after(1000, lambda: self.score_update())
 
     def piano_update(self):
         self.history.update(self.session.data)
