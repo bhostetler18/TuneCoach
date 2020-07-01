@@ -69,7 +69,7 @@ class SessionDiagnostics:
         title_label = tk.Label(topest_frame, text="Session Diagnostics", bg=background_color, fg="white",
                                font=("calibri", 20))
         title_label.pack(side=tk.TOP)
-        self.sessionName = tk.Label(topest_frame, text=mainWindow.currentPracticeSession._name, bg=background_color,
+        self.sessionName = tk.Label(topest_frame, text=mainWindow.currentPracticeSessionName, bg=background_color,
                                     fg="light sky blue", font=("Calibri", 16))
         self.sessionName.pack(side=tk.BOTTOM)
 

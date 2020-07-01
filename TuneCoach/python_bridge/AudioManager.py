@@ -5,25 +5,6 @@ from TuneCoach.python_bridge.Session import *
 from TuneCoach.pitch_detection import TunerStream
 
 
-def load_library():
-    lib = cdll.LoadLibrary("./libPitchDetection.so")
-    lib.create_stream.argtypes = [c_int]
-    lib.create_stream.restype = c_void_p
-    lib.mainloop.argtypes = [c_void_p]
-    lib.pause_stream.argtypes = [c_void_p]
-    lib.resume_stream.argtypes = [c_void_p]
-    lib.kill_stream.argtypes = [c_void_p]
-    lib.is_alive.argtypes = [c_void_p]
-    lib.is_alive.restype = c_bool
-    lib.is_paused.argtypes = [c_void_p]
-    lib.is_paused.restype = c_bool
-    lib.read_stream.restype = c_bool
-    lib.read_stream.argtypes = [c_void_p, POINTER(c_double)]
-    lib.peek_stream.argtypes = [c_void_p]
-    lib.peek_stream.restype = c_double
-    return lib
-
-
 class AudioThread(threading.Thread):
     def __init__(self, stream):
         super().__init__()
@@ -41,6 +22,8 @@ class Reader(threading.Thread):
         super().__init__()
         self._stream = stream
         # self.daemon = True
+        if session is None:
+            raise AttributeError('Must')
         self.session = session
 
     def run(self):
@@ -63,4 +46,3 @@ class AudioManager(TunerStream):
 
     def destroy(self):
         self.kill()
-        print("Successfully killed audio stream")
