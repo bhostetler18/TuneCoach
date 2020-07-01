@@ -68,7 +68,7 @@ class MainWindow:
         if path == '' or path == (): # if the user cancels the dialog, don't do anything
             return
         if self.audio_manager is not None:
-            self.audio_manager.destroy()
+            self.audio_manager.kill()
         
         # New Session Code:
         self.reset_everything()
@@ -79,6 +79,9 @@ class MainWindow:
         self.myDiagnosticObject.sessionName.configure(text=self.currentPracticeSessionName)
         self.myDiagnosticObject.update_plot(-1)
         self.myHistoryObject.clear()
+
+        self.piano_update()
+        self.score_update()
     
     def load_practice_session(self):
         path = tk.filedialog.askopenfilename(initialdir = './', title="Select a session", filetypes = [('session files', '*.session')])
@@ -94,11 +97,14 @@ class MainWindow:
             self.currentPracticeSessionPath = path
             self.currentPracticeSessionName = Path(path).stem
             if self.audio_manager is not None:
-                self.audio_manager.destroy()
+                self.audio_manager.kill()
             self.reset_everything()
             self.audio_manager = AudioManager(session)
             self.myDiagnosticObject.sessionName.configure(text=self.currentPracticeSessionName)
             print('success loading session')
+
+            self.piano_update()
+            self.score_update()
             # oldWindow.destroy()
     
     def create_menubar(self):
@@ -133,6 +139,8 @@ class MainWindow:
                 self.isPaused = False
                 self.pitchDisplay.resume()
                 self.audio_manager.resume()
+                self.piano_update()
+                self.score_update()
             else:
                 print("Pausing")
                 self.isPaused = True
@@ -172,3 +180,17 @@ class MainWindow:
         self.myHistoryObject = SessionHistory(self, self.bottom_frame)
         self.myDiagnosticObject = SessionDiagnostics(self)
         self.pitchDisplay = PitchDisplay(self)
+    
+    def score_update(self):
+        if self.audio_manager is not None and not self.isPaused:
+            self.myDiagnosticObject.overallScoreLabel.set_text("Overall Score: %.2f" % self.currentPracticeSession.get_overall())
+            self.myDiagnosticObject.update_plot(int(self.currentPracticeSession.get_overall()))
+            # print(self.currentPracticeSession.get_overall())
+        if not self.isPaused:
+            self.master.after(500, lambda: self.score_update())
+
+
+    def piano_update(self):
+        self.myHistoryObject.update(self.currentPracticeSession)
+        if not self.isPaused:
+            self.master.after(20, lambda: self.piano_update())

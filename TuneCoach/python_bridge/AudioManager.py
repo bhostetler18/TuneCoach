@@ -3,6 +3,7 @@ import threading
 from TuneCoach.python_bridge.pitch_utilities import *
 from TuneCoach.python_bridge.Session import *
 from TuneCoach.pitch_detection import TunerStream
+from time import sleep
 
 
 class AudioThread(threading.Thread):
@@ -23,7 +24,7 @@ class Reader(threading.Thread):
         self._stream = stream
         # self.daemon = True
         if session is None:
-            raise AttributeError('Must')
+            raise AttributeError('Session cannot be None!')
         self.session = session
 
     def run(self):
@@ -33,6 +34,7 @@ class Reader(threading.Thread):
             if success and response:
                 hz = response
                 self.session.collect_data(hz)
+            sleep(.01)
         print("Reader stopped")
 
 
