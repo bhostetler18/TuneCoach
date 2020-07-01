@@ -17,23 +17,23 @@ class SessionDiagnostics:
         self.a.set_ylim([0, 100])
         self.a.set_autoscale_on(False)
         self.a.set_title("Score Over Time")
-        if self.mainWindow.currentPracticeSession is not None:
-            self.overallScoreLabel.set_text("Overall Score: %.2f" % self.mainWindow.currentPracticeSession.get_overall())
+        if self.mainWindow.session.data is not None:
+            self.overallScoreLabel.set_text("Overall Score: %.2f" % self.mainWindow.session.data.get_overall())
         else:
             self.overallScoreLabel.set_text("N/A")
 
     def update_plot(self, new_score):
-        if self.mainWindow.currentPracticeSession is not None:
+        if self.mainWindow.session.data is not None:
             if new_score >= 0:
-                self.mainWindow.currentPracticeSession._scoreList.append(new_score)
-                if len(self.mainWindow.currentPracticeSession._scoreList) > 10:
-                    self.mainWindow.currentPracticeSession._scoreList.pop(0)
+                self.mainWindow.session.data._scoreList.append(new_score)
+                if len(self.mainWindow.session.data._scoreList) > 10:
+                    self.mainWindow.session.data._scoreList.pop(0)
                 else:
-                    self.mainWindow.currentPracticeSession._scoreIndex.append(
-                        len(self.mainWindow.currentPracticeSession._scoreIndex))
+                    self.mainWindow.session.data._scoreIndex.append(
+                        len(self.mainWindow.session.data._scoreIndex))
             self.clear_plot()
-            self.a.plot(self.mainWindow.currentPracticeSession._scoreIndex,
-                        self.mainWindow.currentPracticeSession._scoreList, color="blue")
+            self.a.plot(self.mainWindow.session.data._scoreIndex,
+                        self.mainWindow.session.data._scoreList, color="blue")
             self.canvas.draw()
         else:
             self.clear_plot()
@@ -41,12 +41,12 @@ class SessionDiagnostics:
 
     def reset(self):
         self.update_plot(-1)
-        self.overallScoreLabel.set_text("Overall Score: %.2f" % self.mainWindow.currentPracticeSession.get_overall())
+        self.overallScoreLabel.set_text("Overall Score: %.2f" % self.mainWindow.session.data.get_overall())
 
     def __init__(self, mainWindow):
         self.mainWindow = mainWindow
         workingFrame = mainWindow.left_frame
-        currentSession = mainWindow.currentPracticeSession
+        currentSession = mainWindow.session.data
         topest_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
         top_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
         right_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
@@ -69,9 +69,9 @@ class SessionDiagnostics:
         title_label = tk.Label(topest_frame, text="Session Diagnostics", bg=background_color, fg="white",
                                font=("calibri", 20))
         title_label.pack(side=tk.TOP)
-        self.sessionName = tk.Label(topest_frame, text=mainWindow.currentPracticeSessionName, bg=background_color,
+        self.session_name = tk.Label(topest_frame, text=mainWindow.session.name, bg=background_color,
                                     fg="light sky blue", font=("Calibri", 16))
-        self.sessionName.pack(side=tk.BOTTOM)
+        self.session_name.pack(side=tk.BOTTOM)
 
         if currentSession is None:
             print("There is no session.")

@@ -1,6 +1,6 @@
 # main gui for TuneCoach. Made by the group, Jamm Hostetler, James Eschrich, Joe Gravelle, Jenny Baik, Gavin Gui
 from TuneCoach.gui.PitchDisplay import *
-from TuneCoach.python_bridge.Session import Session, load_from_file, save_to_file
+from TuneCoach.gui.Session import Session, load_session, save_session
 from TuneCoach.gui.SessionHistory import *
 from TuneCoach.gui.SessionDiagnostics import *
 from TuneCoach.gui.RemoveWindow import *
@@ -8,23 +8,22 @@ from TuneCoach.gui.TunerSettingsWindow import *
 from TuneCoach.gui.FAQWindow import *
 from TuneCoach.gui.TutorialWindow import *
 from TuneCoach.gui.IntroWindow import *
-from pathlib import Path
+
 
 from tkinter import messagebox
 
+def invalid_path(path): return path == '' or path == () or path == None
 
 # Main GUI
 class MainWindow:
     def __init__(self, master):
         self.practiceSessionList = []
-        self.currentPracticeSession = Session(15)  # Temporary session! TODO: don't hardcode threshold
-        self.currentPracticeSessionName = "Temporary Session"
-        self.currentPracticeSessionPath = None
-        self.audio_manager = AudioManager(self.currentPracticeSession)
+        self.session = Session(SessionData(15), None)  # Temporary session! TODO: don't hardcode threshold
+        self.audio_manager = AudioManager(self.session)
         self.threshold = 15
         self.yellow_threshold = 35
 
-        self.isPaused = True
+        self.paused = True
         self.master = master
 
         master.attributes('-fullscreen', True)
@@ -41,18 +40,56 @@ class MainWindow:
         self.create_menubar()
         self.layout_frames(self.screen_width, self.screen_height)
         IntroWindow(self)
+    
+    # Creating frames to organize the screen.
+    def layout_frames(self, screen_width, screen_height):
+        self.bottom_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
+        self.left_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
+        self.right_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
 
+        # Putting the frames into a grid layout
+        self.bottom_frame.grid(row=1, column=0, columnspan=2, sticky="nsew")
+        self.left_frame.grid(row=0, column=0, sticky="nsew")
+        self.right_frame.grid(row=0, column=1, sticky="nsew")
+
+        # setting up grid weights.
+        self.master.grid_rowconfigure(0, weight=1)
+        self.master.grid_rowconfigure(1, weight=1)
+        self.master.grid_columnconfigure(0, weight=3)
+        self.master.grid_columnconfigure(1, weight=4)
+
+        # Here we can work on creating the functionality for each frame, ex: tuner, pitch history, information
+        self.history = SessionHistory(self, self.bottom_frame)
+        self.diagnostics = SessionDiagnostics(self)
+        self.pitch_display = PitchDisplay(self)
+    
+    def save_as_practice_session(self):
+        path = tk.filedialog.asksaveasfilename(initialdir = './', title="Save session as...", filetypes = [('session files', '*.session')])
+        if invalid_path(path): # if the user cancels the dialog, don't do anything
+            return False # we didn't save
+        self.session = self.session.with_path(path)
+        # notify session name change
+        self.diagnostics.session_name.configure(text=self.session.name)
+        return True # we did save
+        
     # Adding menu options to the top of the screen.
-    def save_practice_session(self):
-        if self.currentPracticeSessionPath is None:
-            path = tk.filedialog.asksaveasfilename(initialdir = './', title="Save session", filetypes = [('session files', '*.session')])
-            if path == '' or path == (): # if the user cancels the dialog, don't do anything
-                return
-            self.currentPracticeSessionPath = path
-            self.currentPracticeSessionName = Path(path).stem
-            self.myDiagnosticObject.sessionName.configure(text=self.currentPracticeSessionName)
-        save_to_file(self.currentPracticeSession, self.currentPracticeSessionPath)
-        messagebox.showinfo("Session Saved", f"Session saved to {self.currentPracticeSessionPath} successfully")
+    # returns False ONLY IF THE USER CANCELS
+    def save_practice_session(self, ask=False):
+        if self.session.path is None:
+            prompt = "Save current session?"
+
+            # if ask if true, cancel if we say no at the messagebox or if we
+            # cancel out of save_as. if ask is false, cancel only if we cancel out
+            # of save_as
+            if ask and not messagebox.askyesno("", prompt):
+                return True # "save" was successfully, because the user chose to not save
+            if not self.save_as_practice_session():
+                return False # cancel save
+        else:
+            save_session(self.session)
+        
+        messagebox.showinfo("Session Saved", f'Session saved to "{self.session.path}" successfully')
+        return True # saved successfully
 
     def remove_practice_session(self):
         RemoveWindow(self)
@@ -66,51 +103,40 @@ class MainWindow:
     def load_tutorial(self):
         TutorialWindow(self)
 
-    def new_practice_session(self):
-        # NewSessionWindow(self)
-        path = tk.filedialog.asksaveasfilename(initialdir = './', title="Create a new session", filetypes = [('session files', '*.session')])
-        if path == '' or path == (): # if the user cancels the dialog, don't do anything
-            return
+    def setup_session(self, session):
+        self.reset_everything()
+
         if self.audio_manager is not None:
             self.audio_manager.kill()
         
-        # New Session Code:
-        self.reset_everything()
-        self.currentPracticeSession = Session(self.threshold)
-        self.currentPracticeSessionPath = path
-        self.currentPracticeSessionName = Path(path).stem
-        self.audio_manager = AudioManager(self.currentPracticeSession)
-        self.myDiagnosticObject.sessionName.configure(text=self.currentPracticeSessionName)
-        self.myDiagnosticObject.update_plot(-1)
-        self.myHistoryObject.clear()
+        self.session = session
+        self.audio_manager = AudioManager(self.session.data)
+        self.diagnostics.session_name.configure(text=self.session.name)
 
-        self.piano_update()
-        self.score_update()
-    
-    def load_practice_session(self):
-        path = tk.filedialog.askopenfilename(initialdir = './', title="Select a session", filetypes = [('session files', '*.session')])
-        if path == '' or path == (): # if the user cancels the dialog, don't do anything
-            return
-
-        session = load_from_file(path)
-
-        if session is None:
-            pass  # TODO: Handle error, display to user
-        else:
-            self.currentPracticeSession = session
-            self.currentPracticeSessionPath = path
-            self.currentPracticeSessionName = Path(path).stem
-            if self.audio_manager is not None:
-                self.audio_manager.kill()
-            self.reset_everything()
-            self.audio_manager = AudioManager(session)
-            self.myDiagnosticObject.sessionName.configure(text=self.currentPracticeSessionName)
-            print('success loading session')
-
+        if not self.session.data.empty:
             self.piano_update()
             self.score_update()
-            # oldWindow.destroy()
+
+    def new_practice_session(self, ask=True):
+        if ask:
+            self.save_practice_session(ask=True)
+        data = SessionData(self.threshold)
+        self.setup_session(Session(data))
     
+    def load_practice_session(self, ask=True):
+        if ask:
+            self.save_practice_session(ask=True)
+        path = tk.filedialog.askopenfilename(initialdir = './', title="Select a session", filetypes = [('session files', '*.session')])
+        if invalid_path(path): # if the user cancels the dialog, don't do anything
+            return
+
+        session = load_session(path)
+
+        if session is None:
+            messagebox.showerror("Invalid session", f'Session located at "{path}" is invalid!')
+        else:
+            self.setup_session(session)
+
     def create_menubar(self):
         menubar = tk.Menu(self.master)
         self.master.config(menu=menubar)
@@ -120,6 +146,7 @@ class MainWindow:
         menubar.add_cascade(label="File", menu=file_menu)
         file_menu.add_command(label="New Practice Session", command=self.new_practice_session)
         file_menu.add_command(label="Save Current Session", command=self.save_practice_session)
+        file_menu.add_command(label="Save Current Session As...", command=self.save_as_practice_session)
         file_menu.add_command(label="Load Existing Session", command=self.load_practice_session)
         # TODO: Add functionality to remove sessions
         # file_menu.add_separator
@@ -140,61 +167,38 @@ class MainWindow:
         if self.audio_manager is not None:
             if self.audio_manager.is_paused():
                 print("Resuming")
-                self.isPaused = False
-                self.pitchDisplay.resume()
+                self.paused = False
+                self.pitch_display.resume()
                 self.audio_manager.resume()
                 self.piano_update()
                 self.score_update()
             else:
                 print("Pausing")
-                self.isPaused = True
-                self.pitchDisplay.pause()
+                self.paused = True
+                self.pitch_display.pause()
                 self.audio_manager.pause()
 
     def force_pause(self):
         if self.audio_manager is not None and not self.audio_manager.is_paused():
             print("Pausing")
-            self.isPaused = True
-            self.pitchDisplay.pause()
+            self.paused = True
+            self.pitch_display.pause()
             self.audio_manager.pause()
 
     def reset_everything(self):
-        self.myHistoryObject.clear()
-        self.myDiagnosticObject.reset()
         self.force_pause()
-
-        # Creating frames to organize the screen.
-    def layout_frames(self, screen_width, screen_height):
-        self.bottom_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
-        self.left_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
-        self.right_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
-
-        # Putting the frames into a grid layout
-        self.bottom_frame.grid(row=1, column=0, columnspan=2, sticky="nsew")
-        self.left_frame.grid(row=0, column=0, sticky="nsew")
-        self.right_frame.grid(row=0, column=1, sticky="nsew")
-
-        # setting up grid weights.
-        self.master.grid_rowconfigure(0, weight=1)
-        self.master.grid_rowconfigure(1, weight=1)
-        self.master.grid_columnconfigure(0, weight=3)
-        self.master.grid_columnconfigure(1, weight=4)
-
-        # Here we can work on creating the functionality for each frame, ex: tuner, pitch history, information
-        self.myHistoryObject = SessionHistory(self, self.bottom_frame)
-        self.myDiagnosticObject = SessionDiagnostics(self)
-        self.pitchDisplay = PitchDisplay(self)
+        self.history.clear()
+        self.diagnostics.reset()
     
     def score_update(self):
-        if self.audio_manager is not None and not self.isPaused:
-            self.myDiagnosticObject.overallScoreLabel.set_text("Overall Score: %.2f" % self.currentPracticeSession.get_overall())
-            self.myDiagnosticObject.update_plot(int(self.currentPracticeSession.get_overall()))
-            # print(self.currentPracticeSession.get_overall())
-        if not self.isPaused:
+        if self.audio_manager is not None and not self.paused:
+            self.diagnostics.overallScoreLabel.set_text("Overall Score: %.2f" % self.session.data.get_overall())
+            self.diagnostics.update_plot(int(self.session.data.get_overall()))
+            # print(self.session.get_overall())
+        if not self.paused:
             self.master.after(500, lambda: self.score_update())
 
-
     def piano_update(self):
-        self.myHistoryObject.update(self.currentPracticeSession)
-        if not self.isPaused:
+        self.history.update(self.session.data)
+        if not self.paused:
             self.master.after(20, lambda: self.piano_update())

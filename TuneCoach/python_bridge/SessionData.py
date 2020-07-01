@@ -20,7 +20,7 @@ def load_from_file(path):
         print(e)
         return None
 
-class Session:
+class SessionData:
     def __init__(self, cent_range):
         self._notes = ("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
         self._in_tune_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -60,6 +60,9 @@ class Session:
     def update_threshold(self, new_threshold):
         self._threshold = new_threshold
 
+    @property
+    def empty(self):
+        return self._overall_count == 0
     # Takes in frequency and calculates and stores all data
     def collect_data(self, hz):
         self._freq_history.append(hz)

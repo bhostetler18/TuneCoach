@@ -1,7 +1,7 @@
 import tkinter as tk
 from TuneCoach.gui.constants import *
 from TuneCoach.gui.NewSessionWindow import *
-from TuneCoach.python_bridge import Session
+from TuneCoach.python_bridge.SessionData import SessionData
 from TuneCoach.gui.SaveProgressWindow import *
 
 
@@ -18,7 +18,7 @@ class LoadSessionWindow:
         path = tk.filedialog.askopenfilename(initialdir = './', title="Select a session", filetypes = (('Session files', '*.session')))
         if path is None: # if the user cancels the dialog, don't do anything
             return
-        session = Session.load_from_file(path, self.selected_session.get())
+        session = SessionData.load_from_file(path, self.selected_session.get())
         if session is None:
             pass  # TODO: Handle error, display to user
         else:
@@ -58,7 +58,7 @@ class LoadSessionWindow:
         create_session_label = tk.Label(top_frame, text="Load Previous Session", bg=background_color, fg="white")
         create_session_label.pack()
 
-        session_files = Session.get_existing_sessions()
+        session_files = SessionData.get_existing_sessions()
         session_names = list(map(lambda filename: os.path.splitext(filename)[0], session_files))
         if len(session_files) > 0:
             select_session_label = tk.Label(left_frame, text="Select a session to load", bg=background_color, fg="white")

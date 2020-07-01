@@ -1,5 +1,5 @@
 import tkinter as tk
-from TuneCoach.python_bridge.Session import *
+from TuneCoach.python_bridge.SessionData import *
 from TuneCoach.gui.constants import *
 from TuneCoach.python_bridge.AudioManager import *
 from TuneCoach.gui.SaveProgressWindow import *

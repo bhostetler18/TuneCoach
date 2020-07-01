@@ -1,7 +1,6 @@
 from TuneCoach.gui.MainWindow import *
 from TuneCoach.gui.PitchDisplay import *
 from tkinter import *
-from TuneCoach.python_bridge.Session import *
 from TuneCoach.python_bridge.AudioManager import *
 import time
 
@@ -26,6 +25,8 @@ def space_pressed(event, mainWindow):
 
 
 def cleanup(mainWindow):
+    if not mainWindow.save_practice_session(ask=True):
+        return # do not close if we're saving and then we cancel
     if mainWindow.audio_manager is not None:
         mainWindow.audio_manager.destroy()
     mainWindow.master.destroy()

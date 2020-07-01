@@ -1,7 +1,7 @@
 from ctypes import *
 import threading
 from TuneCoach.python_bridge.pitch_utilities import *
-from TuneCoach.python_bridge.Session import *
+from TuneCoach.python_bridge.SessionData import *
 from TuneCoach.pitch_detection import TunerStream
 from time import sleep
 
@@ -48,3 +48,7 @@ class AudioManager(TunerStream):
 
     def destroy(self):
         self.kill()
+
+    @property
+    def paused(self):
+        return self.is_paused()
