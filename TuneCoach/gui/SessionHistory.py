@@ -74,7 +74,8 @@ class SessionHistory:
     def update(self, data):
         if data is not None and data.has_new_data:
             data.has_new_data = False
-            for i, (note, cents) in enumerate(data.display_buffer):
+            recent = list(data.display_buffer)
+            for i, (note, cents) in enumerate(recent):
                 color = "red"
                 if abs(cents) <= self.mainWindow.threshold:
                     color = "green"
