@@ -12,28 +12,24 @@ class SessionDiagnostics:
         MoreInfoWindow(mainWindow)
 
     def clear_plot(self):
-        self.a.clear()
-        self.a.set_xlim([0, 10])
-        self.a.set_ylim([0, 100])
-        self.a.set_autoscale_on(False)
-        self.a.set_title("Score Over Time")
+        self.plot.clear()
+        self.plot.set_xlim([0, 10])
+        self.plot.set_ylim([0, 100])
+        self.plot.set_autoscale_on(False)
+        self.plot.set_title("Score Over Time")
         if self.mainWindow.currentPracticeSession is not None:
             self.overallScoreLabel.set_text("Overall Score: %.2f" % self.mainWindow.currentPracticeSession.get_overall())
         else:
             self.overallScoreLabel.set_text("N/A")
 
-    def update_plot(self, new_score):
+    def update_plot(self):
         if self.mainWindow.currentPracticeSession is not None:
-            if new_score >= 0:
-                self.mainWindow.currentPracticeSession._scoreList.append(new_score)
-                if len(self.mainWindow.currentPracticeSession._scoreList) > 10:
-                    self.mainWindow.currentPracticeSession._scoreList.pop(0)
-                else:
-                    self.mainWindow.currentPracticeSession._scoreIndex.append(
-                        len(self.mainWindow.currentPracticeSession._scoreIndex))
+            new_score = self.mainWindow.currentPracticeSession.get_overall()
+            self.overallScoreLabel.set_text("Overall Score: %.2f" % new_score)
+            self.mainWindow.currentPracticeSession.update_score_history()
             self.clear_plot()
-            self.a.plot(self.mainWindow.currentPracticeSession._scoreIndex,
-                        self.mainWindow.currentPracticeSession._scoreList, color="blue")
+            numScores = len(self.mainWindow.currentPracticeSession._score_history)
+            self.plot.plot(range(numScores), self.mainWindow.currentPracticeSession._score_history, color="blue")
             self.canvas.draw()
         else:
             self.clear_plot()
@@ -91,20 +87,20 @@ class SessionDiagnostics:
             self.fig = Figure(figsize=(3, 3))
         else:
             self.fig = Figure(figsize=(2,2))
-        self.a = self.fig.add_subplot(111)
-        self.a.plot(defaultX, defaultY, color='blue')
+        self.plot = self.fig.add_subplot(111)
+        self.plot.plot(defaultX, defaultY, color='blue')
 
         # Not sure whether or not we want it to have the same axis the whole time
-        self.a.set_ylim([0, 100])
-        self.a.set_xlim([0, 10])
+        self.plot.set_ylim([0, 100])
+        self.plot.set_xlim([0, 10])
         my_fontsize = 16
         my_axissize = 14
         #if mainWindow.screen_width < 1000:
         #    my_fontsize = 3
         #    my_axissize = 3
-        self.a.set_title("Score Over Time", fontsize=my_fontsize)
-        self.a.set_ylabel("Score", fontsize=my_axissize)
-        self.a.set_autoscale_on(False)
+        self.plot.set_title("Score Over Time", fontsize=my_fontsize)
+        self.plot.set_ylabel("Score", fontsize=my_axissize)
+        self.plot.set_autoscale_on(False)
 
         self.canvas = FigureCanvasTkAgg(self.fig, master=right_frame)
         self.canvas.get_tk_widget().configure(relief=tk.RIDGE, bd=5)

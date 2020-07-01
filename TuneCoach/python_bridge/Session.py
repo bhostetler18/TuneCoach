@@ -38,8 +38,7 @@ class Session:
         # Potential data storage
         self._note_history = []
         self._cent_history = []
-        self._scoreList = []
-        self._scoreIndex = []
+        self._score_history = []
 
 
     @staticmethod
@@ -60,6 +59,12 @@ class Session:
 
     def update_threshold(self, new_threshold):
         self._threshold = new_threshold
+
+    def update_score_history(self):
+        new_score = self.get_overall()
+        self._score_history.append(new_score)
+        if len(self._score_history) > 10:
+                self._score_history.pop(0)
 
     # Takes in frequency and calculates and stores all data
     def collect_data(self, hz):

@@ -183,11 +183,9 @@ class MainWindow:
     
     def score_update(self):
         if self.audio_manager is not None and not self.isPaused:
-            self.myDiagnosticObject.overallScoreLabel.set_text("Overall Score: %.2f" % self.currentPracticeSession.get_overall())
-            self.myDiagnosticObject.update_plot(int(self.currentPracticeSession.get_overall()))
-            # print(self.currentPracticeSession.get_overall())
+            self.myDiagnosticObject.update_plot()
         if not self.isPaused:
-            self.master.after(500, lambda: self.score_update())
+            self.master.after(1000, lambda: self.score_update())
 
 
     def piano_update(self):
