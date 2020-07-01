@@ -74,13 +74,11 @@ class SessionHistory:
     def update(self, data):
         if data is not None and data.has_new_data:
             data.has_new_data = False
-            recent = list(data.display_buffer)
-            thresh2 = self.mainWindow.yellow_threshold
-            for i, (note, cents) in enumerate(recent):
+            for i, (note, cents) in enumerate(data.display_buffer):
                 color = "red"
                 if abs(cents) <= self.mainWindow.threshold:
                     color = "green"
-                elif abs(cents) <= thresh2:
+                elif abs(cents) <= self.mainWindow.yellow_threshold:
                     color = "yellow"
 
                 circle = self.circle_list[i]
