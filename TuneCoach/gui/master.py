@@ -25,6 +25,7 @@ def space_pressed(event, mainWindow):
 
 
 def cleanup(mainWindow):
+    mainWindow.force_pause()
     if not mainWindow.save_practice_session(ask=True):
         return # do not close if we're saving and then we cancel
     if mainWindow.audio_manager is not None:

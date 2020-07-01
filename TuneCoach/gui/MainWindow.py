@@ -64,6 +64,7 @@ class MainWindow:
         self.pitch_display = PitchDisplay(self)
     
     def save_as_practice_session(self):
+        self.force_pause()
         path = tk.filedialog.asksaveasfilename(initialdir = './', title="Save session as...", filetypes = [('session files', '*.session')])
         if invalid_path(path): # if the user cancels the dialog, don't do anything
             return False # we didn't save
@@ -76,6 +77,7 @@ class MainWindow:
     # Adding menu options to the top of the screen.
     # returns False ONLY IF THE USER CANCELS
     def save_practice_session(self, ask=False):
+        self.force_pause()
         if self.session.path is None:
 
             # if ask if true, cancel if we say no at the messagebox or if we
@@ -124,7 +126,7 @@ class MainWindow:
             self.save_practice_session(ask=True)
         data = SessionData(self.threshold)
         self.setup_session(Session(data))
-    
+
     def load_practice_session(self, ask=True):
         if ask:
             self.save_practice_session(ask=True)
@@ -139,6 +141,12 @@ class MainWindow:
         else:
             self.setup_session(session)
 
+    def session_menu_item(self, fn):
+        def command_function():
+            self.force_pause()
+            fn()
+        return command_function
+
     def create_menubar(self):
         menubar = tk.Menu(self.master)
         self.master.config(menu=menubar)
@@ -146,10 +154,10 @@ class MainWindow:
 
         # File menubar
         menubar.add_cascade(label="File", menu=file_menu)
-        file_menu.add_command(label="New Practice Session", command=self.new_practice_session)
-        file_menu.add_command(label="Save Current Session", command=self.save_practice_session)
-        file_menu.add_command(label="Save Current Session As...", command=self.save_as_practice_session)
-        file_menu.add_command(label="Load Existing Session", command=self.load_practice_session)
+        file_menu.add_command(label="New Practice Session", command=self.session_menu_item(self.new_practice_session))
+        file_menu.add_command(label="Save Current Session", command=self.session_menu_item(self.save_practice_session))
+        file_menu.add_command(label="Save Current Session As...", command=self.session_menu_item(self.save_as_practice_session))
+        file_menu.add_command(label="Load Existing Session", command=self.session_menu_item(self.load_practice_session))
         # TODO: Add functionality to remove sessions
         # file_menu.add_separator
         # file_menu.add_command(label = "Remove Practice Session", command = self.remove_practice_session)

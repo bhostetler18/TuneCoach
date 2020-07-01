@@ -15,7 +15,7 @@ pitch_detection = Extension('TuneCoach.pitch_detection',
 
 setup(
     name="TuneCoach",
-    version="0.0.2",
+    version="0.0.3",
     author="Jamm Hostetler , James Eschrich, Joe Gravelle, Jenny Baik, Gavin Gui",
     author_email="jeschrich@ufl.edu",
     description="An interactive tool for practicing intonation",
