@@ -196,7 +196,7 @@ class MainWindow:
         if self.audio_manager is not None and not self.paused:
             self.diagnostics.update_plot()
         if not self.paused:
-            self.master.after(1000, lambda: self.score_update())
+            self.master.after(500, lambda: self.score_update())
 
     def piano_update(self):
         self.history.update(self.session.data)

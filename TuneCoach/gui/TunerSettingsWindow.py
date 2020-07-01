@@ -6,8 +6,9 @@ import tkinter.ttk as ttk
 # Tuner settings window
 class TunerSettingsWindow:
     def update_pitch_settings(self, cent_threshold, oldSettingsView):
-        self.mainWindow.currentPracticeSession.update_threshold(cent_threshold)
-        self.mainWindow.pitchDisplay.set_threshold(cent_threshold)
+        self.mainWindow.threshold = cent_threshold
+        self.mainWindow.pitch_display.set_threshold(cent_threshold)
+        self.mainWindow.session.data._threshold = cent_threshold
 
         oldSettingsView.destroy()
 
@@ -54,7 +55,7 @@ class TunerSettingsWindow:
         centsitivity.pack()
 
         v = tk.DoubleVar()
-        v.set(mainWindow.currentPracticeSession._threshold)
+        v.set(mainWindow.threshold)
 
         cent_scale = tk.Scale(middle_frame1, from_=1, to=25, orient=tk.HORIZONTAL, variable=v)
         cent_scale.config(bg=background_color, fg="white")
