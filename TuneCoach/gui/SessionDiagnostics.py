@@ -12,6 +12,7 @@ class SessionDiagnostics:
         MoreInfoWindow(mainWindow)
 
     def clear_plot(self):
+        print("cleared")
         self.plot.clear()
         self.plot.set_xlim([0, 10])
         self.plot.set_ylim([0, 100])
@@ -21,6 +22,7 @@ class SessionDiagnostics:
             self.overallScoreLabel.set_text("Overall Score: %.2f" % self.mainWindow.session.data.get_overall())
         else:
             self.overallScoreLabel.set_text("N/A")
+        self.canvas.draw()
 
     def update_plot(self):
         if self.mainWindow.session.data is not None:
