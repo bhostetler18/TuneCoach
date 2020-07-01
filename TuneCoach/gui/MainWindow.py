@@ -3,13 +3,14 @@ from TuneCoach.gui.PitchDisplay import *
 from TuneCoach.python_bridge.Session import Session, load_from_file, save_to_file
 from TuneCoach.gui.SessionHistory import *
 from TuneCoach.gui.SessionDiagnostics import *
-from TuneCoach.gui.SaveWindow import *
 from TuneCoach.gui.RemoveWindow import *
 from TuneCoach.gui.TunerSettingsWindow import *
 from TuneCoach.gui.FAQWindow import *
 from TuneCoach.gui.TutorialWindow import *
 from TuneCoach.gui.IntroWindow import *
 from pathlib import Path
+
+from tkinter import messagebox
 
 
 # Main GUI
@@ -47,8 +48,11 @@ class MainWindow:
             path = tk.filedialog.asksaveasfilename(initialdir = './', title="Save session", filetypes = [('session files', '*.session')])
             if path == '' or path == (): # if the user cancels the dialog, don't do anything
                 return
+            self.currentPracticeSessionPath = path
+            self.currentPracticeSessionName = Path(path).stem
+            self.myDiagnosticObject.sessionName.configure(text=self.currentPracticeSessionName)
         save_to_file(self.currentPracticeSession, self.currentPracticeSessionPath)
-        SaveWindow(self)
+        messagebox.showinfo("Session Saved", f"Session saved to {self.currentPracticeSessionPath} successfully")
 
     def remove_practice_session(self):
         RemoveWindow(self)
