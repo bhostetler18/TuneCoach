@@ -15,7 +15,10 @@ class LoadSessionWindow:
             self.load_practice_session(oldWindow)
     #actually loads the practice session
     def load_practice_session(self, oldWindow):
-        session = Session.load_from_file(self.selected_session.get())
+        path = tk.filedialog.askopenfilename(initialdir = './', title="Select a session", filetypes = (('Session files', '*.session')))
+        if path is None: # if the user cancels the dialog, don't do anything
+            return
+        session = Session.load_from_file(path, self.selected_session.get())
         if session is None:
             pass  # TODO: Handle error, display to user
         else:

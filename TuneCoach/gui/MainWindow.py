@@ -1,6 +1,6 @@
 # main gui for TuneCoach. Made by the group, Jamm Hostetler, James Eschrich, Joe Gravelle, Jenny Baik, Gavin Gui
 from TuneCoach.gui.PitchDisplay import *
-from TuneCoach.python_bridge.Session import *
+from TuneCoach.python_bridge.Session import Session, load_from_file, save_to_file
 from TuneCoach.gui.SessionHistory import *
 from TuneCoach.gui.SessionDiagnostics import *
 from TuneCoach.gui.SaveWindow import *
@@ -9,13 +9,16 @@ from TuneCoach.gui.TunerSettingsWindow import *
 from TuneCoach.gui.FAQWindow import *
 from TuneCoach.gui.TutorialWindow import *
 from TuneCoach.gui.IntroWindow import *
+from pathlib import Path
 
 
 # Main GUI
 class MainWindow:
     def __init__(self, master):
         self.practiceSessionList = []
-        self.currentPracticeSession = Session(15, "Temporary Session")  # TODO: don't hardcode threshold
+        self.currentPracticeSession = Session(15)  # Temporary session! TODO: don't hardcode threshold
+        self.currentPracticeSessionName = "Temporary Session"
+        self.currentPracticeSessionPath = None
         self.audio_manager = AudioManager(self.currentPracticeSession)
         self.threshold = 15
         self.yellow_threshold = 35
@@ -40,13 +43,12 @@ class MainWindow:
 
     # Adding menu options to the top of the screen.
     def save_practice_session(self):
-        if self.currentPracticeSession._name == "Temporary Session":
-            SaveWindow(self, 0)
-        elif self.currentPracticeSession is not None:
-            self.currentPracticeSession.save_to_file()
-            SaveWindow(self,1)
-        else:
-            SaveWindow(self, -1)
+        if self.currentPracticeSessionPath is None:
+            path = tk.filedialog.asksaveasfilename(initialdir = './', title="Save session", filetypes = [('session files', '*.session')])
+            if path == '' or path == (): # if the user cancels the dialog, don't do anything
+                return
+        save_to_file(self.currentPracticeSession, self.currentPracticeSessionPath)
+        SaveWindow(self)
 
     def remove_practice_session(self):
         RemoveWindow(self)
@@ -61,10 +63,43 @@ class MainWindow:
         TutorialWindow(self)
 
     def new_practice_session(self):
-        NewSessionWindow(self)
-
+        # NewSessionWindow(self)
+        path = tk.filedialog.asksaveasfilename(initialdir = './', title="Create a new session", filetypes = [('session files', '*.session')])
+        if path == '' or path == (): # if the user cancels the dialog, don't do anything
+            return
+        if self.audio_manager is not None:
+            self.audio_manager.destroy()
+        
+        # New Session Code:
+        self.reset_everything()
+        self.currentPracticeSession = Session(self.threshold)
+        self.currentPracticeSessionPath = path
+        self.currentPracticeSessionName = Path(path).stem
+        self.audio_manager = AudioManager(self.currentPracticeSession)
+        self.myDiagnosticObject.sessionName.configure(text=self.currentPracticeSessionName)
+        self.myDiagnosticObject.update_plot(-1)
+        self.myHistoryObject.clear()
+    
     def load_practice_session(self):
-        LoadSessionWindow(self)
+        path = tk.filedialog.askopenfilename(initialdir = './', title="Select a session", filetypes = [('session files', '*.session')])
+        if path == '' or path == (): # if the user cancels the dialog, don't do anything
+            return
+
+        session = load_from_file(path)
+
+        if session is None:
+            pass  # TODO: Handle error, display to user
+        else:
+            self.currentPracticeSession = session
+            self.currentPracticeSessionPath = path
+            self.currentPracticeSessionName = Path(path).stem
+            if self.audio_manager is not None:
+                self.audio_manager.destroy()
+            self.reset_everything()
+            self.audio_manager = AudioManager(session)
+            self.myDiagnosticObject.sessionName.configure(text=self.currentPracticeSessionName)
+            print('success loading session')
+            # oldWindow.destroy()
     
     def create_menubar(self):
         menubar = tk.Menu(self.master)

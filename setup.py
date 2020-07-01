@@ -27,7 +27,7 @@ setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         # "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
+        "Operating System :: Ubuntu 20.04",
     ],
     ext_modules=[pitch_detection],
     python_requires='>=3.8',

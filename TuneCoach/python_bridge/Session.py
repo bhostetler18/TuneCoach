@@ -5,10 +5,23 @@ import math
 import datetime
 import pickle
 import os
+from pathlib import Path
 
+def save_to_file(session, path):
+    with open(path, "wb") as file:
+        pickle.dump(session, file)
+
+def load_from_file(path):
+    try:
+        with open(path, "rb") as file:
+            session = pickle.load(file)
+            return session
+    except Exception as e:
+        print(e)
+        return None
 
 class Session:
-    def __init__(self, cent_range, session_name):
+    def __init__(self, cent_range):
         self._notes = ("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
         self._in_tune_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self._pitch_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -18,7 +31,6 @@ class Session:
         self._overall_count = 0
         self._threshold = cent_range
         self._timestamp = datetime.date.today()
-        self._name = session_name
         self._recent_notes = collections.deque([])
         self.display_buffer = collections.deque([])
 
@@ -28,19 +40,6 @@ class Session:
         self._scoreList = []
         self._scoreIndex = []
 
-    def save_to_file(self):
-        with open(f"./user_sessions/{self._name}.session", "wb") as file:
-            pickle.dump(self, file)
-
-    @staticmethod
-    def load_from_file(filename):
-        try:
-            with open(f"./user_sessions/{filename}", "rb") as file:
-                session = pickle.load(file)
-                return session
-        except Exception as e:
-            print(e)
-            return None
 
     @staticmethod
     def get_existing_sessions():

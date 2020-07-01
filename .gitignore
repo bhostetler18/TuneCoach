@@ -5,7 +5,9 @@ cmake-build-debug/
 build/
 .vscode/
 dist/
-TuneCoach.egg-info
+TuneCoach.egg-info/
+tunecoach.egg-info/
+**/*.so
 
 pyvenv.cfg
 bin
