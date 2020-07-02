@@ -5,8 +5,7 @@ from TuneCoach.python_bridge.AudioManager import *
 import time
 
 
-def space_pressed(event, mainWindow):
-    mainWindow.toggle_pause()
+
 
     # end = time.time()
     # elapsed_time = end - start
@@ -24,23 +23,12 @@ def space_pressed(event, mainWindow):
     # print("")
 
 
-def cleanup(mainWindow):
-    mainWindow.force_pause()
-    if not mainWindow.save_practice_session(ask=True):
-        return # do not close if we're saving and then we cancel
-    if mainWindow.audio_manager is not None:
-        mainWindow.audio_manager.destroy()
-    mainWindow.master.destroy()
-
-
 
 def main():
     start = time.time()
     root = Tk()
     root.title("TuneCoach")
     our_window = MainWindow(root)
-    root.bind('<space>', lambda event, arg=our_window: space_pressed(event, arg))
-    root.wm_protocol("WM_DELETE_WINDOW", lambda w=our_window: cleanup(w))
     root.mainloop()
 
 

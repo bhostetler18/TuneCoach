@@ -12,7 +12,9 @@ from TuneCoach.gui.IntroWindow import *
 
 from tkinter import messagebox
 
-def invalid_path(path): return path == '' or path == () or path == None
+def invalid_path(path): 
+    # print(path)
+    return path == '' or path == () or path == None
 
 # Main GUI
 class MainWindow:
@@ -37,10 +39,24 @@ class MainWindow:
         master.minsize(width=int(self.screen_width/2), height=int(self.screen_height/2))
         master.maxsize(width=self.screen_width, height=self.screen_height)
 
+        master.bind('<space>', self.space_pressed)
+        master.wm_protocol("WM_DELETE_WINDOW", self.cleanup)
+        
         self.create_menubar()
         self.layout_frames(self.screen_width, self.screen_height)
         IntroWindow(self)
     
+    def cleanup(self):
+        self.disable()
+        if not self.save_practice_session(ask=True):
+            self.enable()
+            return # do not close if we're saving and then we cancel
+        if self.audio_manager is not None:
+            self.audio_manager.destroy()
+        self.master.destroy() 
+    
+    def space_pressed(self, event):
+        self.toggle_pause()
     # Creating frames to organize the screen.
     def layout_frames(self, screen_width, screen_height):
         self.bottom_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
@@ -140,11 +156,19 @@ class MainWindow:
             messagebox.showerror("Invalid session", f'Session located at "{path}" is invalid!')
         else:
             self.setup_session(session)
-
+    def do_nothing(self):
+        pass
+    def disable(self):
+        self.master.protocol("WM_DELETE_WINDOW", self.do_nothing)
+        self.force_pause()
+    def enable(self):
+        self.master.protocol("WM_DELETE_WINDOW", self.cleanup)
     def session_menu_item(self, fn):
-        def command_function():
-            self.force_pause()
-            fn()
+        def command_function(*args, **kwargs):
+            self.disable()
+            ret = fn(*args, **kwargs)
+            self.enable()
+            return ret
         return command_function
 
     def create_menubar(self):

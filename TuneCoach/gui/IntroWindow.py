@@ -6,12 +6,16 @@ class IntroWindow:
     @staticmethod
     def intro_load_session(mainWindow, oldFrame):
         oldFrame.destroy()
+        mainWindow.disable()
         mainWindow.load_practice_session(ask=False)
+        mainWindow.enable()
 
     @staticmethod
     def intro_new_session(mainWindow, oldFrame):
         oldFrame.destroy()
+        mainWindow.disable()
         mainWindow.new_practice_session(ask=False)
+        mainWindow.enable()
 
     def __init__(self, mainWindow):
         self.master = mainWindow.master
