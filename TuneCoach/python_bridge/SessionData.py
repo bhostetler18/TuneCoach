@@ -54,6 +54,12 @@ class SessionData:
         else:
             return (100.0 * self._overall) / self._overall_count
 
+    def get_avg_cents(self):
+        if self._overall_count == 0:
+            return 0.0
+        else:
+            return self._cents / self._overall_count
+
     def get_recent_notes(self):
         return self._recent_notes
 
