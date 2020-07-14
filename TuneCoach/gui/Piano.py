@@ -11,8 +11,16 @@ class Piano(tk.Canvas):
 
 	def draw(self, event):
 		print("redraw")
+		self.delete("all")
 		width = self.winfo_width()
 		height = self.winfo_height()
+		key_gap = 1
 		white_key_height = height/7
+		black_key_height = height/14
+		black_key_width = width*0.6
 		for i in range(0, 8):
-			self.create_rectangle(0, white_key_height*i, width, white_key_height*i + white_key_height, fill='white')
+			self.create_rectangle(0, (white_key_height)*i + key_gap/2, width, (white_key_height)*(i+1) - key_gap/2, fill='white')
+			if i not in {0,4,7}:
+				self.create_rectangle(0, (white_key_height)*(i) - black_key_height/2, black_key_width, white_key_height*(i)+black_key_height/2, fill='black')
+			
+		

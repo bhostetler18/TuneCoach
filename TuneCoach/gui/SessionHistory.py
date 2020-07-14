@@ -38,7 +38,7 @@ class SessionHistory:
         self.canvas.delete("all")
 
         self.width = self.frame.winfo_width()
-        self.height = self.frame.winfo_height()
+        self.height = self.frame.winfo_height() - 10  # Subtract 10 because MainWindow sets bd=5
 
         piano_width = self.height*self.aspect_ratio
         self.piano.configure(width=piano_width)
