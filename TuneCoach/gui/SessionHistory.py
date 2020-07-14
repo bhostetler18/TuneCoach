@@ -70,6 +70,8 @@ class SessionHistory:
         if data is not None and (force or data.has_new_data):
             data.has_new_data = False
             recent = list(data.display_buffer)
+            pitch_errors = [(100.0 * data._in_tune_count[i]) / (data._pitch_count[i] if data._pitch_count[i] != 0 else 1) for i in range(0,12)]
+            self.piano.set_scores(pitch_errors)
             for i, (note, cents) in enumerate(recent):
                 color = "red"
                 if abs(cents) <= self.mainWindow.threshold:
