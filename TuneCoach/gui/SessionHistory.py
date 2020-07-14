@@ -48,18 +48,18 @@ class SessionHistory:
         self.circle_size = 0.5*self.available_width/64
         
         self.noteDict = {
-            "C": self.height / 14,
-            "C#": self.height / 7,
-            "D": self.height / 14 * 3,
-            "D#": self.height / 7 * 2,
-            "E": self.height / 14 * 5,
+            "B": self.height / 14,
+            "A#": self.height / 7,
+            "A": self.height / 14 * 3,
+            "G#": self.height / 7 * 2,
+            "G": self.height / 14 * 5,
+            "F#": self.height / 7 * 3,
             "F": self.height / 14 * 7,
-            "F#": self.height / 7 * 4,
-            "G": self.height / 14 * 9,
-            "G#": self.height / 7 * 5,
-            "A": self.height / 14 * 11,
-            "A#": self.height / 7 * 6,
-            "B": self.height / 14 * 13
+            "E": self.height / 14 * 9,
+            "D#": self.height / 7 * 5,
+            "D": self.height / 14 * 11,
+            "C#": self.height / 7 * 6,
+            "C": self.height / 14 * 13
         }
 
         for note in self.noteDict:
