@@ -5,10 +5,13 @@ import tkinter.ttk as ttk
 
 # Tuner settings window
 class TunerSettingsWindow:
-    def update_tuner_settings(self, cent_threshold, oldSettingsView):
+    def update_tuner_settings(self, cent_threshold, key, signature, oldSettingsView):
         self.mainWindow.threshold = cent_threshold
         self.mainWindow.pitch_display.set_threshold(cent_threshold)
         self.mainWindow.session.data._threshold = cent_threshold
+
+        self.mainWindow.session.data.set_key(key)
+        self.mainWindow.session.data.set_signature(signature)
 
         oldSettingsView.destroy()
 
@@ -72,11 +75,10 @@ class TunerSettingsWindow:
         sig_label.pack()
         
         # Default key signatures
-        key = "C"
-        sig = "Major"
+        key = tk.StringVar()
+        sig = tk.StringVar()
 
-        # TODO: Create functionality for key signatures, connect
-
+        # Grid of key signature buttons
         c_button = tk.Radiobutton(bottom_frame1, text="C", indicatoron=0, width=3, variable=key, value="C")
         c_button.grid(row=1, column=0)
         db_button = tk.Radiobutton(bottom_frame1, text="Db", indicatoron=0, width=3, variable=key, value="Db")
@@ -106,8 +108,7 @@ class TunerSettingsWindow:
         minor_button = tk.Radiobutton(bottom_frame2, text="Minor", indicatoron=0, width=7, variable=sig, value="Minor")
         minor_button.grid(row=2, column=0)
 
-        done_button = ttk.Button(bottomest_frame, text="Apply",
-                                command=lambda: self.update_tuner_settings(cent_scale.get(), tuner_settings_window))
+        done_button = ttk.Button(bottomest_frame, text="Apply", command=lambda: self.update_tuner_settings(cent_scale.get(), key.get(), sig.get(), tuner_settings_window))
 
         done_button.pack()
         tuner_settings_window.lift(self.mainWindow.master)

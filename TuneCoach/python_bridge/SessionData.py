@@ -21,6 +21,7 @@ def load_from_file(path):
         # print(e)
         return None
 
+# TODO: Apply key signatures here
 class SessionData:
     def __init__(self, cent_range):
         self._notes = ("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
@@ -35,6 +36,9 @@ class SessionData:
         self._recent_notes = collections.deque([])
         self.display_buffer = collections.deque([])
         self.has_new_data = False
+
+        self._key = "C"
+        self._signature = "Major"
 
         # Potential data storage
         self._note_history = []
@@ -60,6 +64,18 @@ class SessionData:
             return 0.0
         else:
             return self._cents / self._overall_count
+
+    def get_key(self):
+        return self._key
+
+    def get_signature(self):
+        return self._signature
+
+    def set_key(self, key):
+        self._key = key
+
+    def set_signature(self, signature):
+        self._signature = signature
 
     def get_recent_notes(self):
         return self._recent_notes
