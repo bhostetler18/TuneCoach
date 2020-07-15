@@ -43,6 +43,8 @@ class SessionHistory:
         self.frame.bind("<Configure>", self.setup)
 
     def scroll(self, *args):
+        if !self.mainWindow.paused:
+            return
         if args[0] == 'moveto':
             offset = max(0, min(float(args[1]), 1 - self.scrollbar_width))
             self.scrollbar.set(offset, offset + self.scrollbar_width)
@@ -50,8 +52,6 @@ class SessionHistory:
             self.display_notes(self.current_pos)
         if args[0] == 'update_width':
             self.scrollbar.set(1 - self.scrollbar_width, 1)
-
-
 
     def setup(self, event): # TODO: fix bug where resizing window removes current data from display
         self.clear()
@@ -85,8 +85,7 @@ class SessionHistory:
         for note in self.noteDict:
             self.canvas.create_line(piano_width, self.noteDict[note], self.width, self.noteDict[note], width=3)
 
-        self.display_notes(max(0, len(self.buffer) - self.display_size))
-
+        self.display_recent_notes()
 
     def update(self, data, force=False):
         if data is not None and (force or data.has_new_data):
@@ -97,10 +96,12 @@ class SessionHistory:
             self.scroll('update_width')
             pitch_errors = [(100.0 * data._in_tune_count[i]) / (data._pitch_count[i] if data._pitch_count[i] != 0 else 1) for i in range(0,12)]
             self.piano.set_scores(pitch_errors)
-            self.display_notes(max(0, len(self.buffer) - self.display_size))
+            self.display_recent_notes()
+
+    def display_recent_notes(self):
+        self.display_notes(max(0, len(self.buffer) - self.display_size))
 
     def display_notes(self, pos):
-        # TODO: make sure paused
         self.current_pos = pos
         self.clear()
         notes = self.buffer[pos : pos + self.display_size]
@@ -120,7 +121,6 @@ class SessionHistory:
             else:
                 self.canvas.coords(circle, x - self.circle_size, y - self.circle_size, x + self.circle_size, y + self.circle_size)
                 self.canvas.itemconfig(circle, fill=color)
-
 
     def clear(self):
         for circle in self.circle_list:
