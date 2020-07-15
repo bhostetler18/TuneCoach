@@ -18,6 +18,9 @@ class SessionHistory:
         self.canvas = tk.Canvas(workingFrame, bg="#bdd0df")
         self.canvas.pack(expand=True, fill=tk.BOTH)
 
+        self.display_size = 64
+        self.current_pos = 0
+
         self.scrollbar = tk.Scrollbar(workingFrame, orient=tk.HORIZONTAL)
         self.scrollbar.pack(side='bottom', fill='x')
         self.scrollbar.config(command=self.scroll)
@@ -33,9 +36,9 @@ class SessionHistory:
         self.piano.pack(side='bottom', expand=True, fill='y', anchor='w')
 
         self.available_width = self.width
-        self.circle_size = self.available_width/65
+        self.circle_size = self.available_width/(self.display_size + 1)
         self.circle_start = 0
-        self.circle_list = [None] * 64  # TODO: don't hardcode size and coordinate with Feedback buffer
+        self.circle_list = [None] * self.display_size
 
         self.frame.bind("<Configure>", self.setup)
 
@@ -43,8 +46,8 @@ class SessionHistory:
         if args[0] == 'moveto':
             offset = max(0, min(float(args[1]), 1 - self.scrollbar_width))
             self.scrollbar.set(offset, offset + self.scrollbar_width)
-            start = int(len(self.buffer) * offset)
-            self.display_notes(start)
+            self.current_pos = int(len(self.buffer) * offset)
+            self.display_notes(self.current_pos)
         if args[0] == 'update_width':
             self.scrollbar.set(1 - self.scrollbar_width, 1)
 
@@ -62,7 +65,7 @@ class SessionHistory:
             
         self.available_width = self.width - piano_width
         self.circle_start = piano_width
-        self.circle_size = 0.5*self.available_width/64
+        self.circle_size = 0.5*self.available_width/self.display_size
         
         self.noteDict = {
             "B": self.height / 14,
@@ -82,23 +85,26 @@ class SessionHistory:
         for note in self.noteDict:
             self.canvas.create_line(piano_width, self.noteDict[note], self.width, self.noteDict[note], width=3)
 
+        self.display_notes(max(0, len(self.buffer) - self.display_size))
+
 
     def update(self, data, force=False):
         if data is not None and (force or data.has_new_data):
             data.has_new_data = False
             recent = data.display_buffer
             self.buffer.append(recent[-1]) # TODO: use note_history, replace note names with integral values, remove buffer
-            self.scrollbar_width = 1/(max(1, len(self.buffer)/64))
+            self.scrollbar_width = 1/(max(1, len(self.buffer)/self.display_size))
             self.scroll('update_width')
             pitch_errors = [(100.0 * data._in_tune_count[i]) / (data._pitch_count[i] if data._pitch_count[i] != 0 else 1) for i in range(0,12)]
             self.piano.set_scores(pitch_errors)
-            self.display_notes(max(0, len(self.buffer) - 64))
+            self.display_notes(max(0, len(self.buffer) - self.display_size))
 
-    def display_notes(self, start):
+    def display_notes(self, pos):
         # TODO: make sure paused
+        self.current_pos = pos
         self.clear()
-        recent = self.buffer[start : start+64]
-        for i, (note, cents) in enumerate(self.buffer[start:start+64]):
+        notes = self.buffer[pos : pos + self.display_size]
+        for i, (note, cents) in enumerate(notes):
             color = "red"
             if abs(cents) <= self.mainWindow.threshold:
                 color = "green"
@@ -119,4 +125,4 @@ class SessionHistory:
     def clear(self):
         for circle in self.circle_list:
             self.canvas.delete(circle)
-        self.circle_list = [None] * 64
+        self.circle_list = [None] * self.display_size
