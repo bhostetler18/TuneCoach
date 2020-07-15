@@ -41,10 +41,22 @@ class Piano(tk.Canvas):
             coords = self.coords(key)
             x = coords[2] / 2
             y = (coords[3] + coords[1]) / 2
-            textID = self.create_text(x, y, text=f"{self.notes[i]}: {round(scores[i])}%", fill="black", tag="text")
+            if round(scores[i]) > 70:
+                textColor = "green"
+            elif round(scores[i]) > 50:
+                textColor = "yellow"
+            else:
+                textColor = "red"        
+            textID = self.create_text(x, y, text=f"{self.notes[i]}: {round(scores[i])}%", fill=textColor, tag="text")
         for i in [1,3,6,8,10]:
             key = self.keys[i]
             coords = self.coords(key)
             x = coords[2] / 2
             y = (coords[3] + coords[1]) / 2
-            textID = self.create_text(x, y, text=f"{self.notes[i]}: {round(scores[i])}%", fill="white", tag="text")
+            if round(scores[i]) > 70:
+                textColor = "green"
+            elif round(scores[i]) > 50:
+                textColor = "yellow"
+            else:
+                textColor = "red"  
+            textID = self.create_text(x, y, text=f"{self.notes[i]}: {round(scores[i])}%", fill=textColor, tag="text")
