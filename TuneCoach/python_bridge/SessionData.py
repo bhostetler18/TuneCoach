@@ -7,6 +7,7 @@ import pickle
 import os
 from pathlib import Path
 
+# DO WE STILL NEED THIS HERE?
 def save_to_file(session, path):
     with open(path, "wb") as file:
         pickle.dump(session, file)
