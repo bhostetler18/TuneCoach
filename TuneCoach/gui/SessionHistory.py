@@ -43,16 +43,22 @@ class SessionHistory:
         self.frame.bind("<Configure>", self.setup)
 
     def scroll(self, *args):
-        if !self.mainWindow.paused:
+        if args[0] == 'update_width':
+            self.scrollbar.set(1 - self.scrollbar_width, 1)
+        if not self.mainWindow.paused:
             return
+
         if args[0] == 'moveto':
             offset = max(0, min(float(args[1]), 1 - self.scrollbar_width))
             self.scrollbar.set(offset, offset + self.scrollbar_width)
-            self.current_pos = int(len(self.buffer) * offset)
-            self.display_notes(self.current_pos)
-        if args[0] == 'update_width':
-            self.scrollbar.set(1 - self.scrollbar_width, 1)
-
+            self.display_notes(int(len(self.buffer) * offset))
+        elif args[0] == 'scroll':
+            amount = int(args[1])
+            if args[2] == 'pages':
+                self.display_notes(self.current_pos + self.display_size*amount)
+            elif args[2] == 'units':
+                self.display_notes(self.current_pos + amount)
+        
     def setup(self, event): # TODO: fix bug where resizing window removes current data from display
         self.clear()
         self.canvas.delete("all")
@@ -85,7 +91,7 @@ class SessionHistory:
         for note in self.noteDict:
             self.canvas.create_line(piano_width, self.noteDict[note], self.width, self.noteDict[note], width=3)
 
-        self.display_recent_notes()
+        self.display_notes(self.current_pos) # redraw the notes the user was currently looking at
 
     def update(self, data, force=False):
         if data is not None and (force or data.has_new_data):
@@ -102,6 +108,10 @@ class SessionHistory:
         self.display_notes(max(0, len(self.buffer) - self.display_size))
 
     def display_notes(self, pos):
+        if len(self.buffer) <= self.display_size:
+            pos = 0
+        else:
+            pos = min(max(0, pos), len(self.buffer) - self.display_size)
         self.current_pos = pos
         self.clear()
         notes = self.buffer[pos : pos + self.display_size]
