@@ -5,7 +5,7 @@ import tkinter.ttk as ttk
 
 # Tuner settings window
 class TunerSettingsWindow:
-    def update_pitch_settings(self, cent_threshold, oldSettingsView):
+    def update_tuner_settings(self, cent_threshold, oldSettingsView):
         self.mainWindow.threshold = cent_threshold
         self.mainWindow.pitch_display.set_threshold(cent_threshold)
         self.mainWindow.session.data._threshold = cent_threshold
@@ -70,43 +70,44 @@ class TunerSettingsWindow:
         sig_label = tk.Label(bottom_frame, text="Key Signature")
         sig_label.config(bg=background_color, fg="white")
         sig_label.pack()
+        
+        # Default key signatures
+        key = "C"
+        sig = "Major"
 
+        # TODO: Create functionality for key signatures, connect
 
-        c_button = tk.Button(bottom_frame1, text="C", height=1, width=1)
+        c_button = tk.Radiobutton(bottom_frame1, text="C", indicatoron=0, width=3, variable=key, value="C")
         c_button.grid(row=1, column=0)
-        db_button = tk.Button(bottom_frame1, text="Db", height=1, width=1)
+        db_button = tk.Radiobutton(bottom_frame1, text="Db", indicatoron=0, width=3, variable=key, value="Db")
         db_button.grid(row=1, column=1)
-        d_button = tk.Button(bottom_frame1, text="D", height=1, width=1)
+        d_button = tk.Radiobutton(bottom_frame1, text="D", indicatoron=0, width=3, variable=key, value="D")
         d_button.grid(row=1, column=2)
-
-        eb_button = tk.Button(bottom_frame1, text="Eb", height=1, width=1)
+        eb_button = tk.Radiobutton(bottom_frame1, text="Eb", indicatoron=0, width=3, variable=key, value="Eb")
         eb_button.grid(row=2, column=0)
-        e_button = tk.Button(bottom_frame1, text="E", height=1, width=1)
+        e_button = tk.Radiobutton(bottom_frame1, text="E", indicatoron=0, width=3, variable=key, value="E")
         e_button.grid(row=2, column=1)
-        f_button = tk.Button(bottom_frame1, text="F", height=1, width=1)
+        f_button = tk.Radiobutton(bottom_frame1, text="F", indicatoron=0, width=3, variable=key, value="F")
         f_button.grid(row=2, column=2)
-
-        fs_button = tk.Button(bottom_frame1, text="F#", height=1, width=1)
+        fs_button = tk.Radiobutton(bottom_frame1, text="F#", indicatoron=0, width=3, variable=key, value="F#")
         fs_button.grid(row=3, column=0)
-        g_button = tk.Button(bottom_frame1, text="G", height=1, width=1)
+        g_button = tk.Radiobutton(bottom_frame1, text="G", indicatoron=0, width=3, variable=key, value="G")
         g_button.grid(row=3, column=1)
-        ab_button = tk.Button(bottom_frame1, text="Ab", height=1, width=1)
+        ab_button = tk.Radiobutton(bottom_frame1, text="Ab", indicatoron=0, width=3, variable=key, value="Ab")
         ab_button.grid(row=3, column=2)
-
-        a_button = tk.Button(bottom_frame1, text="A", height=1, width=1)
+        a_button = tk.Radiobutton(bottom_frame1, text="A", indicatoron=0, width=3, variable=key, value="A")
         a_button.grid(row=4, column=0)
-        bb_button = tk.Button(bottom_frame1, text="Bb", height=1, width=1)
+        bb_button = tk.Radiobutton(bottom_frame1, text="Bb", indicatoron=0, width=3, variable=key, value="Bb")
         bb_button.grid(row=4, column=1)
-        b_button = tk.Button(bottom_frame1, text="B", height=1, width=1)
+        b_button = tk.Radiobutton(bottom_frame1, text="B", indicatoron=0, width=3, variable=key, value="B")
         b_button.grid(row=4, column=2)
-
-        major_button = ttk.Button(bottom_frame2, text="Major")
+        major_button = tk.Radiobutton(bottom_frame2, text="Major", indicatoron=0, width=6, variable=sig, value="Major")
         major_button.grid(row=1, column=0)
-        minor_button = ttk.Button(bottom_frame2, text="Minor")
+        minor_button = tk.Radiobutton(bottom_frame2, text="Minor", indicatoron=0, width=7, variable=sig, value="Minor")
         minor_button.grid(row=2, column=0)
 
         done_button = ttk.Button(bottomest_frame, text="Apply",
-                                command=lambda: self.update_pitch_settings(cent_scale.get(), tuner_settings_window))
+                                command=lambda: self.update_tuner_settings(cent_scale.get(), tuner_settings_window))
 
         done_button.pack()
         tuner_settings_window.lift(self.mainWindow.master)

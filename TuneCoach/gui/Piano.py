@@ -44,7 +44,7 @@ class Piano(tk.Canvas):
             if round(scores[i]) > 70:
                 textColor = "green"
             elif round(scores[i]) > 50:
-                textColor = "yellow"
+                textColor = "gold"
             else:
                 textColor = "red"        
             textID = self.create_text(x, y, text=f"{self.notes[i]}: {round(scores[i])}%", fill=textColor, tag="text")
@@ -56,7 +56,7 @@ class Piano(tk.Canvas):
             if round(scores[i]) > 70:
                 textColor = "green"
             elif round(scores[i]) > 50:
-                textColor = "yellow"
+                textColor = "gold"
             else:
                 textColor = "red"  
             textID = self.create_text(x, y, text=f"{self.notes[i]}: {round(scores[i])}%", fill=textColor, tag="text")
