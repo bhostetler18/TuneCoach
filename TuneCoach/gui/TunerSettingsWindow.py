@@ -75,8 +75,8 @@ class TunerSettingsWindow:
         sig_label.pack()
         
         # Default key signatures
-        key = tk.StringVar()
-        sig = tk.StringVar()
+        key = tk.StringVar(None, "C")
+        sig = tk.StringVar(None, "Major")
 
         # Grid of key signature buttons
         c_button = tk.Radiobutton(bottom_frame1, text="C", indicatoron=0, width=3, variable=key, value="C")
