@@ -44,8 +44,10 @@ class SessionHistory:
 
     def scroll(self, *args):
         if args[0] == 'update_width':
+            self.scrollbar_width = args[1]
             self.scrollbar.set(1 - self.scrollbar_width, 1)
         if not self.mainWindow.paused:
+            # TODO: change color to indicate the user can't scroll
             return
 
         if args[0] == 'moveto':
@@ -55,9 +57,11 @@ class SessionHistory:
         elif args[0] == 'scroll':
             amount = int(args[1])
             if args[2] == 'pages':
-                self.display_notes(self.current_pos + self.display_size*amount)
+                self.display_notes(self.current_pos + int(0.5*self.display_size*amount))
             elif args[2] == 'units':
                 self.display_notes(self.current_pos + amount)
+            offset = self.current_pos/len(self.buffer)
+            self.scrollbar.set(offset, offset + self.scrollbar_width)
         
     def setup(self, event): # TODO: fix bug where resizing window removes current data from display
         self.clear()
@@ -98,8 +102,7 @@ class SessionHistory:
             data.has_new_data = False
             recent = data.display_buffer
             self.buffer.append(recent[-1]) # TODO: use note_history, replace note names with integral values, remove buffer
-            self.scrollbar_width = 1/(max(1, len(self.buffer)/self.display_size))
-            self.scroll('update_width')
+            self.scroll('update_width', 1 / max(1, len(self.buffer) / self.display_size))
             pitch_errors = [(100.0 * data._in_tune_count[i]) / (data._pitch_count[i] if data._pitch_count[i] != 0 else 1) for i in range(0,12)]
             self.piano.set_scores(pitch_errors)
             self.display_recent_notes()
