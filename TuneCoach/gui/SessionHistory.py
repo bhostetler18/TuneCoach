@@ -116,7 +116,6 @@ class SessionHistory:
         else:
             pos = min(max(0, pos), len(self.buffer) - self.display_size)
         self.current_pos = pos
-        self.clear()
         notes = self.buffer[pos : pos + self.display_size]
         for i, (note, cents) in enumerate(notes):
             color = "red"
