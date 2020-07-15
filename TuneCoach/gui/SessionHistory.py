@@ -1,12 +1,6 @@
 import tkinter as tk
-import PIL.Image
-import PIL.ImageTk
 import TuneCoach.gui as gui
-from importlib.resources import open_binary
-
-# loads piano.jpeg using importlib's resources
-# feature
-image = open_binary(gui, 'piano.jpeg')
+from TuneCoach.gui.Piano import Piano
 
 
 # Different classes for pop-up windows.
@@ -27,9 +21,9 @@ class SessionHistory:
         self.width = self.frame.winfo_width()
         self.height = self.frame.winfo_height()
 
-        self.large_image = PIL.Image.open(image)
-        self.aspect_ratio = self.large_image.width / self.large_image.height
-        self.piano_image = None
+        self.aspect_ratio = 580/820
+        self.piano = Piano(self.canvas, width=50, height=90)
+        self.piano.pack(side='left', expand=True, fill='y', anchor='w')
 
         self.available_width = self.width
         self.circle_size = self.available_width/65
@@ -38,43 +32,46 @@ class SessionHistory:
 
         self.frame.bind("<Configure>", self.setup)
 
+
     def setup(self, event):
         self.clear()
         self.canvas.delete("all")
 
         self.width = self.frame.winfo_width()
-        self.height = self.frame.winfo_height()
+        self.height = self.frame.winfo_height() - 10  # Subtract 10 because MainWindow sets bd=5
 
-        resized = self.large_image.resize((int(self.height*self.aspect_ratio), int(self.height)), PIL.Image.ANTIALIAS)
-        self.piano_image = PIL.ImageTk.PhotoImage(resized)
-        self.canvas.create_image(0, 0, anchor=tk.NW, image=self.piano_image)
-
-        self.available_width = self.width - self.piano_image.width()
-        self.circle_start = self.piano_image.width()
+        piano_width = self.height*self.aspect_ratio
+        self.piano.configure(width=piano_width)
+            
+        self.available_width = self.width - piano_width
+        self.circle_start = piano_width
         self.circle_size = 0.5*self.available_width/64
         
         self.noteDict = {
-            "C": self.height / 14,
-            "C#": self.height / 7,
-            "D": self.height / 14 * 3,
-            "D#": self.height / 7 * 2,
-            "E": self.height / 14 * 5,
+            "B": self.height / 14,
+            "A#": self.height / 7,
+            "A": self.height / 14 * 3,
+            "G#": self.height / 7 * 2,
+            "G": self.height / 14 * 5,
+            "F#": self.height / 7 * 3,
             "F": self.height / 14 * 7,
-            "F#": self.height / 7 * 4,
-            "G": self.height / 14 * 9,
-            "G#": self.height / 7 * 5,
-            "A": self.height / 14 * 11,
-            "A#": self.height / 7 * 6,
-            "B": self.height / 14 * 13
+            "E": self.height / 14 * 9,
+            "D#": self.height / 7 * 5,
+            "D": self.height / 14 * 11,
+            "C#": self.height / 7 * 6,
+            "C": self.height / 14 * 13
         }
 
         for note in self.noteDict:
-            self.canvas.create_line(self.piano_image.width(), self.noteDict[note], self.width, self.noteDict[note], width=3)
+            self.canvas.create_line(piano_width, self.noteDict[note], self.width, self.noteDict[note], width=3)
+
 
     def update(self, data, force=False):
         if data is not None and (force or data.has_new_data):
             data.has_new_data = False
             recent = list(data.display_buffer)
+            pitch_errors = [(100.0 * data._in_tune_count[i]) / (data._pitch_count[i] if data._pitch_count[i] != 0 else 1) for i in range(0,12)]
+            self.piano.set_scores(pitch_errors)
             for i, (note, cents) in enumerate(recent):
                 color = "red"
                 if abs(cents) <= self.mainWindow.threshold:
