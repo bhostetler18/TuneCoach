@@ -32,7 +32,7 @@ class SessionHistory:
         self.height = self.frame.winfo_height()
 
         self.aspect_ratio = 580/820
-        self.piano = Piano(self.canvas, width=50, height=90)
+        self.piano = Piano(self.canvas, self.mainWindow, width=50, height=90)
         self.piano.pack(side='bottom', expand=True, fill='y', anchor='w')
 
         self.available_width = self.width
