@@ -28,6 +28,7 @@ class MainWindow:
         self.paused = True
         self.master = master
 
+        # FIXME: Timer only works for 1st session
         self.timer = Timer()
         self.timer.start()
         self.timer.pause()
@@ -144,6 +145,8 @@ class MainWindow:
             self.save_practice_session(ask=True)
         data = SessionData(self.threshold)
         self.setup_session(Session(data))
+        self.timer.start()
+        self.timer.pause()
 
     def load_practice_session(self, ask=True):
         if ask:
@@ -231,7 +234,7 @@ class MainWindow:
         self.force_pause()
         self.history.clear()
         self.diagnostics.clear_plot()
-        #self.timer.clear()
+        self.timer.clear()
     
     def score_update(self):
         if self.audio_manager is not None and not self.paused:

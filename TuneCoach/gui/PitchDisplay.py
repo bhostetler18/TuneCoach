@@ -139,8 +139,11 @@ class PitchDisplay:
     def update_octave(self, value):
         self._octaveValue = value
 
-    def set_time(self, time):
-        self.time_label.config(text=time)
+    def set_time(self, total_seconds):
+        minutes = total_seconds // 60
+        seconds = total_seconds % 60
+        display_string = '{:02}:{:02}'.format(minutes, seconds)
+        self.time_label.config(text=display_string)
 
     def update_data(self):  # event
         if self.mainWindow.audio_manager is not None:
@@ -166,6 +169,6 @@ class PitchDisplay:
                     self.update_hertz('')
                     self.update_octave('')
                     self.display_current_gui()
-        self.set_time(str(self.mainWindow.timer.get()))
+        self.set_time(self.mainWindow.timer.get())
 
         self.mainWindow.master.after(10, self.update_data)
