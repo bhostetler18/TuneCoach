@@ -105,7 +105,7 @@ class TunerSettingsWindow:
         b_button.grid(row=4, column=2)
         major_button = tk.Radiobutton(bottom_frame2, text="Major", indicatoron=0, width=6, variable=sig, value="Major")
         major_button.grid(row=1, column=0)
-        minor_button = tk.Radiobutton(bottom_frame2, text="Minor", indicatoron=0, width=7, variable=sig, value="Minor")
+        minor_button = tk.Radiobutton(bottom_frame2, text="Minor", indicatoron=0, width=6, variable=sig, value="Minor")
         minor_button.grid(row=2, column=0)
 
         done_button = ttk.Button(bottomest_frame, text="Apply", command=lambda: self.update_tuner_settings(cent_scale.get(), key.get(), sig.get(), tuner_settings_window))

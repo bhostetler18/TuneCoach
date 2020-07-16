@@ -3,8 +3,30 @@ from enum import Enum
 
 
 class Accidental(Enum):
-    FLAT = 0
-    SHARP = 1
+    FLAT = "b"
+    SHARP = "#"
+
+class KeySignatureType(Enum):
+    MAJOR = "Major"
+    MINOR = "Minor"
+
+class KeySignature:
+    def __init__(self, root, raw_value, accidental, ktype):
+        self.root = root
+        self.raw_value = raw_value
+        self.accidental = accidental
+        self.ktype = ktype
+    
+    def get_display_for(self, raw_value):
+        return pitch_class_to_name(raw_value, self.accidental)
+
+    def get_name(self):
+        root_str = self.get_display_for(self.raw_value)
+        return f"{root_str} {self.ktype.value}"
+
+
+def get_accidentals(key_sig):
+    order_sharps = []
 
 
 def hz_to_midi(hz):

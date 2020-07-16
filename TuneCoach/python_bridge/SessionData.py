@@ -24,7 +24,6 @@ def load_from_file(path):
 # TODO: Apply key signatures here
 class SessionData:
     def __init__(self, cent_range):
-        self._notes = ("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
         self._in_tune_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self._pitch_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self._freq_history = []
@@ -37,8 +36,7 @@ class SessionData:
         self.display_buffer = collections.deque([])
         self.has_new_data = False
 
-        self._key = "C"
-        self._signature = "Major"
+        self._key_signature = KeySignature("Eb", 3, Accidental.FLAT, KeySignatureType.MAJOR)
 
         # Potential data storage
         self._note_history = []
@@ -65,17 +63,11 @@ class SessionData:
         else:
             return self._cents / self._overall_count
 
-    def get_key(self):
-        return self._key
+    def get_key_signature(self):
+        return self._key_signature
 
-    def get_signature(self):
-        return self._signature
-
-    def set_key(self, key):
-        self._key = key
-
-    def set_signature(self, signature):
-        self._signature = signature
+    def set_key_signature(self, key):
+        self._key_signature = key
 
     def get_recent_notes(self):
         return self._recent_notes
@@ -101,10 +93,7 @@ class SessionData:
         index = midi_to_pitch_class(midi)
         desired_hz = closest_in_tune_frequency(hz)
         cent = cents(desired_hz, hz)
-        name = pitch_class_to_name(index, Accidental.SHARP)
         octave = 2 + math.floor(math.log2(desired_hz / 65.4))
-
-        # print(f"{name}{octave}: {round(hz, 2)} Hz ({round(cent)} cents)")
 
         # Gets counts of everything to calculate accuracy
         if abs(cent) <= self._threshold:
@@ -114,32 +103,15 @@ class SessionData:
         self._overall_count += 1
         self._cents += abs(cent)
 
-        self.display_buffer.append((name, cent))
+        self.display_buffer.append((index, cent))
         if len(self.display_buffer) > 64:
             self.display_buffer.popleft()
 
         # Only inserts a note if it's different than the last
-        if len(self._recent_notes) == 0 or name != self._recent_notes[-1]:
-            self._recent_notes.append(name)
+        if len(self._recent_notes) == 0 or index != self._recent_notes[-1]:
+            self._recent_notes.append(index)
 
         # If deque is full, pop
         if len(self._recent_notes) > 8:
             self._recent_notes.popleft()
 
-    def display_all_data(self):
-        print("These are your accuracies for each pitch class:")
-        for i in range(12):
-            if self._pitch_count[i] == 0:
-                print(self._notes[i], "was not played/sung in the session.")
-            else:
-                pitch_error = (100.0 * self._in_tune_count[i]) / self._pitch_count[i]
-                print("%s was in tune for %.2f %% of the time." % (self._notes[i], pitch_error))
-
-        print("")
-        if self._overall_count == 0:
-            print("There was no audio input.")
-        else:
-            avg_cents = self._cents / self._overall_count
-            print("Overall:")
-            print("You were in tune for %.2f %% of the time." % self.get_overall())
-            print("You were off by an an average of %.2f cents." % avg_cents)

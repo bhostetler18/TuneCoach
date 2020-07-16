@@ -151,7 +151,7 @@ class PitchDisplay:
                 pitch_class = midi_to_pitch_class(midi)
                 desired_hz = closest_in_tune_frequency(hz)
                 cent = cents(desired_hz, hz)
-                name = pitch_class_to_name(pitch_class, Accidental.SHARP)  # TODO: coordinate accidental with Session
+                name = self.mainWindow.session.data.get_key_signature().get_display_for(pitch_class)
                 self.update_cents(cent)
                 self.update_hertz(f"{round(hz)} Hz")
                 self.update_octave(f"{get_octave(midi)}")
