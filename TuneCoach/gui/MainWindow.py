@@ -82,7 +82,7 @@ class MainWindow:
         # Here we can work on creating the functionality for each frame, ex: tuner, pitch history, information
         self.history = SessionHistory(self, self.bottom_frame)
         self.diagnostics = SessionDiagnostics(self)
-        self.pitch_display = PitchDisplay(self)
+        self.pitch_display = PitchDisplay(self, self.threshold)
     
     def save_as_practice_session(self):
         self.force_pause()
