@@ -117,12 +117,11 @@ class TunerSettingsWindow:
                 self.radio_buttons[i].config(text=names[i])
 
         index = self.root.get()
-        if self.ktype.get() == "Minor":
-            keytype = KeySignatureType.MINOR
+        keytype = KeySignatureType[self.ktype.get().upper()]
+        if keytype == KeySignatureType.MINOR:
             accidental = self.minor_accidentals[index]
             name = self.minor_key_names[index]
         else:
-            keytype = KeySignatureType.MAJOR
             accidental = self.major_accidentals[index]
             name = self.major_key_names[index]
             
