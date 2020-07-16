@@ -156,5 +156,6 @@ class PitchDisplay:
                     self.update_hertz('')
                     self.update_octave('')
                     self.display_current_gui()
+        print(self.mainWindow.timer.get())
 
         self.mainWindow.master.after(10, self.update_data)

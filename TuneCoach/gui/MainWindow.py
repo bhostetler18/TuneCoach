@@ -3,11 +3,11 @@ from TuneCoach.gui.PitchDisplay import *
 from TuneCoach.gui.Session import Session, load_session, save_session
 from TuneCoach.gui.SessionHistory import *
 from TuneCoach.gui.SessionDiagnostics import *
-from TuneCoach.gui.RemoveWindow import *
 from TuneCoach.gui.TunerSettingsWindow import *
 from TuneCoach.gui.FAQWindow import *
 from TuneCoach.gui.TutorialWindow import *
 from TuneCoach.gui.IntroWindow import *
+from TuneCoach.gui.Timer import *
 
 
 from tkinter import messagebox
@@ -27,6 +27,10 @@ class MainWindow:
 
         self.paused = True
         self.master = master
+
+        self.timer = Timer()
+        self.timer.start()
+        self.timer.pause()
 
         master.attributes('-fullscreen', True)
         master.state('iconic')
@@ -57,6 +61,7 @@ class MainWindow:
     
     def space_pressed(self, event):
         self.toggle_pause()
+
     # Creating frames to organize the screen.
     def layout_frames(self, screen_width, screen_height):
         self.bottom_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
@@ -111,9 +116,6 @@ class MainWindow:
         messagebox.showinfo("Session Saved", f'Session saved to "{self.session.path}" successfully')
         return True # saved successfully
 
-    def remove_practice_session(self):
-        RemoveWindow(self)
-
     def tuner_settings(self):
         TunerSettingsWindow(self)
 
@@ -156,13 +158,17 @@ class MainWindow:
             messagebox.showerror("Invalid session", f'Session located at "{path}" is invalid!')
         else:
             self.setup_session(session)
+
     def do_nothing(self):
         pass
+
     def disable(self):
         self.master.protocol("WM_DELETE_WINDOW", self.do_nothing)
         self.force_pause()
+
     def enable(self):
         self.master.protocol("WM_DELETE_WINDOW", self.cleanup)
+
     def session_menu_item(self, fn):
         def command_function(*args, **kwargs):
             self.disable()
@@ -182,7 +188,6 @@ class MainWindow:
         file_menu.add_command(label="Save Current Session", command=self.session_menu_item(self.save_practice_session))
         file_menu.add_command(label="Save Current Session As...", command=self.session_menu_item(self.save_as_practice_session))
         file_menu.add_command(label="Load Existing Session", command=self.session_menu_item(self.load_practice_session))
-        # TODO: Add functionality to remove sessions
         # file_menu.add_separator
         # file_menu.add_command(label = "Remove Practice Session", command = self.remove_practice_session)
 
@@ -206,11 +211,13 @@ class MainWindow:
                 self.audio_manager.resume()
                 self.piano_update()
                 self.score_update()
+                self.timer.resume()
             else:
                 # print("Pausing")
                 self.paused = True
                 self.pitch_display.pause()
                 self.audio_manager.pause()
+                self.timer.pause()
 
     def force_pause(self):
         if self.audio_manager is not None and not self.audio_manager.is_paused():
@@ -218,11 +225,13 @@ class MainWindow:
             self.paused = True
             self.pitch_display.pause()
             self.audio_manager.pause()
+            self.timer.pause()
 
     def reset_everything(self):
         self.force_pause()
         self.history.clear()
         self.diagnostics.clear_plot()
+        #self.timer.clear()
     
     def score_update(self):
         if self.audio_manager is not None and not self.paused:
