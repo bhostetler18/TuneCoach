@@ -6,13 +6,13 @@ import time
 
 class Timer:
     def __init__(self):
-        print("Initializing Timer")
+        print("Initializing")
         self.started = None
         self.paused = None
         self.is_paused = False
 
     def start(self):
-        print("Starting Timer")
+        print("Starting")
         self.started = datetime.now()
 
     def pause(self):
@@ -20,7 +20,7 @@ class Timer:
             print("PAUSE: Timer not started")
         if self.is_paused:
             print("Already paused")
-        print("Pausing Timer")
+        print("Pausing")
         self.paused = datetime.now()
         self.is_paused = True
 
@@ -29,20 +29,19 @@ class Timer:
             print("RESUME: Timer not started")
         if not self.is_paused:
             print("Timer is not paused")
-        print("Resuming Timer")
+        print("Resuming")
 
         pause_time = datetime.now() - self.paused
         self.started += pause_time
         self.is_paused = False
 
     def get(self):
-        print("Getting value")
         if self.started is None:
             print("GET: Timer not started")
         if self.is_paused:
-            return self.paused - self.started
+            return int((self.paused - self.started).total_seconds())
         else:
-            return datetime.now() - self.started
+            return int((datetime.now() - self.started).total_seconds())
 
     def clear(self):
         print("Clearing")
