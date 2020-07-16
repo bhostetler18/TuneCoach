@@ -15,6 +15,7 @@ class SessionDiagnostics:
         if self.mainWindow.session.data is not None:
             self.overallScoreLabel.set_text("Overall Score: %.2f" % self.mainWindow.session.data.get_overall())
             self.overallCentsLabel.set_text("You are off by an average of %.2f cents." % self.mainWindow.session.data.get_avg_cents())
+            self.key_signature.set_text("Key signature: %s" % self.mainWindow.session.data.get_key_signature().get_name())
 
         else:
             self.overallScoreLabel.set_text("N/A")
