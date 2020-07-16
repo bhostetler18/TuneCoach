@@ -28,8 +28,15 @@ class PitchDisplay:
         self.canvas.pack(fill=BOTH, expand=True)
         self.canvas.bind("<Configure>", self.configure)
 
-        self.light = IndicatorLight(self.canvas, 35)
-        self.light.pack(anchor='w', side='top')
+        self.rec_frame = Frame(self.canvas, width=80, height=35)
+        self.rec_frame.pack(anchor='w', side='top')
+        self.rec_frame.pack_propagate(0)
+
+        self.light = IndicatorLight(self.rec_frame, 35)
+        self.light.pack(anchor='w', side='left')
+
+        self.time_label = Label(self.rec_frame, text='0:00', anchor='e', justify=RIGHT)
+        self.time_label.pack(side='right')
 
         self.showsHertz = BooleanVar()
 
@@ -132,6 +139,9 @@ class PitchDisplay:
     def update_octave(self, value):
         self._octaveValue = value
 
+    def set_time(self, time):
+        self.time_label.config(text=time)
+
     def update_data(self):  # event
         if self.mainWindow.audio_manager is not None:
             hz = self.mainWindow.audio_manager.peek()
@@ -156,6 +166,6 @@ class PitchDisplay:
                     self.update_hertz('')
                     self.update_octave('')
                     self.display_current_gui()
-        print(self.mainWindow.timer.get())
+        self.set_time(str(self.mainWindow.timer.get()))
 
         self.mainWindow.master.after(10, self.update_data)
