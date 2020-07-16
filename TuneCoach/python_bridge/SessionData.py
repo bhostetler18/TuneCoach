@@ -36,7 +36,7 @@ class SessionData:
         self.display_buffer = collections.deque([])
         self.has_new_data = False
 
-        self._key_signature = KeySignature("Eb", 3, Accidental.FLAT, KeySignatureType.MAJOR)
+        self._key_signature = KeySignature("C", 0, Accidental.SHARP, KeySignatureType.MAJOR)
 
         # Potential data storage
         self._note_history = []

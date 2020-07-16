@@ -1,17 +1,17 @@
 import tkinter as tk
 from TuneCoach.gui.constants import *
+from TuneCoach.python_bridge.pitch_utilities import *
 import tkinter.ttk as ttk
 
 
 # Tuner settings window
 class TunerSettingsWindow:
-    def update_tuner_settings(self, cent_threshold, key, signature, oldSettingsView):
+    def update_tuner_settings(self, cent_threshold, key_signature, oldSettingsView):
         self.mainWindow.threshold = cent_threshold
         self.mainWindow.pitch_display.set_threshold(cent_threshold)
         self.mainWindow.session.data._threshold = cent_threshold
 
-        self.mainWindow.session.data.set_key(key)
-        self.mainWindow.session.data.set_signature(signature)
+        self.mainWindow.session.data.set_key_signature(key_signature)
 
         oldSettingsView.destroy()
 
@@ -74,41 +74,58 @@ class TunerSettingsWindow:
         sig_label.config(bg=background_color, fg="white")
         sig_label.pack()
         
-        # Default key signatures
-        key = tk.StringVar(None, "C")
-        sig = tk.StringVar(None, "Major")
+
+        self.major_key_names = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
+        self.major_accidentals = [Accidental.SHARP, Accidental.FLAT, Accidental.SHARP, Accidental.FLAT,
+                                    Accidental.SHARP, Accidental.FLAT, Accidental.SHARP,Accidental.SHARP,
+                                        Accidental.FLAT, Accidental.SHARP, Accidental.FLAT, Accidental.SHARP]
+        self.minor_key_names = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"]
+        self.minor_accidentals = [Accidental.FLAT, Accidental.SHARP, Accidental.FLAT, Accidental.FLAT,
+                                    Accidental.SHARP, Accidental.FLAT, Accidental.SHARP,Accidental.FLAT,
+                                        Accidental.SHARP, Accidental.SHARP, Accidental.FLAT, Accidental.SHARP]
+
+        self.current_key_signature = KeySignature("C", 0, Accidental.SHARP, KeySignatureType.MAJOR)
+        self.root = tk.IntVar(value=0)
+        self.ktype = tk.StringVar(value="Major")
+        self.radio_buttons = []
 
         # Grid of key signature buttons
-        c_button = tk.Radiobutton(bottom_frame1, text="C", indicatoron=0, width=3, variable=key, value="C")
-        c_button.grid(row=1, column=0)
-        db_button = tk.Radiobutton(bottom_frame1, text="Db", indicatoron=0, width=3, variable=key, value="Db")
-        db_button.grid(row=1, column=1)
-        d_button = tk.Radiobutton(bottom_frame1, text="D", indicatoron=0, width=3, variable=key, value="D")
-        d_button.grid(row=1, column=2)
-        eb_button = tk.Radiobutton(bottom_frame1, text="Eb", indicatoron=0, width=3, variable=key, value="Eb")
-        eb_button.grid(row=2, column=0)
-        e_button = tk.Radiobutton(bottom_frame1, text="E", indicatoron=0, width=3, variable=key, value="E")
-        e_button.grid(row=2, column=1)
-        f_button = tk.Radiobutton(bottom_frame1, text="F", indicatoron=0, width=3, variable=key, value="F")
-        f_button.grid(row=2, column=2)
-        fs_button = tk.Radiobutton(bottom_frame1, text="F#", indicatoron=0, width=3, variable=key, value="F#")
-        fs_button.grid(row=3, column=0)
-        g_button = tk.Radiobutton(bottom_frame1, text="G", indicatoron=0, width=3, variable=key, value="G")
-        g_button.grid(row=3, column=1)
-        ab_button = tk.Radiobutton(bottom_frame1, text="Ab", indicatoron=0, width=3, variable=key, value="Ab")
-        ab_button.grid(row=3, column=2)
-        a_button = tk.Radiobutton(bottom_frame1, text="A", indicatoron=0, width=3, variable=key, value="A")
-        a_button.grid(row=4, column=0)
-        bb_button = tk.Radiobutton(bottom_frame1, text="Bb", indicatoron=0, width=3, variable=key, value="Bb")
-        bb_button.grid(row=4, column=1)
-        b_button = tk.Radiobutton(bottom_frame1, text="B", indicatoron=0, width=3, variable=key, value="B")
-        b_button.grid(row=4, column=2)
-        major_button = tk.Radiobutton(bottom_frame2, text="Major", indicatoron=0, width=6, variable=sig, value="Major")
+        for i in range(0, 12):
+            name = self.major_key_names[i]
+            button = tk.Radiobutton(bottom_frame1, text=name, indicatoron=0, width=3, variable=self.root, value=i, command=self.selection_changed)
+            button.grid(row=i//3 + 1, column=i%3)
+            self.radio_buttons.append(button)
+
+        major_button = tk.Radiobutton(bottom_frame2, text="Major", indicatoron=0, width=6, variable=self.ktype, value="Major", command=lambda: self.selection_changed(True))
         major_button.grid(row=1, column=0)
-        minor_button = tk.Radiobutton(bottom_frame2, text="Minor", indicatoron=0, width=6, variable=sig, value="Minor")
+        minor_button = tk.Radiobutton(bottom_frame2, text="Minor", indicatoron=0, width=6, variable=self.ktype, value="Minor", command=lambda: self.selection_changed(True))
         minor_button.grid(row=2, column=0)
 
-        done_button = ttk.Button(bottomest_frame, text="Apply", command=lambda: self.update_tuner_settings(cent_scale.get(), key.get(), sig.get(), tuner_settings_window))
+        done_button = ttk.Button(bottomest_frame, text="Apply", command=lambda: self.update_tuner_settings(cent_scale.get(), 
+                                                                                                           self.current_key_signature,
+                                                                                                           tuner_settings_window))
 
         done_button.pack()
         tuner_settings_window.lift(self.mainWindow.master)
+
+    def selection_changed(self, redraw=False):
+        if redraw:
+            names = self.major_key_names
+            if self.ktype.get() == "Minor":
+                names = self.minor_key_names
+            for i in range(0, 12):
+                self.radio_buttons[i].config(text=names[i])
+
+        index = self.root.get()
+        if self.ktype.get() == "Minor":
+            keytype = KeySignatureType.MINOR
+            accidental = self.minor_accidentals[index]
+            name = self.minor_key_names[index]
+        else:
+            keytype = KeySignatureType.MAJOR
+            accidental = self.major_accidentals[index]
+            name = self.major_key_names[index]
+            
+        self.current_key_signature = KeySignature(name, index, accidental, keytype)
+
+
