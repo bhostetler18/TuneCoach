@@ -1,6 +1,7 @@
 import collections
 from TuneCoach.python_bridge.pitch_utilities import *
 from TuneCoach.gui.MainWindow import *
+from TuneCoach.gui.Timer import *
 import math
 import datetime
 import pickle
@@ -21,7 +22,7 @@ def load_from_file(path):
         # print(e)
         return None
 
-# TODO: Apply key signatures here
+
 class SessionData:
     def __init__(self, cent_range):
         self._in_tune_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -37,6 +38,10 @@ class SessionData:
         self.has_new_data = False
 
         self._key_signature = KeySignature("C", 0, Accidental.SHARP, KeySignatureType.MAJOR)
+
+        self.timer = Timer()
+        self.timer.start()
+        self.timer.pause()
 
         # Potential data storage
         self._note_history = []

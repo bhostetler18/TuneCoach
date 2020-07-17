@@ -169,6 +169,6 @@ class PitchDisplay:
                     self.update_hertz('')
                     self.update_octave('')
                     self.display_current_gui()
-        self.set_time(self.mainWindow.timer.get())
+        self.set_time(self.mainWindow.session.data.timer.get())
 
         self.mainWindow.master.after(10, self.update_data)

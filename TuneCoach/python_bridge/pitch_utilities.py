@@ -25,10 +25,6 @@ class KeySignature:
         return f"{root_str} {self.ktype.value}"
 
 
-def get_accidentals(key_sig):
-    order_sharps = []
-
-
 def hz_to_midi(hz):
     return int(round(12.0 * math.log(hz/440.0, 2) + 69.0))
 
