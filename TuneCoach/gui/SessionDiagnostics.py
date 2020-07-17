@@ -13,7 +13,7 @@ class SessionDiagnostics:
         MoreInfoWindow(mainWindow)
 
     def clear_plot(self):
-        print("clearing plot")
+        self.myGraph.clear_plot()
         #self.plot.clear()
         #self.plot.set_xlim([0, 10])
         #self.plot.set_ylim([0, 100])
@@ -26,11 +26,11 @@ class SessionDiagnostics:
         #self.canvas.draw()
 
     def update_plot(self):
-        print("updating plot")
-        #if self.mainWindow.session.data is not None:
-        #    new_score = self.mainWindow.session.data.get_overall()
-        #    self.overallScoreLabel.set_text("Overall Score: %.2f" % new_score)
-        #    self.mainWindow.session.data.update_score_history()
+        self.myGraph.update_plot()
+        if self.mainWindow.session.data is not None:
+            new_score = self.mainWindow.session.data.get_overall()
+            self.overallScoreLabel.set_text("Overall Score: %.2f" % new_score)
+            self.mainWindow.session.data.update_score_history()
         #    self.clear_plot()
         #    numScores = len(self.mainWindow.session.data._score_history)
         #    self.plot.plot(range(numScores), self.mainWindow.session.data._score_history, color="blue")
@@ -63,7 +63,7 @@ class SessionDiagnostics:
         workingFrame.grid_columnconfigure(1, weight=2)
 
 
-        myGraph = Graph(right_frame, mainWindow, mainWindow.screen_width, mainWindow.screen_height)
+        self.myGraph = Graph(right_frame, mainWindow, mainWindow.screen_width, mainWindow.screen_height)
 
         title_label = tk.Label(topest_frame, text="Session Diagnostics", bg=background_color, fg="white",
                                font=("calibri", 20))
