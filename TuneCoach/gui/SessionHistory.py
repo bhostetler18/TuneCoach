@@ -97,15 +97,12 @@ class SessionHistory:
 
         self.display_notes(self.current_pos) # redraw the notes the user was currently looking at
 
-    def update(self, data, force=False):
-        if data is not None and (force or data.has_new_data):
-            data.has_new_data = False
-            recent = data.display_buffer
-            self.buffer.append(recent[-1]) # TODO: use note_history, replace note names with integral values, remove buffer
-            self.scroll('update_width', 1 / max(1, len(self.buffer) / self.display_size))
-            pitch_errors = [(100.0 * data._in_tune_count[i]) / (data._pitch_count[i] if data._pitch_count[i] != 0 else 1) for i in range(0,12)]
-            self.piano.set_scores(pitch_errors)
-            self.display_recent_notes()
+    def update(self, recent):
+        self.buffer.append(recent[-1]) # TODO: use note_history, replace note names with integral values, remove buffer
+        self.scroll('update_width', 1 / max(1, len(self.buffer) / self.display_size))
+        pitch_errors = [(100.0 * data._in_tune_count[i]) / (data._pitch_count[i] if data._pitch_count[i] != 0 else 1) for i in range(0,12)]
+        self.piano.set_scores(pitch_errors)
+        self.display_recent_notes()
 
     def display_recent_notes(self):
         self.display_notes(max(0, len(self.buffer) - self.display_size))

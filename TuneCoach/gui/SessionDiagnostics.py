@@ -23,18 +23,19 @@ class SessionDiagnostics:
             self.overallScoreLabel.set_text("N/A")
         self.canvas.draw()
 
-    def update_plot(self):
-        if self.mainWindow.session.data is not None:
-            new_score = self.mainWindow.session.data.get_overall()
+    def update_plot(self, data):
+        self.clear_plot()
+        if data is not None:
+            new_score = data.get_overall()
             self.overallScoreLabel.set_text("Overall Score: %.2f" % new_score)
-            self.mainWindow.session.data.update_score_history()
-            self.clear_plot()
-            numScores = len(self.mainWindow.session.data._score_history)
-            self.plot.plot(range(numScores), self.mainWindow.session.data._score_history, color="blue")
-            self.canvas.draw()
-        else:
-            self.clear_plot()
-            self.canvas.draw()
+            data.update_score_history()
+            
+            numScores = len(data._score_history)
+            self.plot.plot(range(numScores), data._score_history, color="blue")
+        
+        self.canvas.draw()
+
+
 
     def __init__(self, mainWindow):
         self.mainWindow = mainWindow

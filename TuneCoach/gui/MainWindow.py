@@ -130,12 +130,12 @@ class MainWindow:
             self.audio_manager.kill()
         
         self.session = session
-        self.audio_manager = AudioManager(self.session.data)
+        self.audio_manager = AudioManager(self.session.data.display_buffer)
         self.diagnostics.session_name.configure(text=self.session.name)
 
         if not self.session.data.empty:
-            self.diagnostics.update_plot()
-            self.history.update(self.session.data, force=True)
+            self.score_update()
+            self.piano_update()
 
     def new_practice_session(self, ask=True):
         if ask:
@@ -206,9 +206,11 @@ class MainWindow:
                 self.audio_manager.resume()
                 self.piano_update()
                 self.score_update()
+                self.pitch_display_update()
             else:
                 # print("Pausing")
                 self.paused = True
+                
                 self.pitch_display.pause()
                 self.audio_manager.pause()
 
@@ -223,14 +225,22 @@ class MainWindow:
         self.force_pause()
         self.history.clear()
         self.diagnostics.clear_plot()
+        self.pitch_display.update_data(0)
     
     def score_update(self):
         if self.audio_manager is not None and not self.paused:
-            self.diagnostics.update_plot()
+            self.diagnostics.update_plot(self.session.data)
         if not self.paused:
             self.master.after(500, lambda: self.score_update())
 
     def piano_update(self):
-        self.history.update(self.session.data)
+        if self.session.data.has_new_data:
+            self.session.data.has_new_data = False # TODO lock
+            self.history.update(self.session.data.display_buffer)
         if not self.paused:
             self.master.after(20, lambda: self.piano_update())
+
+    def pitch_display_update(self):
+        self.pitch_display.update_data(self.audio_manager.peek())
+        if not self.paused:
+            self.master.after(10, self.pitch_display_update)
