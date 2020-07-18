@@ -5,22 +5,9 @@ from TuneCoach.python_bridge.SessionData import *
 from TuneCoach.pitch_detection import TunerStream
 from time import sleep
 
-
-class AudioThread(threading.Thread):
-    def __init__(self, stream):
-        super().__init__()
-        self._stream = stream
-        # self.daemon = True
-
-    def run(self):
-        # print("Starting background audio thread")
-        self._stream.mainloop()
-        # print("Exited background audio thread")
-
-
 class Reader(threading.Thread):
     def __init__(self, stream, session):
-        super().__init__()
+        super().__init__(daemon=True)
         self._stream = stream
         # self.daemon = True
         if session is None:
@@ -41,7 +28,7 @@ class Reader(threading.Thread):
 class AudioManager(TunerStream):
     def __init__(self, session):
         super().__init__(44100)
-        self._background_audio = threading.Thread(target=lambda: self.mainloop())
+        self._background_audio = threading.Thread(target=lambda: self.mainloop(), daemon=True)
         self._background_audio.start()
         self._background_reader = Reader(self, session)
         self._background_reader.start()

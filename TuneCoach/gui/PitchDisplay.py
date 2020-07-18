@@ -91,7 +91,7 @@ class PitchDisplay:
 
         rStart = 90 - self._span
         rSpan = 2 * self._span
-        yStart = 90 - self.cents_to_angle(self.mainWindow.yellow_threshold)
+        yStart = 90 - self.cents_to_angle(self.mainWindow.controller.yellow_threshold)
         ySpan = 2 * (90 - yStart)
         gStart = 90 - self.cents_to_angle(self.threshold)
         gSpan = 2 * self.cents_to_angle(self.threshold)

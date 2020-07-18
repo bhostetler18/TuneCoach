@@ -1,6 +1,5 @@
-from TuneCoach.gui.NewSessionWindow import *
-from TuneCoach.gui.LoadSessionWindow import *
-
+import tkinter as tk
+from TuneCoach.gui.constants import background_color
 
 class IntroWindow:
     @staticmethod
