@@ -1,4 +1,3 @@
-from TuneCoach.gui.MoreInfoWindow import *
 import tkinter as tk
 from TuneCoach.gui.constants import *
 from TuneCoach.gui.ScoreLabel import *
@@ -8,11 +7,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
 class SessionDiagnostics:
-    @staticmethod
-    def more_info_window_caller(mainWindow):
-        MoreInfoWindow(mainWindow)
-
     def clear_plot(self):
+<<<<<<< HEAD
         self.myGraph.clear_plot()
         #self.plot.clear()
         #self.plot.set_xlim([0, 10])
@@ -24,6 +20,22 @@ class SessionDiagnostics:
         #else:
         #    self.overallScoreLabel.set_text("N/A")
         #self.canvas.draw()
+=======
+        self.plot.clear()
+        self.plot.set_xlim([0, 10])
+        self.plot.set_ylim([0, 100])
+        self.plot.set_autoscale_on(False)
+        self.plot.set_title("Score Over Time")
+        if self.mainWindow.session.data is not None:
+            self.overallScoreLabel.set_text("Overall Score: %.2f" % self.mainWindow.session.data.get_overall())
+            self.overallCentsLabel.set_text("You are off by an average of %.2f cents." % self.mainWindow.session.data.get_avg_cents())
+            self.key_signature.set_text("Key Signature: %s %s" % (self.mainWindow.session.data.get_key(), self.mainWindow.session.data.get_signature()))
+
+        else:
+            self.overallScoreLabel.set_text("N/A")
+            self.overallCentsLabel.set_text("N/A")
+        self.canvas.draw()
+>>>>>>> origin/Disp-Gavin
 
     def update_plot(self, data):
         self.myGraph.update_plot()
@@ -72,26 +84,28 @@ class SessionDiagnostics:
                                     fg="light sky blue", font=("Calibri", 16))
         self.session_name.pack(side=tk.BOTTOM, padx = 10, pady = 10)
 
-        if currentSession is None:
-            # print("There is no session.")
-            v = "Overall Score: 0.00"
-        else:
-            v = "Overall Score: %.2f" % currentSession.get_overall()
+        v = "Overall Score: %.2f" % currentSession.get_overall()
+        c = "You are off by an average of %.2f cents." % currentSession.get_avg_cents()
 
         self.overallScoreLabel = ScoreLabel(middle_frame, v, 150, 60)
         self.overallScoreLabel.pack()
-        more_info_button = tk.Button(bottom_frame, text="More info",
-                                     command=lambda: self.more_info_window_caller(mainWindow))
-        more_info_button.pack()
 
-        #defaultX = [0]
-        #defaultY = [0]
-        #if mainWindow.screen_width > 1000:
-        #    self.fig = Figure(figsize=(3, 3))
-        #else:
-        #    self.fig = Figure(figsize=(2,2))
-        #self.plot = self.fig.add_subplot(111)
-        #self.plot.plot(defaultX, defaultY, color='blue')
+        self.overallCentsLabel = ScoreLabel(middle_frame, c, 300, 60)
+        self.overallCentsLabel.pack()
+
+        key_signature = "Key Signature: %s %s" % (currentSession.get_key(), currentSession.get_signature())
+        self.key_signature = ScoreLabel(bottom_frame, key_signature, 200, 60)
+        self.key_signature.pack()
+
+
+        defaultX = [0]
+        defaultY = [0]
+        if mainWindow.screen_width > 1000:
+            self.fig = Figure(figsize=(3, 3))
+        else:
+            self.fig = Figure(figsize=(2, 2))
+        self.plot = self.fig.add_subplot(111)
+        self.plot.plot(defaultX, defaultY, color='blue')
 
         # Not sure whether or not we want it to have the same axis the whole time
         #self.plot.set_ylim([0, 100])
@@ -105,7 +119,8 @@ class SessionDiagnostics:
         #self.plot.set_ylabel("Score", fontsize=my_axissize)
         #self.plot.set_autoscale_on(False)
 
-        #self.canvas = FigureCanvasTkAgg(self.fig, master=right_frame)
-        #self.canvas.get_tk_widget().configure(relief=tk.RIDGE, bd=5)
-        #self.canvas.get_tk_widget().pack()
-        #self.canvas.draw()
+        self.canvas = FigureCanvasTkAgg(self.fig, master=right_frame)
+        self.canvas.get_tk_widget().configure(relief=tk.RIDGE, bd=5)
+        self.canvas.get_tk_widget().pack()
+        self.canvas.draw()
+

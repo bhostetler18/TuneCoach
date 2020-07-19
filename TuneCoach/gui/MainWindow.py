@@ -6,6 +6,7 @@ from TuneCoach.gui.TunerSettingsWindow import *
 from TuneCoach.gui.FAQWindow import *
 from TuneCoach.gui.TutorialWindow import *
 from TuneCoach.gui.IntroWindow import *
+from TuneCoach.gui.Timer import *
 
 from TuneCoach.gui.MainController import MainController
 
@@ -22,6 +23,10 @@ class MainWindow:
         self.controller = MainController(self)
         self.session = self.controller.session # TODO hack!!
         self.master = master
+
+        self.timer = Timer()
+        self.timer.start()
+        self.timer.pause()
 
         master.attributes('-fullscreen', True)
         master.state('iconic')

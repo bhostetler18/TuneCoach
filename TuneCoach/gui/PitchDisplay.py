@@ -28,8 +28,15 @@ class PitchDisplay:
         self.canvas.pack(fill=BOTH, expand=True)
         self.canvas.bind("<Configure>", self.configure)
 
-        self.light = IndicatorLight(self.canvas, 35)
-        self.light.pack(anchor='w', side='top')
+        self.rec_frame = Frame(self.canvas, width=80, height=35)
+        self.rec_frame.pack(anchor='w', side='top')
+        self.rec_frame.pack_propagate(0)
+
+        self.light = IndicatorLight(self.rec_frame, 35)
+        self.light.pack(anchor='w', side='left')
+
+        self.time_label = Label(self.rec_frame, text='0:00', anchor='e', justify=RIGHT)
+        self.time_label.pack(side='right')
 
         self.showsHertz = BooleanVar()
 
