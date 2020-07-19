@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 from TuneCoach.gui.constants import *
 
 
@@ -27,8 +28,12 @@ class EndSessionWindow:
         self.end_sesh_window.grid_rowconfigure(0, weight=1)
         self.end_sesh_window.grid_rowconfigure(1, weight=1)
 
-        success_label = tk.Label(top_frame, text="Session ended successfully.", fg="white", bg=background_color)
+        label_style = ttk.Style()
+        label_style.configure("EndSession.TLabel", foreground="white", background=background_color)
+        success_label = ttk.Label(top_frame, text="Session ended successfully.", style="EndSession.TLabel")
         success_label.pack()
 
-        end_button = tk.Button(bottom_frame, text="Ok", command=lambda: self.end_sesh_window.destroy())
+        button_style = ttk.Style()
+        button_style.configure("EndSession.TButton")
+        end_button = ttk.Button(bottom_frame, text="Ok", command=lambda: self.end_sesh_window.destroy(), style="EndSession.TButton")
         end_button.pack()

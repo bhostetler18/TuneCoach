@@ -11,6 +11,7 @@ from TuneCoach.gui.IntroWindow import *
 
 
 from tkinter import messagebox
+from ttkthemes import ThemedStyle
 
 def invalid_path(path): 
     # print(path)
@@ -19,6 +20,18 @@ def invalid_path(path):
 # Main GUI
 class MainWindow:
     def __init__(self, master):
+        style = ThemedStyle(master)
+        style.set_theme("yaru")
+
+        # def_btn = tk.Button(master, text="Default")
+        # def_btn.pack()
+        # themed_btn = ttk.Button(master, text="Themed")
+        # themed_btn.pack()
+        # master_style = ttk.Style()
+        # master_style.theme_use('alt')
+        # master_style = ttk.Style()
+        # master_style.configure(".", foreground="red")
+
         self.practiceSessionList = []
         self.session = Session(SessionData(15), None)  # Temporary session! TODO: don't hardcode threshold
         self.audio_manager = AudioManager(self.session.data)
@@ -59,9 +72,9 @@ class MainWindow:
         self.toggle_pause()
     # Creating frames to organize the screen.
     def layout_frames(self, screen_width, screen_height):
-        self.bottom_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
-        self.left_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
-        self.right_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
+        self.bottom_frame = ttk.Frame(self.master) #bd=5, relief=tk.RAISED, bg=background_color)
+        self.left_frame = ttk.Frame(self.master) #bd=5, relief=tk.RAISED, bg=background_color)
+        self.right_frame = ttk.Frame(self.master) #bd=5, relief=tk.RAISED, bg=background_color)
 
         # Putting the frames into a grid layout
         self.bottom_frame.grid(row=1, column=0, columnspan=2, sticky="nsew")

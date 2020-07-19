@@ -5,6 +5,7 @@ from TuneCoach.gui.ScoreLabel import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+import tkinter.ttk as ttk
 
 class SessionDiagnostics:
     @staticmethod
@@ -40,11 +41,11 @@ class SessionDiagnostics:
         self.mainWindow = mainWindow
         workingFrame = mainWindow.left_frame
         currentSession = mainWindow.session.data
-        topest_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
-        top_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
-        right_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
-        middle_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
-        bottom_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
+        topest_frame = ttk.Frame(workingFrame)#, bd=5, bg=background_color)
+        top_frame = ttk.Frame(workingFrame)#, bd=5, bg=background_color)
+        right_frame = ttk.Frame(workingFrame)#, bd=5, bg=background_color)
+        middle_frame = ttk.Frame(workingFrame)#, bd=5, bg=background_color)
+        bottom_frame = ttk.Frame(workingFrame)#, bd=5, bg=background_color)
 
         topest_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
         top_frame.grid(row=1, column=0, sticky="nsew")

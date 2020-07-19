@@ -1,5 +1,6 @@
 from TuneCoach.gui.NewSessionWindow import *
 from TuneCoach.gui.LoadSessionWindow import *
+import tkinter.ttk as ttk
 
 
 class IntroWindow:
@@ -23,9 +24,12 @@ class IntroWindow:
         introWindow.configure(bg=background_color)
         introWindow.geometry("400x250")
 
-        topFrame = tk.Frame(introWindow, bg=background_color)
-        middleFrame = tk.Frame(introWindow, bg=background_color)
-        bottomFrame = tk.Frame(introWindow, bg=background_color)
+        print("hello")
+        intro_window_style = ttk.Style()
+        intro_window_style.configure("Intro.TFrame", background=background_color)
+        topFrame = ttk.Frame(introWindow, style="Intro.TFrame")
+        middleFrame = ttk.Frame(introWindow, style="Intro.TFrame")
+        bottomFrame = ttk.Frame(introWindow, style="Intro.TFrame")
         # bottomRight = tk.Frame(introWindow, bg=background_color)
         # bottomLeft = tk.Frame(introWindow, bg=background_color)
 
