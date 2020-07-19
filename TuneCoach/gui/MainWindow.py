@@ -13,7 +13,7 @@ from TuneCoach.gui.IntroWindow import *
 from tkinter import messagebox
 from ttkthemes import ThemedStyle
 
-def invalid_path(path): 
+def invalid_path(path):
     # print(path)
     return path == '' or path == () or path == None
 
@@ -22,15 +22,6 @@ class MainWindow:
     def __init__(self, master):
         style = ThemedStyle(master)
         style.set_theme("yaru")
-
-        # def_btn = tk.Button(master, text="Default")
-        # def_btn.pack()
-        # themed_btn = ttk.Button(master, text="Themed")
-        # themed_btn.pack()
-        # master_style = ttk.Style()
-        # master_style.theme_use('alt')
-        # master_style = ttk.Style()
-        # master_style.configure(".", foreground="red")
 
         self.practiceSessionList = []
         self.session = Session(SessionData(15), None)  # Temporary session! TODO: don't hardcode threshold
