@@ -67,7 +67,7 @@ class MainController:
         if self.audio_manager is not None:
             self.audio_manager.kill()
         
-        self.audio_manager = AudioManager(self.session.data.display_buffer)
+        self.audio_manager = AudioManager(self.session.data)
         self.view.update_session_name(self.session.name)
 
         if not self.session.data.empty:
@@ -114,13 +114,17 @@ class MainController:
         self.setup_session()
 
     def load_from(self):
-        if not self.saved:
+        # if current sesion isn't saved, ask if we should save. If we should
+        # try to save. If the user cancels, don't bother to save
+        if not self.saved and self.view.ask_should_save():
             self.save()
-        path, cancel = self.view.perform_load_session()
+
+        path, cancel = self.view.perform_load()
         if cancel:
             return False
         
         session = load_session(path)
+
 
         if session is None:
             self.view.error(f'Session located at "{path}" is invalid!', title="Invalid session")

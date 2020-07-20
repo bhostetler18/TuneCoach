@@ -2,13 +2,10 @@ import tkinter as tk
 from TuneCoach.gui.constants import *
 from TuneCoach.gui.ScoreLabel import *
 from TuneCoach.gui.Graph import *
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
 class SessionDiagnostics:
     def clear_plot(self):
-<<<<<<< HEAD
         self.myGraph.clear_plot()
         #self.plot.clear()
         #self.plot.set_xlim([0, 10])
@@ -20,22 +17,16 @@ class SessionDiagnostics:
         #else:
         #    self.overallScoreLabel.set_text("N/A")
         #self.canvas.draw()
-=======
-        self.plot.clear()
-        self.plot.set_xlim([0, 10])
-        self.plot.set_ylim([0, 100])
-        self.plot.set_autoscale_on(False)
-        self.plot.set_title("Score Over Time")
-        if self.mainWindow.session.data is not None:
-            self.overallScoreLabel.set_text("Overall Score: %.2f" % self.mainWindow.session.data.get_overall())
-            self.overallCentsLabel.set_text("You are off by an average of %.2f cents." % self.mainWindow.session.data.get_avg_cents())
-            self.key_signature.set_text("Key Signature: %s %s" % (self.mainWindow.session.data.get_key(), self.mainWindow.session.data.get_signature()))
+        data = self.mainWindow.controller.session.data
+        if data is not None:
+            self.overallScoreLabel.set_text("Overall Score: %.2f" % data.get_overall())
+            self.overallCentsLabel.set_text("You are off by an average of %.2f cents." % data.get_avg_cents())
+            self.key_signature.set_text("Key Signature: %s %s" % (data.get_key(), data.get_signature()))
 
         else:
             self.overallScoreLabel.set_text("N/A")
             self.overallCentsLabel.set_text("N/A")
-        self.canvas.draw()
->>>>>>> origin/Disp-Gavin
+        #self.canvas.draw()
 
     def update_plot(self, data):
         self.myGraph.update_plot()
@@ -54,7 +45,7 @@ class SessionDiagnostics:
     def __init__(self, mainWindow):
         self.mainWindow = mainWindow
         workingFrame = mainWindow.left_frame
-        currentSession = mainWindow.session.data
+        currentSession = mainWindow.controller.session.data
         topest_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
         top_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
         right_frame = tk.Frame(workingFrame, bd=5, bg=background_color)
@@ -80,7 +71,7 @@ class SessionDiagnostics:
         title_label = tk.Label(topest_frame, text="Session Diagnostics", bg=background_color, fg="white",
                                font=("calibri", 20))
         title_label.pack(side=tk.TOP)
-        self.session_name = tk.Label(topest_frame, text=mainWindow.session.name, bg=background_color,
+        self.session_name = tk.Label(topest_frame, text=mainWindow.controller.session.name, bg=background_color,
                                     fg="light sky blue", font=("Calibri", 16))
         self.session_name.pack(side=tk.BOTTOM, padx = 10, pady = 10)
 
@@ -98,14 +89,14 @@ class SessionDiagnostics:
         self.key_signature.pack()
 
 
-        defaultX = [0]
-        defaultY = [0]
-        if mainWindow.screen_width > 1000:
-            self.fig = Figure(figsize=(3, 3))
-        else:
-            self.fig = Figure(figsize=(2, 2))
-        self.plot = self.fig.add_subplot(111)
-        self.plot.plot(defaultX, defaultY, color='blue')
+        # defaultX = [0]
+        # defaultY = [0]
+        # if mainWindow.screen_width > 1000:
+        #     self.fig = Figure(figsize=(3, 3))
+        # else:
+        #     self.fig = Figure(figsize=(2, 2))
+        # self.plot = self.fig.add_subplot(111)
+        # self.plot.plot(defaultX, defaultY, color='blue')
 
         # Not sure whether or not we want it to have the same axis the whole time
         #self.plot.set_ylim([0, 100])
@@ -119,8 +110,8 @@ class SessionDiagnostics:
         #self.plot.set_ylabel("Score", fontsize=my_axissize)
         #self.plot.set_autoscale_on(False)
 
-        self.canvas = FigureCanvasTkAgg(self.fig, master=right_frame)
-        self.canvas.get_tk_widget().configure(relief=tk.RIDGE, bd=5)
-        self.canvas.get_tk_widget().pack()
-        self.canvas.draw()
+        # self.canvas = FigureCanvasTkAgg(self.fig, master=right_frame)
+        # self.canvas.get_tk_widget().configure(relief=tk.RIDGE, bd=5)
+        # self.canvas.get_tk_widget().pack()
+        # self.canvas.draw()
 

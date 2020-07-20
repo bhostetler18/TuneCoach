@@ -10,7 +10,8 @@ from TuneCoach.gui.Timer import *
 
 from TuneCoach.gui.MainController import MainController
 
-
+import tkinter.filedialog
+import tkinter.messagebox
 import tkinter as tk
 
 def invalid_path(path): 
@@ -21,7 +22,6 @@ def invalid_path(path):
 class MainWindow:
     def __init__(self, master):
         self.controller = MainController(self)
-        self.session = self.controller.session # TODO hack!!
         self.master = master
 
         self.timer = Timer()

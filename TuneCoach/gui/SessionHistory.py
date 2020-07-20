@@ -46,7 +46,7 @@ class SessionHistory:
         if args[0] == 'update_width':
             self.scrollbar_width = args[1]
             self.scrollbar.set(1 - self.scrollbar_width, 1)
-        if not self.mainWindow.paused:
+        if not self.mainWindow.controller.paused:
             # TODO: change color to indicate the user can't scroll
             return
 

@@ -28,6 +28,7 @@ class Reader(threading.Thread):
 class AudioManager(TunerStream):
     def __init__(self, session):
         super().__init__(44100)
+        
         self._background_audio = threading.Thread(target=lambda: self.mainloop(), daemon=True)
         self._background_audio.start()
         self._background_reader = Reader(self, session)
