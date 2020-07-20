@@ -7,7 +7,8 @@ import pickle
 import os
 from pathlib import Path
 
-# DO WE STILL NEED THIS HERE?
+# DO WE STILL NEED THIS HERE? we can move it if you want?
+# it doesn't matter but it fits here pretty logically
 def save_to_file(session, path):
     with open(path, "wb") as file:
         pickle.dump(session, file)
@@ -31,14 +32,14 @@ class SessionData:
         self._cents = 0.0
         self._overall = 0
         self._overall_count = 0
-        self._threshold = cent_range
+        self.threshold = cent_range
         self._timestamp = datetime.date.today()
         self._recent_notes = collections.deque([])
         self.display_buffer = collections.deque([])
         self.has_new_data = False
 
-        self._key = "C"
-        self._signature = "Major"
+        self.key = "C"
+        self.signature = "Major"
 
         # Potential data storage
         self._note_history = []
@@ -59,29 +60,12 @@ class SessionData:
         else:
             return (100.0 * self._overall) / self._overall_count
 
-    def get_avg_cents(self):
+    @property
+    def avg_cents(self):
         if self._overall_count == 0:
             return 0.0
         else:
             return self._cents / self._overall_count
-
-    def get_key(self):
-        return self._key
-
-    def get_signature(self):
-        return self._signature
-
-    def set_key(self, key):
-        self._key = key
-
-    def set_signature(self, signature):
-        self._signature = signature
-
-    def get_recent_notes(self):
-        return self._recent_notes
-
-    def update_threshold(self, new_threshold):
-        self._threshold = new_threshold
 
     @property
     def empty(self):

@@ -26,8 +26,10 @@ class MainController:
             self.view.after(500, self.update_diagnostics)
 
     def update_history(self):
+        breakpoint()
         if self.session.data.has_new_data:
             self.session.data.has_new_data = False # TODO lock
+            self.saved = False
             self.view.update_history(self.session.data)
         if not self.paused:
             self.view.after(20, lambda: self.update_history())
@@ -131,3 +133,4 @@ class MainController:
         else:
             self.session = session
             self.setup_session()
+            self.saved = True
