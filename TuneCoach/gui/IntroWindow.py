@@ -1,20 +1,19 @@
-from TuneCoach.gui.NewSessionWindow import *
-from TuneCoach.gui.LoadSessionWindow import *
-
+import tkinter as tk
+from TuneCoach.gui.constants import background_color
 
 class IntroWindow:
     @staticmethod
     def intro_load_session(mainWindow, oldFrame):
         oldFrame.destroy()
         mainWindow.disable()
-        mainWindow.load_practice_session(ask=False)
+        mainWindow.controller.load_from()
         mainWindow.enable()
 
     @staticmethod
     def intro_new_session(mainWindow, oldFrame):
         oldFrame.destroy()
         mainWindow.disable()
-        mainWindow.new_practice_session(ask=False)
+        mainWindow.controller.new_session()
         mainWindow.enable()
 
     def __init__(self, mainWindow):

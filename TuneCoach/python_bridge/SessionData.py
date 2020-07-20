@@ -8,7 +8,8 @@ import pickle
 import os
 from pathlib import Path
 
-# DO WE STILL NEED THIS HERE?
+# DO WE STILL NEED THIS HERE? we can move it if you want?
+# it doesn't matter but it fits here pretty logically
 def save_to_file(session, path):
     with open(path, "wb") as file:
         pickle.dump(session, file)
@@ -31,13 +32,13 @@ class SessionData:
         self._cents = 0.0
         self._overall = 0
         self._overall_count = 0
-        self._threshold = cent_range
+        self.threshold = cent_range
         self._timestamp = datetime.date.today()
         self._recent_notes = collections.deque([])
         self.display_buffer = collections.deque([])
         self.has_new_data = False
 
-        self._key_signature = KeySignature("C", 0, Accidental.SHARP, KeySignatureType.MAJOR)
+        self.key_signature = KeySignature("C", 0, Accidental.SHARP, KeySignatureType.MAJOR)
 
         self.timer = Timer()
         self.timer.start()
@@ -62,23 +63,12 @@ class SessionData:
         else:
             return (100.0 * self._overall) / self._overall_count
 
-    def get_avg_cents(self):
+    @property
+    def avg_cents(self):
         if self._overall_count == 0:
             return 0.0
         else:
             return self._cents / self._overall_count
-
-    def get_key_signature(self):
-        return self._key_signature
-
-    def set_key_signature(self, key):
-        self._key_signature = key
-
-    def get_recent_notes(self):
-        return self._recent_notes
-
-    def update_threshold(self, new_threshold):
-        self._threshold = new_threshold
 
     @property
     def empty(self):
@@ -101,7 +91,7 @@ class SessionData:
         octave = 2 + math.floor(math.log2(desired_hz / 65.4))
 
         # Gets counts of everything to calculate accuracy
-        if abs(cent) <= self._threshold:
+        if abs(cent) <= self.threshold:
             self._in_tune_count[index] += 1
             self._overall += 1
         self._pitch_count[index] += 1

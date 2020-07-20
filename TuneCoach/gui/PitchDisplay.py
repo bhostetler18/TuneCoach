@@ -47,11 +47,11 @@ class PitchDisplay:
         self._clearing = False
 
         self.display_default_gui()
-        self.update_data()
 
     def pause(self):
         self.light.stop()
         self.canvas.itemconfig(self.help_text, text='Press \'space\' to accept audio input')
+        self.update_pitch(0)
 
     def resume(self):
         self.light.start_flashing()
@@ -98,7 +98,7 @@ class PitchDisplay:
 
         rStart = 90 - self._span
         rSpan = 2 * self._span
-        yStart = 90 - self.cents_to_angle(self.mainWindow.yellow_threshold)
+        yStart = 90 - self.cents_to_angle(self.mainWindow.controller.yellow_threshold)
         ySpan = 2 * (90 - yStart)
         gStart = 90 - self.cents_to_angle(self.threshold)
         gSpan = 2 * self.cents_to_angle(self.threshold)
@@ -145,30 +145,28 @@ class PitchDisplay:
         display_string = '{:02}:{:02}'.format(minutes, seconds)
         self.time_label.config(text=display_string)
 
-    def update_data(self):  # event
-        if self.mainWindow.audio_manager is not None:
-            hz = self.mainWindow.audio_manager.peek()
-            if hz != 0:
-                self._clearing = False
-                midi = hz_to_midi(hz)
-                pitch_class = midi_to_pitch_class(midi)
-                desired_hz = closest_in_tune_frequency(hz)
-                cent = cents(desired_hz, hz)
-                name = self.mainWindow.session.data.get_key_signature().get_display_for(pitch_class)
-                self.update_cents(cent)
-                self.update_hertz(f"{round(hz)} Hz")
-                self.update_octave(f"{get_octave(midi)}")
-                self.update_pitch(name)
-                self.display_current_gui()
-                self._last_time = time.time()
-            else:
-                self._clearing = True
-                if self._centsValue != -50 and time.time() - self._last_time > 1.5:
-                    self.update_cents(max(-50, self._centsValue - 3))
-                    self.update_pitch('---')
-                    self.update_hertz('')
-                    self.update_octave('')
-                    self.display_current_gui()
-        self.set_time(self.mainWindow.session.data.timer.get())
+    def update_data(self, hz):
 
-        self.mainWindow.master.after(10, self.update_data)
+        if hz != 0:
+            self._clearing = False
+            midi = hz_to_midi(hz)
+            pitch_class = midi_to_pitch_class(midi)
+            desired_hz = closest_in_tune_frequency(hz)
+            cent = cents(desired_hz, hz)
+            name = self.mainWindow.controller.session.data.key_signature.get_display_for(pitch_class)
+            self.update_cents(cent)
+            self.update_hertz(f"{round(hz)} Hz")
+            self.update_octave(f"{get_octave(midi)}")
+            self.update_pitch(name)
+            self.display_current_gui()
+            self._last_time = time.time()
+        else:
+            self._clearing = True
+            if self._centsValue != -50 and time.time() - self._last_time > 1.5:
+                self.update_cents(max(-50, self._centsValue - 3))
+                self.update_pitch('---')
+                self.update_hertz('')
+                self.update_octave('')
+                self.display_current_gui()
+
+        self.set_time(self.mainWindow.controller.session.data.timer.get()) # TODO move timer

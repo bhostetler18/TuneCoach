@@ -9,9 +9,9 @@ class TunerSettingsWindow:
     def update_tuner_settings(self, cent_threshold, key_signature, oldSettingsView):
         self.mainWindow.threshold = cent_threshold
         self.mainWindow.pitch_display.set_threshold(cent_threshold)
-        self.mainWindow.session.data._threshold = cent_threshold
+        self.mainWindow.controller.session.data._threshold = cent_threshold
 
-        self.mainWindow.session.data.set_key_signature(key_signature)
+        self.mainWindow.controller.session.data.key_signature = key_signature
 
         oldSettingsView.destroy()
 

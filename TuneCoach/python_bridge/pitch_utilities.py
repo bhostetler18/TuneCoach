@@ -1,6 +1,6 @@
 import math
 from enum import Enum
-
+from dataclasses import dataclass
 
 class Accidental(Enum):
     FLAT = "b"
@@ -10,17 +10,18 @@ class KeySignatureType(Enum):
     MAJOR = "Major"
     MINOR = "Minor"
 
+@dataclass
 class KeySignature:
-    def __init__(self, root, raw_value, accidental, ktype):
-        self.root = root
-        self.raw_value = raw_value
-        self.accidental = accidental
-        self.ktype = ktype
+    root: str
+    raw_value: int
+    accidental: Accidental
+    ktype: KeySignatureType
     
     def get_display_for(self, raw_value):
         return pitch_class_to_name(raw_value, self.accidental)
 
-    def get_name(self):
+    @property
+    def name(self):
         root_str = self.get_display_for(self.raw_value)
         return f"{root_str} {self.ktype.value}"
 

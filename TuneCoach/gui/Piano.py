@@ -40,7 +40,7 @@ class Piano(tk.Canvas):
 
         self.delete("text")
         notes = None
-        if self.mainWindow.session.data.get_key_signature().accidental == Accidental.SHARP: # TODO: refactor
+        if self.mainWindow.controller.session.data.key_signature.accidental == Accidental.SHARP: # TODO: refactor
             notes = self.sharp_notes
         else:
             notes = self.flat_notes
