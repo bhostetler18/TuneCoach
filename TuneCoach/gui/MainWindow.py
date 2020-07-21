@@ -161,10 +161,9 @@ class MainWindow:
 
     def pause(self):
         self.pitch_display.pause()
-        #self.session.data.timer.pause()
+
     def resume(self):
         self.pitch_display.resume()
-        #self.session.data.timer.resume()
 
     def error(self, msg, title="Error!"):
         tk.messagebox.showerror(title, msg)

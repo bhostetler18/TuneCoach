@@ -60,7 +60,7 @@ class TunerSettingsWindow:
         centsitivity.pack()
 
         v = tk.DoubleVar()
-        v.set(mainWindow.threshold)
+        v.set(mainWindow.controller.threshold)
 
         cent_scale = tk.Scale(middle_frame1, from_=1, to=25, orient=tk.HORIZONTAL, variable=v)
         cent_scale.config(bg=background_color, fg="white")
@@ -73,20 +73,25 @@ class TunerSettingsWindow:
         sig_label = tk.Label(bottom_frame, text="Key Signature")
         sig_label.config(bg=background_color, fg="white")
         sig_label.pack()
-        
+
 
         self.major_key_names = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
         self.major_accidentals = [Accidental.SHARP, Accidental.FLAT, Accidental.SHARP, Accidental.FLAT,
-                                    Accidental.SHARP, Accidental.FLAT, Accidental.SHARP,Accidental.SHARP,
+                                    Accidental.SHARP, Accidental.FLAT, Accidental.SHARP, Accidental.SHARP,
                                         Accidental.FLAT, Accidental.SHARP, Accidental.FLAT, Accidental.SHARP]
         self.minor_key_names = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"]
         self.minor_accidentals = [Accidental.FLAT, Accidental.SHARP, Accidental.FLAT, Accidental.FLAT,
-                                    Accidental.SHARP, Accidental.FLAT, Accidental.SHARP,Accidental.FLAT,
+                                    Accidental.SHARP, Accidental.FLAT, Accidental.SHARP, Accidental.FLAT,
                                         Accidental.SHARP, Accidental.SHARP, Accidental.FLAT, Accidental.SHARP]
 
-        self.current_key_signature = KeySignature("C", 0, Accidental.SHARP, KeySignatureType.MAJOR)
-        self.root = tk.IntVar(value=0)
-        self.ktype = tk.StringVar(value="Major")
+        self.current_key_signature = mainWindow.controller.session.data.key_signature
+        current = self.current_key_signature.name.split()
+        if current[1] == "Minor":
+            index = self.minor_key_names.index(current[0])
+        else:
+            index = self.major_key_names.index(current[0])
+        self.root = tk.IntVar(value=index)
+        self.ktype = tk.StringVar(value=current[1])
         self.radio_buttons = []
 
         # Grid of key signature buttons

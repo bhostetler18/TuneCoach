@@ -21,7 +21,7 @@ class SessionDiagnostics:
         if data is not None:
             self.overallScoreLabel.set_text("Overall Score: %.2f" % data.get_overall())
             self.overallCentsLabel.set_text("You are off by an average of %.2f cents." % data.avg_cents)
-            self.key_signature.set_text("Key Signature: %s" % (data.key_signature))
+            self.key_signature.set_text("Key Signature: %s" % data.key_signature)
         else:
             self.overallScoreLabel.set_text("N/A")
             self.overallCentsLabel.set_text("N/A")
@@ -64,7 +64,6 @@ class SessionDiagnostics:
         workingFrame.grid_columnconfigure(0, weight=1)
         workingFrame.grid_columnconfigure(1, weight=2)
 
-
         self.myGraph = Graph(right_frame, mainWindow, mainWindow.screen_width, mainWindow.screen_height)
 
         title_label = tk.Label(topest_frame, text="Session Diagnostics", bg=background_color, fg="white",
@@ -72,18 +71,18 @@ class SessionDiagnostics:
         title_label.pack(side=tk.TOP)
         self.session_name = tk.Label(topest_frame, text=mainWindow.controller.session.name, bg=background_color,
                                     fg="light sky blue", font=("Calibri", 16))
-        self.session_name.pack(side=tk.BOTTOM, padx = 10, pady = 10)
+        self.session_name.pack(side=tk.BOTTOM, padx=10, pady=10)
 
         v = "Overall Score: %.2f" % currentSession.get_overall()
         c = "You are off by an average of %.2f cents." % currentSession.avg_cents
 
-        self.overallScoreLabel = ScoreLabel(middle_frame, v, 150, 60)
+        self.overallScoreLabel = ScoreLabel(top_frame, v, 150, 60)
         self.overallScoreLabel.pack()
 
         self.overallCentsLabel = ScoreLabel(middle_frame, c, 300, 60)
         self.overallCentsLabel.pack()
 
-        key_signature = "Key Signature: %s" % (currentSession.key_signature.name)
+        key_signature = "Key Signature: %s" % currentSession.key_signature.name
         self.key_signature = ScoreLabel(bottom_frame, key_signature, 200, 60)
         self.key_signature.pack()
 

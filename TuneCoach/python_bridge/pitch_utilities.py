@@ -2,13 +2,16 @@ import math
 from enum import Enum
 from dataclasses import dataclass
 
+
 class Accidental(Enum):
     FLAT = "b"
     SHARP = "#"
 
+
 class KeySignatureType(Enum):
     MAJOR = "Major"
     MINOR = "Minor"
+
 
 @dataclass
 class KeySignature:
