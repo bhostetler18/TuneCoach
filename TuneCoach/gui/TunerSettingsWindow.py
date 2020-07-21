@@ -9,8 +9,7 @@ class TunerSettingsWindow:
     def update_tuner_settings(self, cent_threshold, key_signature, oldSettingsView):
         self.mainWindow.threshold = cent_threshold
         self.mainWindow.pitch_display.set_threshold(cent_threshold)
-        self.mainWindow.controller.session.data._threshold = cent_threshold
-
+        self.mainWindow.controller.session.data.threshold = cent_threshold
         self.mainWindow.controller.session.data.key_signature = key_signature
 
         oldSettingsView.destroy()
@@ -60,7 +59,7 @@ class TunerSettingsWindow:
         centsitivity.pack()
 
         v = tk.DoubleVar()
-        v.set(mainWindow.controller.threshold)
+        v.set(mainWindow.controller.session.data.threshold)
 
         cent_scale = tk.Scale(middle_frame1, from_=1, to=25, orient=tk.HORIZONTAL, variable=v)
         cent_scale.config(bg=background_color, fg="white")

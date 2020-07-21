@@ -25,7 +25,12 @@ class SessionDiagnostics:
         if data is not None:
             self.overallScoreLabel.set_text("Overall Score: %.2f" % data.get_overall())
             self.overallCentsLabel.set_text("You are off by an average of %.2f cents." % data.avg_cents)
-            self.key_signature.set_text("Key Signature: %s" % data.key_signature.name)
+            display_settings = "Settings:\n" \
+                               "---------\n" \
+                               "Key Signature: %s\n" \
+                               "Threshold: ±%d cents\n" \
+                               "Range: %s" % (data.key_signature.name, data.threshold, "Temporary")
+            self.settings.set_text(display_settings)
 
             data.update_score_history()
         #    self.clear_plot()
@@ -77,9 +82,13 @@ class SessionDiagnostics:
         self.overallCentsLabel = ScoreLabel(middle_frame, c, 300, 60)
         self.overallCentsLabel.pack()
 
-        key_signature = "Key Signature: C Major"
-        self.key_signature = ScoreLabel(bottom_frame, key_signature, 200, 60)
-        self.key_signature.pack()
+        display_settings = "Settings:\n" \
+                           "---------\n" \
+                           "Key Signature: C Major\n" \
+                           "Threshold: ±15 cents\n" \
+                           "Range: C2 - B7"
+        self.settings = ScoreLabel(bottom_frame, display_settings, 200, 125)
+        self.settings.pack()
 
 
         # defaultX = [0]
