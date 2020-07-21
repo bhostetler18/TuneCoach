@@ -40,6 +40,11 @@ class SessionData:
 
         self.key_signature = KeySignature("C", 0, Accidental.SHARP, KeySignatureType.MAJOR)
 
+        self.from_note = "C"
+        self.from_octave = 2
+        self.to_note = "B"
+        self.to_octave = 7
+
         self.timer = Timer()
         self.timer.start()
         self.timer.pause()

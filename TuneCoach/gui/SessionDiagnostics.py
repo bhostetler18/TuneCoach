@@ -26,10 +26,10 @@ class SessionDiagnostics:
             self.overallScoreLabel.set_text("Overall Score: %.2f" % data.get_overall())
             self.overallCentsLabel.set_text("You are off by an average of %.2f cents." % data.avg_cents)
             display_settings = "Settings:\n" \
-                               "---------\n" \
-                               "Key Signature: %s\n" \
+                               "-------------------\n" \
                                "Threshold: ±%d cents\n" \
-                               "Range: %s" % (data.key_signature.name, data.threshold, "Temporary")
+                               "Key Signature: %s\n" \
+                               "Range: %s%s to %s%s" % (data.threshold, data.key_signature.name, data.from_note, data.from_octave, data.to_note, data.to_octave)
             self.settings.set_text(display_settings)
 
             data.update_score_history()

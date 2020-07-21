@@ -35,7 +35,7 @@ class PitchDisplay:
         self.light = IndicatorLight(self.rec_frame, 35)
         self.light.pack(anchor='w', side='left')
 
-        self.time_label = Label(self.rec_frame, text='0:00', anchor='e', justify=RIGHT)
+        self.time_label = Label(self.rec_frame, text='00:00', anchor='e', justify=RIGHT)
         self.time_label.pack(side='right')
 
         self.showsHertz = BooleanVar()
