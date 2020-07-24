@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 import TuneCoach.gui as gui
 from TuneCoach.gui.Piano import Piano
 
@@ -21,7 +22,7 @@ class SessionHistory:
         self.display_size = 64
         self.current_pos = 0
 
-        self.scrollbar = tk.Scrollbar(workingFrame, orient=tk.HORIZONTAL)
+        self.scrollbar = ttk.Scrollbar(workingFrame, orient=tk.HORIZONTAL)
         self.scrollbar.pack(side='bottom', fill='x')
         self.scrollbar.config(command=self.scroll)
         self.scrollbar_width = 1

@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 from TuneCoach.python_bridge.SessionData import *
 from TuneCoach.gui.constants import *
 from TuneCoach.python_bridge.AudioManager import *
@@ -21,7 +22,7 @@ class NewSessionWindow:
                 self.creating_a_new_session(mainWindow, popup, newName)
     #will actually create new session
     def creating_a_new_session(self, mainWindow, popup, newName):
-        # Cleanup Code:
+        # TODO: Cleanup Code
         #x = 0
         #for session in mainWindow.currentPracticeSession.get_existing_sessions():
         #    if mainWindow.currentPracticeSession.load_from_file(session)._name == newName or mainWindow.currentPracticeSession.load_from_file(session)._name == newName + ".session":
@@ -49,10 +50,10 @@ class NewSessionWindow:
     def __init__(self, mainWindow):
         new_sesh_window = tk.Toplevel(mainWindow.master)
         new_sesh_window.geometry("500x100")
-        top_frame = tk.Frame(new_sesh_window, bd=5, bg=background_color)
-        left_frame = tk.Frame(new_sesh_window, bd=5, bg=background_color)
-        middle_frame = tk.Frame(new_sesh_window, bd=5, bg=background_color)
-        right_frame = tk.Frame(new_sesh_window, bd=5, bg=background_color)
+        top_frame = ttk.Frame(new_sesh_window)#, bd=5, bg=background_color)
+        left_frame = ttk.Frame(new_sesh_window)#, bd=5, bg=background_color)
+        middle_frame = ttk.Frame(new_sesh_window)#, bd=5, bg=background_color)
+        right_frame = ttk.Frame(new_sesh_window)#, bd=5, bg=background_color)
 
         top_frame.grid(column=0, row=0, columnspan=3, sticky="nsew")
         left_frame.grid(row=1, column=0, sticky="nsew")
@@ -67,10 +68,10 @@ class NewSessionWindow:
 
         # will sub out these stand-ins for values once we get set up how and where we will store practice sessions.
 
-        create_session_label = tk.Label(top_frame, text="Create New Session", bg=background_color, fg="white")
+        create_session_label = ttk.Label(top_frame, text="Create New Session")#, bg=background_color, fg="white")
         create_session_label.pack()
         new_sesh_window.lift(mainWindow.master)
-        self.text_entry_label = tk.Label(left_frame, text="Enter name of new Session", fg="white", bg=background_color)
+        self.text_entry_label = ttk.Label(left_frame, text="Enter name of new Session")#, fg="white", bg=background_color)
         self.text_entry_label.pack()
         text_entry = tk.Entry(middle_frame)
         if  mainWindow.currentPracticeSession._name != "new-session-%d" % len(mainWindow.currentPracticeSession.get_existing_sessions()):

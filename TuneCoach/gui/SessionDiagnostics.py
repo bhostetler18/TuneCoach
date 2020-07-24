@@ -60,11 +60,14 @@ class SessionDiagnostics:
         workingFrame.grid_columnconfigure(0, weight=1)
         workingFrame.grid_columnconfigure(1, weight=2)
 
-        title_label = tk.Label(topest_frame, text="Session Diagnostics", bg=background_color, fg="white",
-                               font=("calibri", 20))
-        title_label.pack(side=tk.TOP)
-        self.session_name = tk.Label(topest_frame, text=mainWindow.session.name, bg=background_color,
-                                    fg="light sky blue", font=("Calibri", 16))
+        title_label_style = ttk.Style()
+        title_label_style.configure("TitleLabel.TLabel", font="Ubuntu 20", side=tk.TOP)
+        title_label = ttk.Label(topest_frame, text="Session Diagnostics", style="TitleLabel.TLabel")#, bg=background_color, fg="white", font=("calibri", 20))
+        title_label.pack()#side=tk.TOP)
+
+        session_name_label_style = ttk.Style()
+        session_name_label_style.configure("SessionName.TLabel", font="Ubuntu 16", foreground="#77216F")
+        self.session_name = ttk.Label(topest_frame, text=mainWindow.session.name, style="SessionName.TLabel")#, bg=background_color, fg="light sky blue", font=("Calibri", 16))
         self.session_name.pack(side=tk.BOTTOM)
 
         if currentSession is None:
@@ -75,7 +78,7 @@ class SessionDiagnostics:
 
         self.overallScoreLabel = ScoreLabel(top_frame, v, 150, 60)
         self.overallScoreLabel.pack()
-        more_info_button = tk.Button(middle_frame, text="More info",
+        more_info_button = ttk.Button(middle_frame, text="More info",
                                      command=lambda: self.more_info_window_caller(mainWindow))
         more_info_button.pack()
 
