@@ -63,9 +63,11 @@ class MainWindow:
         self.toggle_pause()
     # Creating frames to organize the screen.
     def layout_frames(self, screen_width, screen_height):
-        self.bottom_frame = ttk.Frame(self.master) #bd=5, relief=tk.RAISED, bg=background_color)
-        self.left_frame = ttk.Frame(self.master) #bd=5, relief=tk.RAISED, bg=background_color)
-        self.right_frame = ttk.Frame(self.master) #bd=5, relief=tk.RAISED, bg=background_color)
+        frames_style = ttk.Style()
+        frames_style.configure('MainFrames.TFrame', background='white')
+        self.bottom_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
+        self.left_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
+        self.right_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
 
         # Putting the frames into a grid layout
         self.bottom_frame.grid(row=1, column=0, columnspan=2, sticky="nsew")
@@ -176,16 +178,16 @@ class MainWindow:
         return command_function
 
     def create_menubar(self):
-        menubar = tk.Menu(self.master)
+        menubar = tk.Menu(self.master, bg='white')
         self.master.config(menu=menubar)
         file_menu = tk.Menu(menubar)
 
         # File menubar
-        menubar.add_cascade(label="File", menu=file_menu)
-        file_menu.add_command(label="New Practice Session", command=self.session_menu_item(self.new_practice_session))
-        file_menu.add_command(label="Save Current Session", command=self.session_menu_item(self.save_practice_session))
-        file_menu.add_command(label="Save Current Session As...", command=self.session_menu_item(self.save_as_practice_session))
-        file_menu.add_command(label="Load Existing Session", command=self.session_menu_item(self.load_practice_session))
+        menubar.add_cascade(label="File", menu=file_menu, background='white')
+        file_menu.add_command(label="New Practice Session", command=self.session_menu_item(self.new_practice_session), background='white')
+        file_menu.add_command(label="Save Current Session", command=self.session_menu_item(self.save_practice_session), background='white')
+        file_menu.add_command(label="Save Current Session As...", command=self.session_menu_item(self.save_as_practice_session), background='white')
+        file_menu.add_command(label="Load Existing Session", command=self.session_menu_item(self.load_practice_session), background='white')
         # TODO: Add functionality to remove sessions
         # file_menu.add_separator
         # file_menu.add_command(label = "Remove Practice Session", command = self.remove_practice_session)
@@ -193,13 +195,13 @@ class MainWindow:
         # Settings menubar
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
-        settings_menu.add_command(label="Tuner Settings", command=self.tuner_settings)
+        settings_menu.add_command(label="Tuner Settings", command=self.tuner_settings, background='white')
 
         # Help menubar
         help_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Help", menu=help_menu)
-        help_menu.add_command(label="FAQ", command=self.load_FAQ)
-        help_menu.add_command(label="Tutorial", command=self.load_tutorial)
+        help_menu.add_command(label="FAQ", command=self.load_FAQ, background='white')
+        help_menu.add_command(label="Tutorial", command=self.load_tutorial, background='white')
 
     def toggle_pause(self):
         if self.audio_manager is not None:

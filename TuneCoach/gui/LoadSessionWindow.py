@@ -39,10 +39,12 @@ class LoadSessionWindow:
         self.master = mainWindow.master
 
         load_window = tk.Toplevel(self.master)
-        top_frame = tk.Frame(load_window, bd=5, bg=background_color)
-        left_frame = tk.Frame(load_window, bd=5, bg=background_color)
-        middle_frame = tk.Frame(load_window, bd=5, bg=background_color)
-        right_frame = tk.Frame(load_window, bd=5, bg=background_color)
+        frames = ttk.Style()
+        frames.configure('LoadSessionWindowFrames.TFrame', bd=5, background='white')
+        top_frame = ttk.Frame(load_window, style='LoadSessionWindowFrames.TFrame')
+        left_frame = ttk.Frame(load_window, style='LoadSessionWindowFrames.TFrame')
+        middle_frame = ttk.Frame(load_window, style='LoadSessionWindowFrames.TFrame')
+        right_frame = ttk.Frame(load_window, style='LoadSessionWindowFrames.TFrame')
 
         top_frame.grid(column=0, row=0, columnspan=3, sticky="nsew")
         left_frame.grid(row=1, column=0, sticky="nsew")
@@ -55,18 +57,18 @@ class LoadSessionWindow:
         load_window.grid_columnconfigure(1, weight=1)
         load_window.grid_columnconfigure(2, weight=1)
 
-        create_session_label = tk.Label(top_frame, text="Load Previous Session", bg=background_color, fg="white")
+        create_session_label = ttk.Label(top_frame, text="Load Previous Session")
         create_session_label.pack()
 
         session_files = SessionData.get_existing_sessions()
         session_names = list(map(lambda filename: os.path.splitext(filename)[0], session_files))
         if len(session_files) > 0:
-            select_session_label = tk.Label(left_frame, text="Select a session to load", bg=background_color, fg="white")
+            select_session_label = ttk.Label(left_frame, text="Select a session to load")
             select_session_label.pack()
             self.selected_session = tk.StringVar()
             self.selected_session.set(session_files[0]) # strip out extension
 
-            load_session_dropdown = tk.OptionMenu(middle_frame, self.selected_session, *session_files)
+            load_session_dropdown = ttk.OptionMenu(middle_frame, self.selected_session, *session_files)
             load_session_dropdown.pack()
             #TODO: complete functionality for acceptButton
             acceptButton = tk.Button(right_frame, text = "Select", command = lambda: self.propose_save(load_window))

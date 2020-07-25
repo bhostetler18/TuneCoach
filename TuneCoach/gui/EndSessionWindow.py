@@ -29,7 +29,7 @@ class EndSessionWindow:
         self.end_sesh_window.grid_rowconfigure(1, weight=1)
 
         label_style = ttk.Style()
-        label_style.configure("EndSession.TLabel", foreground="white", background=background_color)
+        label_style.configure("EndSession.TLabel", foreground="white")
         success_label = ttk.Label(top_frame, text="Session ended successfully.", style="EndSession.TLabel")
         success_label.pack()
 
