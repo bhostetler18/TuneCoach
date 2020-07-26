@@ -22,7 +22,7 @@ class TunerSettingsWindow:
         self.mainWindow = mainWindow
         data = mainWindow.controller.session.data
         tuner_settings_window = tk.Toplevel(self.mainWindow.master)
-        tuner_settings_window.geometry("500x400")
+        tuner_settings_window.geometry("500x275")
 
         tuner_settings_window.grid()
 
@@ -119,13 +119,13 @@ class TunerSettingsWindow:
         minor_button = tk.Radiobutton(bottom_frame3, text="Minor", indicatoron=0, width=6, variable=self.ktype, value="Minor", command=lambda: self.selection_changed(True))
         minor_button.grid(row=2, column=0)
 
-        from_note = tk.StringVar(value=data.from_note)
+        self.from_note = tk.StringVar(value=data.from_note)
         from_octave = tk.StringVar(value=data.from_octave)
-        to_note = tk.StringVar(value=data.to_note)
+        self.to_note = tk.StringVar(value=data.to_note)
         to_octave = tk.StringVar(value=data.to_octave)
 
-        from_note_menu = tk.OptionMenu(range_frame2, from_note, *self.major_key_names)
-        from_note_menu.grid(row=1, column=0)
+        self.from_note_menu = tk.OptionMenu(range_frame2, self.from_note, *self.major_key_names)
+        self.from_note_menu.grid(row=1, column=0)
         from_octave_menu = tk.OptionMenu(range_frame2, from_octave, 2, 3, 4, 5, 6, 7)
         from_octave_menu.grid(row=1, column=1)
 
@@ -133,12 +133,12 @@ class TunerSettingsWindow:
         to_text.config(bg=background_color, fg="white")
         to_text.grid(row=1, column=3)
 
-        to_note_menu = tk.OptionMenu(range_frame3, to_note, *self.major_key_names)
-        to_note_menu.grid(row=1, column=0)
+        self.to_note_menu = tk.OptionMenu(range_frame3, self.to_note, *self.major_key_names)
+        self.to_note_menu.grid(row=1, column=0)
         to_octave_menu = tk.OptionMenu(range_frame3, to_octave, 2, 3, 4, 5, 6, 7)
         to_octave_menu.grid(row=1, column=1)
 
-        done_button = ttk.Button(done_frame, text="Apply", command=lambda: self.update_tuner_settings(cent_scale.get(), self.current_key_signature, from_note.get(), from_octave.get(), to_note.get(), to_octave.get(), tuner_settings_window))
+        done_button = ttk.Button(done_frame, text="Apply", command=lambda: self.update_tuner_settings(cent_scale.get(), self.current_key_signature, self.from_note.get(), from_octave.get(), self.to_note.get(), to_octave.get(), tuner_settings_window))
 
 
         done_button.pack()
@@ -147,8 +147,10 @@ class TunerSettingsWindow:
     def selection_changed(self, redraw=False):
         if redraw:
             names = self.major_key_names
+            self.refresh_om(True, self.from_note, self.to_note)
             if self.ktype.get() == "Minor":
                 names = self.minor_key_names
+                self.refresh_om(False, self.from_note, self.to_note)
             for i in range(0, 12):
                 self.radio_buttons[i].config(text=names[i])
 
@@ -163,4 +165,14 @@ class TunerSettingsWindow:
             
         self.current_key_signature = KeySignature(name, index, accidental, keytype)
 
-
+    def refresh_om(self, major, from_def, to_def):
+        self.from_note_menu['menu'].delete(0, 'end')
+        self.to_note_menu['menu'].delete(0, 'end')
+        if major:
+            for key in self.major_key_names:
+                self.from_note_menu['menu'].add_command(label=key, command=tk._setit(from_def, key))
+                self.to_note_menu['menu'].add_command(label=key, command=tk._setit(to_def, key))
+        else:
+            for key in self.minor_key_names:
+                self.from_note_menu['menu'].add_command(label=key, command=tk._setit(from_def, key))
+                self.to_note_menu['menu'].add_command(label=key, command=tk._setit(to_def, key))

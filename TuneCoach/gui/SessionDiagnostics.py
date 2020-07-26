@@ -83,10 +83,10 @@ class SessionDiagnostics:
         self.overallCentsLabel.pack()
 
         display_settings = "Settings:\n" \
-                           "---------\n" \
-                           "Key Signature: C Major\n" \
+                           "-------------------\n" \
                            "Threshold: ±15 cents\n" \
-                           "Range: C2 - B7"
+                           "Key Signature: C Major\n" \
+                           "Range: C2 to B7"
         self.settings = ScoreLabel(bottom_frame, display_settings, 200, 125)
         self.settings.pack()
 
