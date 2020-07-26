@@ -60,3 +60,9 @@ def cents(target, actual):
 
 def closest_in_tune_frequency(hz):
     return midi_to_hz(hz_to_midi(hz))
+
+
+def note_to_midi(notes, note, octave):
+    base = 12 + notes.index(note)
+    adj = 12 * int(octave)
+    return base + adj

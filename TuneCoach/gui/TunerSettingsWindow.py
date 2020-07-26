@@ -6,6 +6,23 @@ import tkinter.ttk as ttk
 
 # Tuner settings window
 class TunerSettingsWindow:
+    def input_check(self, new_cents, f_note, f_oct, t_note, t_oct, window):
+        keytype = KeySignatureType[self.ktype.get().upper()]
+        if keytype == KeySignatureType.MINOR:
+            from_midi = note_to_midi(self.minor_key_names, f_note, f_oct)
+            to_midi = note_to_midi(self.minor_key_names, t_note, t_oct)
+        else:
+            from_midi = note_to_midi(self.major_key_names, f_note, f_oct)
+            to_midi = note_to_midi(self.major_key_names, t_note, t_oct)
+        if from_midi >= to_midi:
+            error_frame = tk.Frame(window, bd=5, bg=background_color)
+            error_frame.grid(row=4, column=0, columnspan=3, sticky="nsew")
+            error_label = tk.Label(error_frame, text="Invalid Note Range!")
+            error_label.config(bg=background_color, fg="red", font=(None, 12))
+            error_label.pack()
+        else:
+            self.update_tuner_settings(new_cents, self.current_key_signature, f_note, f_oct, t_note, t_oct, window)
+
     def update_tuner_settings(self, cent_threshold, key_signature, f_note, f_oct, t_note, t_oct, oldSettingsView):
         self.mainWindow.threshold = cent_threshold
         self.mainWindow.pitch_display.set_threshold(cent_threshold)
@@ -22,7 +39,7 @@ class TunerSettingsWindow:
         self.mainWindow = mainWindow
         data = mainWindow.controller.session.data
         tuner_settings_window = tk.Toplevel(self.mainWindow.master)
-        tuner_settings_window.geometry("500x275")
+        tuner_settings_window.geometry("500x300")
 
         tuner_settings_window.grid()
 
@@ -49,7 +66,7 @@ class TunerSettingsWindow:
         range_frame1.grid(row=3, column=0, sticky="nsew")
         range_frame2.grid(row=3, column=1, sticky="nsew")
         range_frame3.grid(row=3, column=2, sticky="nsew")
-        done_frame.grid(row=4, column=0, columnspan=3, sticky="nsew")
+        done_frame.grid(row=5, column=0, columnspan=3, sticky="nsew")
 
         # setting up grid weights.
 
@@ -138,8 +155,9 @@ class TunerSettingsWindow:
         to_octave_menu = tk.OptionMenu(range_frame3, to_octave, 2, 3, 4, 5, 6, 7)
         to_octave_menu.grid(row=1, column=1)
 
-        done_button = ttk.Button(done_frame, text="Apply", command=lambda: self.update_tuner_settings(cent_scale.get(), self.current_key_signature, self.from_note.get(), from_octave.get(), self.to_note.get(), to_octave.get(), tuner_settings_window))
-
+        #def input_check(self, new_cents, f_note, f_oct, t_note, t_oct, window):
+        #done_button = ttk.Button(done_frame, text="Apply", command=lambda: self.update_tuner_settings(cent_scale.get(), self.current_key_signature, self.from_note.get(), from_octave.get(), self.to_note.get(), to_octave.get(), tuner_settings_window))
+        done_button = ttk.Button(done_frame, text="Apply", command=lambda: self.input_check(cent_scale.get(), self.from_note.get(), from_octave.get(), self.to_note.get(), to_octave.get(), tuner_settings_window))
 
         done_button.pack()
         tuner_settings_window.lift(self.mainWindow.master)
