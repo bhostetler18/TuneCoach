@@ -24,7 +24,7 @@ class PitchDisplay:
 
         self._span = 75  # Size of tuner arc in degrees, starting at vertical
 
-        self.canvas = Canvas(self.frame)
+        self.canvas = Canvas(self.frame, bg='#f5f6f7')
         self.canvas.pack(fill=BOTH, expand=True)
         self.canvas.bind("<Configure>", self.configure)
 
@@ -78,9 +78,9 @@ class PitchDisplay:
 
         self.current_pitch_display = self.canvas.create_text(self.width/2, self.height/2 + self.pitchOffset, font=self.font, text='---')
         if self.showsHertz.get():
-            self.hertzDisplay = self.canvas.create_text(self.width/2, self.height/2 + 3*self.pitchOffset, font=(None, 14), text='')
+            self.hertzDisplay = self.canvas.create_text(self.width/2, self.height/2 + 3*self.pitchOffset, font="Ubuntu 14", text='')
 
-        self.help_text = self.canvas.create_text(self.width/2, self.height-25, text='Press \'space\' to accept audio input')
+        self.help_text = self.canvas.create_text(self.width/2, self.height-35, text='Press \'space\' to accept audio input')
 
         x0 = self.centerX - self.radius
         y0 = self.centerY - self.radius

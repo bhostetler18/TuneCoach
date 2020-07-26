@@ -17,14 +17,14 @@ class TunerSettingsWindow:
         tuner_settings_window = tk.Toplevel(self.mainWindow.master)
         tuner_settings_window.geometry("500x200")
 
-        top_frame = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
-        middle_frame = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
-        middle_frame1 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
-        middle_frame2 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
+        top_frame = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        middle_frame = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        middle_frame1 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        middle_frame2 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
         # bottom_frame = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
         # bottom_frame1 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
         # bottom_frame2 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
-        bottomest_frame = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
+        bottomest_frame = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
 
         # putting the frames into a grid layout
         top_frame.grid(row=0, column=0, columnspan=3, sticky="nsew")
@@ -46,25 +46,29 @@ class TunerSettingsWindow:
         tuner_settings_window.grid_columnconfigure(1, weight=1)
         tuner_settings_window.grid_columnconfigure(2, weight=1)
 
-        tuner_label = tk.Label(top_frame, text="Tuner Settings", font=("Calibri", 20))
-        tuner_label.config(bg=background_color, fg="white")
+        tuner_label = ttk.Label(top_frame, text="Tuner Settings")#, font=("Calibri", 20))
+        # tuner_label.config(bg=background_color, fg="white")
         tuner_label.pack()
 
-        centsitivity = tk.Label(middle_frame, text="Margin of Acceptable Pitch Error +- ")
-        centsitivity.config(bg=background_color, fg="white")
+        centsitivity = ttk.Label(middle_frame, text="Margin of Acceptable Pitch Error +- ")
+        # centsitivity.config(bg=background_color, fg="white")
         centsitivity.pack()
 
         v = tk.DoubleVar()
         v.set(mainWindow.threshold)
 
+        # cent_scale_style = ttk.Scale()
+        # cent_scale_style.configure("CentScale.TScale", background="black")
         cent_scale = tk.Scale(middle_frame1, from_=1, to=25, orient=tk.HORIZONTAL, variable=v)
-        cent_scale.config(bg=background_color, fg="white")
+        # cent_scale.config(bg=background_color, fg="white")
         cent_scale.pack()
 
-        in_cents = tk.Label(middle_frame2, text="cents")
-        in_cents.config(bg=background_color, fg="white")
+        in_cents = ttk.Label(middle_frame2, text="cents")
+        # in_cents.config(bg=background_color, fg="white")
         in_cents.pack()
 
+        # done_button_style = ttk.Style()
+        # done_button_style.configure("DoneButton.TButton", )
         done_button = ttk.Button(bottomest_frame, text="Apply",
                                 command=lambda: self.update_pitch_settings(cent_scale.get(), tuner_settings_window))
 

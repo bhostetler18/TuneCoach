@@ -1,6 +1,6 @@
 from TuneCoach.gui.constants import *
 import tkinter as tk
-
+import tkinter.ttk as ttk
 
 class MoreInfoWindow:
     @staticmethod
@@ -13,9 +13,9 @@ class MoreInfoWindow:
         currentSession = mainWindow.session
         data = currentSession.data
 
-        topFrame = tk.Frame(my_window, bg=background_color)
-        middleFrame = tk.Frame(my_window, bg=background_color)
-        bottomFrame = tk.Frame(my_window, bg=background_color)
+        topFrame = ttk.Frame(my_window)#, bg=background_color)
+        middleFrame = ttk.Frame(my_window)#, bg=background_color)
+        bottomFrame = ttk.Frame(my_window)#, bg=background_color)
 
         topFrame.grid(row=0, sticky="nsew")
         middleFrame.grid(row=1, sticky="nsew")
@@ -40,14 +40,16 @@ class MoreInfoWindow:
                 final_string += "\nYou were in tune for %.2f %% of the time." % data.get_overall()
                 final_string += "\nYou were off by an average of %.2f cents." % avg_cents
             else:
-                final_string += "no input yet"
+                final_string += "No input has been entered yet."
 
-        titleLabel = tk.Label(topFrame, text=title_string, bg=background_color, fg="white")
+        title_more_info_label_style = ttk.Style()
+        title_more_info_label_style.configure("TitleMoreInfo.TLabel", font="Ubuntu 20")
+        titleLabel = ttk.Label(topFrame, text=title_string, style="TitleMoreInfo.TLabel")#, bg=background_color, fg="white")
         titleLabel.pack()
-        my_label = tk.Label(middleFrame, text=final_string, bg="#B0AFAF", fg="black", bd=5, relief=tk.RIDGE)
+        my_label = ttk.Label(middleFrame, text=final_string)#, bg="#B0AFAF", fg="black", bd=5, relief=tk.RIDGE)
         my_label.pack()
-        exit_button = tk.Button(bottomFrame, text="Exit", command=lambda: my_window.destroy())
+        exit_button = ttk.Button(bottomFrame, text="Exit", command=lambda: my_window.destroy())
         exit_button.pack(side=tk.LEFT, padx=5, pady=5)
-        refresh_button = tk.Button(bottomFrame, text="Refresh", command=lambda: self.refresh(my_window, mainWindow))
+        refresh_button = ttk.Button(bottomFrame, text="Refresh", command=lambda: self.refresh(my_window, mainWindow))
         refresh_button.pack(side=tk.RIGHT, padx=5, pady=5)
         my_window.lift(mainWindow.master)
