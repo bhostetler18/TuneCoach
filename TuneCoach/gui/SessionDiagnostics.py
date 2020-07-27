@@ -83,6 +83,7 @@ class SessionDiagnostics:
 
         self.overallScoreLabel = ScoreLabel(middle_frame, v, 150, 60)
         self.overallScoreLabel.pack()
+        self.overallScoreLabel.configure(bg = "#F5F6F7", borderwidth=0, bd = 0, highlightthickness = 0)
         more_info_button = ttk.Button(middle_frame, text="More info",
                                      command=lambda: self.more_info_window_caller(mainWindow))
         more_info_button.pack()

@@ -31,7 +31,7 @@ class Graph:
         self.mainWindow = mainWindow
         self.canvasHeight = windowHeight/3
         self.canvasWidth = windowWidth/4
-        self.myCanvas = Canvas(self.frame, width = self.canvasWidth, height = self.canvasHeight, bg = "white")
+        self.myCanvas = Canvas(self.frame, width = self.canvasWidth, height = self.canvasHeight, bg = "#F5F6F7")
         self.myCanvas.pack()
         self.myCanvas.create_line(30, 20,30, self.canvasHeight-30, fill = "black")
         self.myCanvas.create_line(30, self.canvasHeight-30, self.canvasWidth-15, self.canvasHeight-30, fill = "black")
