@@ -140,7 +140,7 @@ class MainWindow:
 
 
     
-    ### METHODS IMPLEMENTED FOR CONTROLLER ###
+   ### METHODS IMPLEMENTED FOR CONTROLLER ### 
 
     def update_diagnostics(self, data):
         self.diagnostics.update_plot(data)

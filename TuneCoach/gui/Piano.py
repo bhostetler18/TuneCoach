@@ -1,6 +1,7 @@
 import tkinter as tk
 from TuneCoach.python_bridge.pitch_utilities import Accidental
 
+# set_score uses session.data.key_signature.accidental
 class Piano(tk.Canvas):
     def __init__(self, parent, mainWindow, **kwargs):
         super().__init__(parent, kwargs)

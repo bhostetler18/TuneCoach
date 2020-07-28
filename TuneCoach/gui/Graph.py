@@ -1,5 +1,8 @@
 from tkinter import *
 
+# data dependecies
+# 
+
 class Graph:
     def clear_plot(self):
         self.myCanvas.delete("points")

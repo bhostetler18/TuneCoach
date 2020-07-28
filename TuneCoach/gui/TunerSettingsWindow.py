@@ -7,11 +7,13 @@ import tkinter.ttk as ttk
 # Tuner settings window
 class TunerSettingsWindow:
     def update_tuner_settings(self, cent_threshold, key_signature, oldSettingsView):
-        self.mainWindow.threshold = cent_threshold
-        self.mainWindow.pitch_display.set_threshold(cent_threshold)
-        self.mainWindow.controller.session.data._threshold = cent_threshold
+        
+        self.mainWindow.controller.update_settings(cent_threshold, key_signature)
 
-        self.mainWindow.controller.session.data.key_signature = key_signature
+        # set controller.threshold = cent_threshold
+        # set pitch display
+        # self.mainWindow.controller.session.data._threshold = cent_threshold
+        # self.mainWindow.controller.session.data.key_signature = key_signature
 
         oldSettingsView.destroy()
 

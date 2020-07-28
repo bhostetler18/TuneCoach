@@ -4,7 +4,7 @@ from TuneCoach.gui.Session import Session, load_session, save_session
 class MainController:
     def __init__(self, view):
         self.view = view
-
+        self.threshold = None
         self.session = Session(SessionData(15), None)
         self.audio_manager = AudioManager(self.session.data)
         self.threshold = 15
