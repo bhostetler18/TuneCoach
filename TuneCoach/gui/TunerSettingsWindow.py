@@ -155,8 +155,6 @@ class TunerSettingsWindow:
         to_octave_menu = tk.OptionMenu(range_frame3, to_octave, 2, 3, 4, 5, 6, 7)
         to_octave_menu.grid(row=1, column=1)
 
-        #def input_check(self, new_cents, f_note, f_oct, t_note, t_oct, window):
-        #done_button = ttk.Button(done_frame, text="Apply", command=lambda: self.update_tuner_settings(cent_scale.get(), self.current_key_signature, self.from_note.get(), from_octave.get(), self.to_note.get(), to_octave.get(), tuner_settings_window))
         done_button = ttk.Button(done_frame, text="Apply", command=lambda: self.input_check(cent_scale.get(), self.from_note.get(), from_octave.get(), self.to_note.get(), to_octave.get(), tuner_settings_window))
 
         done_button.pack()
@@ -164,11 +162,12 @@ class TunerSettingsWindow:
 
     def selection_changed(self, redraw=False):
         if redraw:
-            names = self.major_key_names
-            self.refresh_om(True, self.from_note, self.to_note)
             if self.ktype.get() == "Minor":
                 names = self.minor_key_names
                 self.refresh_om(False, self.from_note, self.to_note)
+            else:
+                names = self.major_key_names
+                self.refresh_om(True, self.from_note, self.to_note)
             for i in range(0, 12):
                 self.radio_buttons[i].config(text=names[i])
 
@@ -184,13 +183,33 @@ class TunerSettingsWindow:
         self.current_key_signature = KeySignature(name, index, accidental, keytype)
 
     def refresh_om(self, major, from_def, to_def):
+        fro = self.from_note.get()
+        to = self.to_note.get()
         self.from_note_menu['menu'].delete(0, 'end')
         self.to_note_menu['menu'].delete(0, 'end')
         if major:
+            if fro == "C#":
+                self.from_note.set('Db')
+            if fro == "G#":
+                self.from_note.set('Ab')
+            if to == "C#":
+                self.to_note.set('Db')
+            if to == "G#":
+                self.to_note.set('Ab')
+
             for key in self.major_key_names:
                 self.from_note_menu['menu'].add_command(label=key, command=tk._setit(from_def, key))
                 self.to_note_menu['menu'].add_command(label=key, command=tk._setit(to_def, key))
         else:
+            if fro == "Db":
+                self.from_note.set('C#')
+            if fro == "Ab":
+                self.from_note.set('G#')
+            if to == "Db":
+                self.to_note.set('C#')
+            if to == "Ab":
+                self.to_note.set('G#')
+
             for key in self.minor_key_names:
                 self.from_note_menu['menu'].add_command(label=key, command=tk._setit(from_def, key))
                 self.to_note_menu['menu'].add_command(label=key, command=tk._setit(to_def, key))
