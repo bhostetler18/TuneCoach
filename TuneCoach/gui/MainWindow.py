@@ -37,6 +37,16 @@ class MainWindow:
         master.maxsize(width=self.screen_width, height=self.screen_height)
 
         master.bind('<space>', lambda ev: self.controller.toggle_pause())
+        master.bind('l', lambda ev: self.controller.load_from())
+        master.bind('o', lambda ev: TunerSettingsWindow(self))
+        master.bind('n', lambda ev: self.controller.new_session())
+        master.bind('<F1>', lambda ev: TutorialWindow(self))
+        master.bind('<F2>', lambda ev: FAQWindow(self))
+        master.bind('<F12>', lambda ev: self.controller.save_as())
+        if self.controller.save:
+            master.bind('s', lambda ev: self.controller.save())
+        else:
+            master.bind('s', lambda ev: self.controller.save_as())
         
         self.enable()
         self.create_menubar()
@@ -147,9 +157,12 @@ class MainWindow:
 
     def update_history(self, data):
         self.history.update(data)
+    
+    def update_threshold(self, threshold):
+        self.pitch_display.set_threshold(threshold)
 
-    def update_pitch(self, hz):
-        self.pitch_display.update_data(hz)
+    def update_pitch(self, hz, data):
+        self.pitch_display.update_data(hz, data)
     
     def update_session_name(self, name):
         self.diagnostics.session_name.configure(text=name)
@@ -157,14 +170,13 @@ class MainWindow:
     def clear(self):
         self.history.clear()
         self.diagnostics.clear_plot()
-        self.pitch_display.update_data(0)
+        self.pitch_display.clear()
 
     def pause(self):
         self.pitch_display.pause()
-        #self.session.data.timer.pause()
+
     def resume(self):
         self.pitch_display.resume()
-        #self.session.data.timer.resume()
 
     def error(self, msg, title="Error!"):
         tk.messagebox.showerror(title, msg)

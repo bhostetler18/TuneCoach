@@ -34,14 +34,14 @@ class Piano(tk.Canvas):
         self.keys.reverse()
     
     # pass in a list of 12 percentages for C through B
-    def set_scores(self, scores):
+    def set_scores(self, scores, data):
         if len(scores) != 12:
             print("INVALID SCORE LIST")
             return
 
         self.delete("text")
         notes = None
-        if self.mainWindow.controller.session.data.key_signature.accidental == Accidental.SHARP: # TODO: refactor
+        if data.key_signature.accidental == Accidental.SHARP: # TODO: refactor
             notes = self.sharp_notes
         else:
             notes = self.flat_notes

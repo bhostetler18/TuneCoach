@@ -3,7 +3,7 @@ from TuneCoach.gui.constants import *
 from TuneCoach.gui.ScoreLabel import *
 from TuneCoach.gui.Graph import *
 
-
+# OUT data.update_score_history()
 class SessionDiagnostics:
     def clear_plot(self):
         self.myGraph.clear_plot()
@@ -17,21 +17,21 @@ class SessionDiagnostics:
         #else:
         #    self.overallScoreLabel.set_text("N/A")
         #self.canvas.draw()
-        data = self.mainWindow.controller.session.data
-        if data is not None:
-            self.overallScoreLabel.set_text("Overall Score: %.2f" % data.get_overall())
-            self.overallCentsLabel.set_text("You are off by an average of %.2f cents." % data.avg_cents)
-            self.key_signature.set_text("Key Signature: %s" % (data.key_signature))
-        else:
-            self.overallScoreLabel.set_text("N/A")
-            self.overallCentsLabel.set_text("N/A")
+
         #self.canvas.draw()
 
     def update_plot(self, data):
-        self.myGraph.update_plot()
+        self.myGraph.update_plot(data.score_history)
         if data is not None:
-            new_score = data.get_overall()
-            self.overallScoreLabel.set_text("Overall Score: %.2f" % new_score)
+            self.overallScoreLabel.set_text("Overall Score: %.2f" % data.get_overall())
+            self.overallCentsLabel.set_text("You are off by an average of %.2f cents." % data.avg_cents)
+            display_settings = "Settings:\n" \
+                               "-------------------\n" \
+                               "Threshold: ±%d cents\n" \
+                               "Key Signature: %s\n" \
+                               "Range: %s%s to %s%s" % (data.threshold, data.key_signature.name, data.from_note, data.from_octave, data.to_note, data.to_octave)
+            self.settings.set_text(display_settings)
+
             data.update_score_history()
         #    self.clear_plot()
         #    numScores = len(self.mainWindow.session.data._score_history)
@@ -64,7 +64,6 @@ class SessionDiagnostics:
         workingFrame.grid_columnconfigure(0, weight=1)
         workingFrame.grid_columnconfigure(1, weight=2)
 
-
         self.myGraph = Graph(right_frame, mainWindow, mainWindow.screen_width, mainWindow.screen_height)
 
         title_label = tk.Label(topest_frame, text="Session Diagnostics", bg=background_color, fg="white",
@@ -72,20 +71,24 @@ class SessionDiagnostics:
         title_label.pack(side=tk.TOP)
         self.session_name = tk.Label(topest_frame, text=mainWindow.controller.session.name, bg=background_color,
                                     fg="light sky blue", font=("Calibri", 16))
-        self.session_name.pack(side=tk.BOTTOM, padx = 10, pady = 10)
+        self.session_name.pack(side=tk.BOTTOM, padx=10, pady=10)
 
-        v = "Overall Score: %.2f" % currentSession.get_overall()
-        c = "You are off by an average of %.2f cents." % currentSession.avg_cents
+        v = "Overall Score: N/A"
+        c = "You are off by an average of N/A cents"
 
-        self.overallScoreLabel = ScoreLabel(middle_frame, v, 150, 60)
+        self.overallScoreLabel = ScoreLabel(top_frame, v, 150, 60)
         self.overallScoreLabel.pack()
 
         self.overallCentsLabel = ScoreLabel(middle_frame, c, 300, 60)
         self.overallCentsLabel.pack()
 
-        key_signature = "Key Signature: %s" % (currentSession.key_signature.name)
-        self.key_signature = ScoreLabel(bottom_frame, key_signature, 200, 60)
-        self.key_signature.pack()
+        display_settings = "Settings:\n" \
+                           "-------------------\n" \
+                           "Threshold: ±15 cents\n" \
+                           "Key Signature: C Major\n" \
+                           "Range: C2 to B7"
+        self.settings = ScoreLabel(bottom_frame, display_settings, 200, 125)
+        self.settings.pack()
 
 
         # defaultX = [0]

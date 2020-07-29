@@ -1,29 +1,23 @@
 from tkinter import *
 
-# data dependecies
-# 
 
 class Graph:
     def clear_plot(self):
         self.myCanvas.delete("points")
     
-    @property
-    def session(self):
-        return self.mainWindow.controller.session
-    def update_plot(self):
-        pointsToPlot = self.session.data._score_history
-        self.session.data.update_score_history()
-        numScores = len(self.session.data._score_history)
+    def update_plot(self, score_history):
+        # self.session.data.update_score_history()
+        numScores = len(score_history)
         self.clear_plot()
         if numScores != 0:
             for i in range(0, numScores-1):
-                yCoord = int((1 - (self.session.data._score_history[i])/100) * (self.canvasHeight-50)+20)
+                yCoord = int((1 - (score_history[i])/100) * (self.canvasHeight-50)+20)
                 xCoord = int ((i)/9 * (self.canvasWidth - 45)) + 30
-                nextY = int((1-(self.session.data._score_history[i+1])/100)*(self.canvasHeight-50)+20)
+                nextY = int((1-(score_history[i+1])/100)*(self.canvasHeight-50)+20)
                 nextX = int((i+1)/9*(self.canvasWidth-45))+30
                 self.create_circle(xCoord, yCoord, 4)
                 self.myCanvas.create_line(xCoord, yCoord, nextX, nextY, tag = "points")
-            yCoord = int((1-(self.session.data._score_history[numScores-1])/100) * (self.canvasHeight-50)+20)
+            yCoord = int((1-(score_history[numScores-1])/100) * (self.canvasHeight-50)+20)
             xCoord = int((numScores-1)/9*(self.canvasWidth-45))+30
             self.create_circle(xCoord, yCoord,4)
 

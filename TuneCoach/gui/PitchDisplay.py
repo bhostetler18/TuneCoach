@@ -35,7 +35,7 @@ class PitchDisplay:
         self.light = IndicatorLight(self.rec_frame, 35)
         self.light.pack(anchor='w', side='left')
 
-        self.time_label = Label(self.rec_frame, text='0:00', anchor='e', justify=RIGHT)
+        self.time_label = Label(self.rec_frame, text='00:00', anchor='e', justify=RIGHT)
         self.time_label.pack(side='right')
 
         self.showsHertz = BooleanVar()
@@ -145,7 +145,7 @@ class PitchDisplay:
         display_string = '{:02}:{:02}'.format(minutes, seconds)
         self.time_label.config(text=display_string)
 
-    def update_data(self, hz):
+    def update_data(self, hz, data):
 
         if hz != 0:
             self._clearing = False
@@ -153,7 +153,7 @@ class PitchDisplay:
             pitch_class = midi_to_pitch_class(midi)
             desired_hz = closest_in_tune_frequency(hz)
             cent = cents(desired_hz, hz)
-            name = self.mainWindow.controller.session.data.key_signature.get_display_for(pitch_class)
+            name = data.key_signature.get_display_for(pitch_class)
             self.update_cents(cent)
             self.update_hertz(f"{round(hz)} Hz")
             self.update_octave(f"{get_octave(midi)}")
@@ -169,4 +169,12 @@ class PitchDisplay:
                 self.update_octave('')
                 self.display_current_gui()
 
-        self.set_time(self.mainWindow.controller.session.data.timer.get()) # TODO move timer
+        self.set_time(data.timer.get()) # TODO move timer
+    def clear(self):
+        self._clearing = True
+        if self._centsValue != -50 and time.time() - self._last_time > 1.5:
+            self.update_cents(max(-50, self._centsValue - 3))
+            self.update_pitch('---')
+            self.update_hertz('')
+            self.update_octave('')
+            self.display_current_gui()

@@ -34,10 +34,20 @@ class MainController:
             self.view.after(20, lambda: self.update_history())
 
     def update_pitch(self):
-        self.view.update_pitch(self.audio_manager.peek())
+        self.view.update_pitch(self.audio_manager.peek(), self.session.data)
         if not self.paused:
             self.view.after(10, self.update_pitch)
-        
+    
+    def update_tuner_settings(self, cent_threshold, key_signature, f_note, f_oct, t_note, t_oct):
+        self.session.data.threshold = cent_threshold
+        self.session.data.key_signature = key_signature
+        self.session.data.from_note = f_note
+        self.session.data.from_octave = f_oct
+        self.session.data.to_note = t_note
+        self.session.data.to_octave = t_oct
+        self.view.update_threshold(cent_threshold)
+
+
     def toggle_pause(self):
         if self.audio_manager.is_paused():
             # print("Resuming")
@@ -77,8 +87,8 @@ class MainController:
         self.view.update_session_name(self.session.name)
 
         if not self.session.data.empty:
-            self.update_diagnostics()
-            self.update_history()
+            self.view.update_diagnostics(self.session.data)
+            self.view.update_history(self.session.data)
     
     def reset_everything(self):
         self.force_pause()
