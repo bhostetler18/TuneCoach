@@ -2,21 +2,24 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import TuneCoach.gui as gui
 from TuneCoach.gui.Piano import Piano
+from TuneCoach.gui.constants import *
 
 
 # Different classes for pop-up windows.
 class SessionHistory:
-    def create_circle(self, x, y, r, canvasName, fillColor):  # center coordinates, radius
+    def create_note(self, x, y, r, canvas, fillColor):  # center coordinates, radius
         x0 = x - r
         y0 = y - r
         x1 = x + r
         y1 = y + r
-        return canvasName.create_oval(x0, y0, x1, y1, fill=fillColor, outline="")
+        #return canvas.create_oval(x0, y0, x1, y1, fill=fillColor, outline="")
+        return canvas.create_rectangle(x0, y0, x1, y1, fill=fillColor, outline="")
+        return 
 
     def __init__(self, mainWindow, workingFrame):
         self.mainWindow = mainWindow
         self.frame = workingFrame
-        self.canvas = tk.Canvas(workingFrame, bg="#bdd0df")
+        self.canvas = tk.Canvas(workingFrame, bg=Colors.piano_track, bd=0, highlightthickness=0)
         self.canvas.pack(expand=True, fill=tk.BOTH)
 
         self.display_size = 64
@@ -92,7 +95,7 @@ class SessionHistory:
         }
 
         for note in self.noteDict:
-            self.canvas.create_line(piano_width, self.noteDict[note], width, self.noteDict[note], width=3)
+            self.canvas.create_line(piano_width, self.noteDict[note], width, self.noteDict[note], width=0.5)
 
         self.display_notes(self.current_pos) # redraw the notes the user was currently looking at
 
@@ -124,10 +127,10 @@ class SessionHistory:
                 color = "yellow"
 
             circle = self.circle_list[i]
-            x = self.circle_start + self.circle_size/2 + 2*self.circle_size*i
+            x = self.circle_start + self.circle_size + 2*self.circle_size*i
             y = self.noteDict[note]
             if circle is None:
-                c = self.create_circle(x, y, self.circle_size, self.canvas, color)
+                c = self.create_note(x, y, self.circle_size, self.canvas, color)
                 self.circle_list[i] = c
             else:
                 self.canvas.coords(circle, x - self.circle_size, y - self.circle_size, x + self.circle_size, y + self.circle_size)

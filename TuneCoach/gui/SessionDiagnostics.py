@@ -48,43 +48,40 @@ class SessionDiagnostics:
         currentSession = mainWindow.controller.session.data
         frames_style = ttk.Style()
         frames_style.configure('DiagnosticsFrame.TFrame', background=Colors.aux)
-        topest_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
-        top_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
+        title_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
+        left_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
         right_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
-        middle_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
-        bottom_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
 
-        topest_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
-        top_frame.grid(row=1, column=0, sticky="nsew")
+        title_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
+        left_frame.grid(row=1, column=0, rowspan=3, sticky="nsew")
         right_frame.grid(row=1, column=1, rowspan=3, sticky="nsew")
-        middle_frame.grid(row=2, column=0, sticky="nsew")
-        bottom_frame.grid(row=3, column=0, sticky="nsew")
 
         workingFrame.grid_rowconfigure(0, weight=1)
         workingFrame.grid_rowconfigure(1, weight=1)
         workingFrame.grid_rowconfigure(2, weight=1)
         workingFrame.grid_rowconfigure(3, weight=1)
-        workingFrame.grid_columnconfigure(0, weight=0)
+        workingFrame.grid_columnconfigure(0, weight=1)
         workingFrame.grid_columnconfigure(1, weight=1)
 
-        self.myGraph = Graph(right_frame, 200,200)
+        self.myGraph = Graph(right_frame)
+        self.myGraph.pack(expand=True, anchor=tk.CENTER, fill=tk.BOTH)
         title_label_style = ttk.Style()
         title_label_style.configure("TitleLabel.TLabel", font="Ubuntu 20", side=tk.TOP, foreground=Colors.text, background=Colors.aux)
-        title_label = ttk.Label(topest_frame, text="Session Diagnostics", style="TitleLabel.TLabel")
+        title_label = ttk.Label(title_frame, text="Session Diagnostics", style="TitleLabel.TLabel")
         title_label.pack()
 
         session_name_label_style = ttk.Style()
         session_name_label_style.configure("SessionName.TLabel", font="Ubuntu 16", foreground="light sky blue", background=Colors.aux)
-        self.session_name = ttk.Label(topest_frame, text=mainWindow.controller.session.name, style="SessionName.TLabel")
-        self.session_name.pack(side=tk.BOTTOM)#padx=10, pady=10)
+        self.session_name = ttk.Label(title_frame, text=mainWindow.controller.session.name, style="SessionName.TLabel")
+        self.session_name.pack()#padx=10, pady=10)
 
         v = "Overall Score: N/A"
         c = "You are off by an average of N/A cents"
 
-        self.overallScoreLabel = RoundedLabel(top_frame, v, 150, 60)
+        self.overallScoreLabel = RoundedLabel(left_frame, v, 150, 60)
         self.overallScoreLabel.pack()
 
-        self.overallCentsLabel = RoundedLabel(middle_frame, c, 300, 60)
+        self.overallCentsLabel = RoundedLabel(left_frame, c, 300, 60)
         self.overallCentsLabel.pack()
 
         display_settings = "Settings:\n" \
@@ -92,7 +89,7 @@ class SessionDiagnostics:
                            "Threshold: ±15 cents\n" \
                            "Key Signature: C Major\n" \
                            "Range: C2 to B7"
-        self.settings = RoundedLabel(bottom_frame, display_settings, 200, 125)
+        self.settings = RoundedLabel(left_frame, display_settings, 200, 125)
         self.settings.pack()
 
 
