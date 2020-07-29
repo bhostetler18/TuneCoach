@@ -132,7 +132,6 @@ class MainController:
         
         session = load_session(path)
 
-
         if session is None:
             self.view.error(f'Session located at "{path}" is invalid!', title="Invalid session")
         else:
