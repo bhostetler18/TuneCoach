@@ -153,7 +153,7 @@ class TunerSettingsWindow:
         from_octave_menu.grid(row=1, column=1)
 
         to_text = tk.Label(range_frame2, text="to")
-        to_text.config(bg=background_color, fg="white")
+        to_text.config(bg=Colors.background, fg="white")
         to_text.grid(row=1, column=3)
 
         self.to_note_menu = tk.OptionMenu(range_frame3, self.to_note, *self.major_key_names)
