@@ -6,6 +6,7 @@ class IndicatorLight(tk.Canvas):
 		super().__init__(parent, width=size, height=size)
 		self._parent = parent
 		self.light = self.create_oval(0.15*size, 0.15*size, 0.85*size, 0.85*size, fill='red', width=0, state=tk.HIDDEN)
+		# self._parent.itemconfig(self.light, bg='#f5f6f7')
 		self._isOn = False
 		self._flashing = False
 		self._job = None

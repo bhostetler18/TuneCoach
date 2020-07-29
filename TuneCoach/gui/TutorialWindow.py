@@ -1,8 +1,9 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 from TuneCoach.gui.constants import *
 
 
-class TutorialWindow:
+class TutorialWindow: #TODO: Style Tutorial Window so it's not ugly - Jenny
     def __init__(self, mainWindow):
         tutorial_window = tk.Toplevel(mainWindow.master)
         tutorial_window.geometry()
@@ -28,9 +29,15 @@ class TutorialWindow:
                   "Keyboard Shortcuts:\n" \
                   "------------------------------------------\n" \
                   "Space: Pause or resume the session.\n" \
+                  "n: Create a new session.\n" \
+                  "s: Save the current session (save as if in Temporary Session).\n" \
+                  "F12: Opens the \"Save as\" menu.\n" \
+                  "l: Opens the menu to load an existing session.\n" \
+                  "o: Opens the tuner options and settings window.\n" \
+                  "F1: Opens the tutorial.\n" \
+                  "F2: Opens the Frequently Asked Questions.\n"
 
-
-        tutorial_label = tk.Label(tutorial_window, text=message, font=("Calibri", 12), justify=tk.LEFT)
-        tutorial_label.config(bg=background_color, fg="white")
+        tutorial_label = ttk.Label(tutorial_window, text=message)#, font=("Calibri", 12), justify=tk.LEFT)
+        # tutorial_label.config(bg=background_color, fg="white")
         tutorial_label.pack()
         tutorial_window.lift(mainWindow.master)

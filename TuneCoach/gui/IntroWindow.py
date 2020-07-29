@@ -1,5 +1,6 @@
-from TuneCoach.gui.NewSessionWindow import *
-from TuneCoach.gui.LoadSessionWindow import *
+import tkinter.ttk as ttk
+import tkinter as tk
+from TuneCoach.gui.constants import background_color
 
 
 class IntroWindow:
@@ -7,25 +8,27 @@ class IntroWindow:
     def intro_load_session(mainWindow, oldFrame):
         oldFrame.destroy()
         mainWindow.disable()
-        mainWindow.load_practice_session(ask=False)
+        mainWindow.controller.load_from()
         mainWindow.enable()
 
     @staticmethod
     def intro_new_session(mainWindow, oldFrame):
         oldFrame.destroy()
         mainWindow.disable()
-        mainWindow.new_practice_session(ask=False)
+        mainWindow.controller.new_session()
         mainWindow.enable()
 
     def __init__(self, mainWindow):
         self.master = mainWindow.master
         introWindow = tk.Toplevel(self.master)
-        introWindow.configure(bg=background_color)
-        introWindow.geometry("400x250")
+        # introWindow.configure(bg=background_color)
+        introWindow.geometry("410x250")
 
-        topFrame = tk.Frame(introWindow, bg=background_color)
-        middleFrame = tk.Frame(introWindow, bg=background_color)
-        bottomFrame = tk.Frame(introWindow, bg=background_color)
+        intro_window_style = ttk.Style()
+        intro_window_style.configure("Intro.TFrame")#, background=background_color)
+        topFrame = ttk.Frame(introWindow, style="Intro.TFrame")
+        middleFrame = ttk.Frame(introWindow, style="Intro.TFrame")
+        bottomFrame = ttk.Frame(introWindow, style="Intro.TFrame")
         # bottomRight = tk.Frame(introWindow, bg=background_color)
         # bottomLeft = tk.Frame(introWindow, bg=background_color)
 
@@ -42,8 +45,9 @@ class IntroWindow:
         # introWindow.grid_columnconfigure(1, weight=1)
         # introWindow.grid_columnconfigure(2, weight=1)
 
-        introLabel = tk.Label(topFrame, text="Welcome to Tune Coach!", anchor="e", fg="white", bg=background_color)
-        introLabel.configure(font=("Calibri", 20))
+        intro_label_style = ttk.Style()
+        intro_label_style.configure("IntroTitle.TLabel", font="Ubuntu 24")
+        introLabel = ttk.Label(topFrame, text="Welcome to Tune Coach!", anchor=tk.CENTER, style="IntroTitle.TLabel")#, fg="white", bg=background_color)
         introLabel.pack(side=tk.TOP)
 
         text = "Please create a new session or load a previous session to begin using the application. \n" \
@@ -51,15 +55,17 @@ class IntroWindow:
                "\n" \
                "For more information on using TuneCoach, navigate to the \"Help\" tab and then \"Tutorial\"."
 
-        explainLabel = tk.Label(middleFrame, text=text, wraplength=350, bg=background_color, fg="white")
+        explain_label_style = ttk.Style()
+        explain_label_style.configure("Intro.TLabel", wraplength=375)
+        explainLabel = ttk.Label(middleFrame, text=text, style="Intro.TLabel")# wraplength=350, bg=background_color, fg="white")
         explainLabel.pack()
-        okButton = tk.Button(bottomFrame, text="Ok", command=lambda: introWindow.destroy())
-        okButton.pack(side=tk.RIGHT, padx=20, pady=20)
-        loadButton = tk.Button(bottomFrame, text="Load Session",
+        okButton = ttk.Button(bottomFrame, text="OK", command=lambda: introWindow.destroy())
+        okButton.pack(side=tk.RIGHT, padx=15, pady=20)
+        loadButton = ttk.Button(bottomFrame, text="Load Session",
                                command=lambda: self.intro_load_session(mainWindow, introWindow))
-        loadButton.pack(side=tk.LEFT, padx=20, pady=20)
-        newSession = tk.Button(bottomFrame, text="New Session",
+        loadButton.pack(side=tk.LEFT, padx=15, pady=20)
+        newSession = ttk.Button(bottomFrame, text="New Session",
                                command=lambda: self.intro_new_session(mainWindow, introWindow))
-        newSession.pack(side=tk.LEFT, padx=20, pady=20)
+        newSession.pack(side=tk.LEFT, padx=15, pady=20)
 
         introWindow.lift(self.master)

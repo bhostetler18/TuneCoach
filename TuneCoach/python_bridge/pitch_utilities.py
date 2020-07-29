@@ -1,10 +1,32 @@
 import math
 from enum import Enum
+from dataclasses import dataclass
 
 
 class Accidental(Enum):
-    FLAT = 0
-    SHARP = 1
+    FLAT = "b"
+    SHARP = "#"
+
+
+class KeySignatureType(Enum):
+    MAJOR = "Major"
+    MINOR = "Minor"
+
+
+@dataclass
+class KeySignature:
+    root: str
+    raw_value: int
+    accidental: Accidental
+    ktype: KeySignatureType
+    
+    def get_display_for(self, raw_value):
+        return pitch_class_to_name(raw_value, self.accidental)
+
+    @property
+    def name(self):
+        root_str = self.get_display_for(self.raw_value)
+        return f"{root_str} {self.ktype.value}"
 
 
 def hz_to_midi(hz):
@@ -38,3 +60,9 @@ def cents(target, actual):
 
 def closest_in_tune_frequency(hz):
     return midi_to_hz(hz_to_midi(hz))
+
+
+def note_to_midi(notes, note, octave):
+    base = 12 + notes.index(note)
+    adj = 12 * int(octave)
+    return base + adj
