@@ -34,8 +34,10 @@ class MainController:
             self.view.after(20, lambda: self.update_history())
 
     def update_pitch(self):
+        print(self.view.pitch_display.needs_update())
         self.view.update_pitch(self.audio_manager.peek(), self.session.data)
-        if not self.paused:
+        print(self.view.pitch_display.needs_update())
+        if not self.paused or self.view.pitch_display.needs_update():
             self.view.after(10, self.update_pitch)
     
     def update_tuner_settings(self, cent_threshold, key_signature, f_note, f_oct, t_note, t_oct):

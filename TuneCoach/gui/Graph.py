@@ -27,11 +27,10 @@ class Graph:
         x1 = x + r
         y1 = y + r
         return self.myCanvas.create_oval(x0, y0, x1, y1, tag = "points", fill = "black")
-    def __init__(self, frame, mainWindow, windowWidth, windowHeight):
+    def __init__(self, frame, width, height):
         self.frame = frame
-        self.mainWindow = mainWindow
-        self.canvasHeight = windowHeight/3
-        self.canvasWidth = windowWidth/4
+        self.canvasHeight = width
+        self.canvasWidth = height
         self.myCanvas = Canvas(self.frame, width = self.canvasWidth, height = self.canvasHeight, bg = "white")
         self.myCanvas.pack()
         self.myCanvas.create_line(30, 20,30, self.canvasHeight-30, fill = "black")

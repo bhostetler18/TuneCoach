@@ -1,4 +1,4 @@
-background_color = '#575759'
-
 class Colors:
-	background = '#575759'
+	background = '#2d2d2d'
+	aux = '#585869'
+	text = '#ffffff'

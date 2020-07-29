@@ -11,7 +11,7 @@ class SessionHistory:
         y0 = y - r
         x1 = x + r
         y1 = y + r
-        return canvasName.create_oval(x0, y0, x1, y1, fill=fillColor)
+        return canvasName.create_oval(x0, y0, x1, y1, fill=fillColor, outline="")
 
     def __init__(self, mainWindow, workingFrame):
         self.mainWindow = mainWindow
@@ -22,7 +22,7 @@ class SessionHistory:
         self.display_size = 64
         self.current_pos = 0
 
-        self.scrollbar = ttk.Scrollbar(workingFrame, orient=tk.HORIZONTAL)
+        self.scrollbar = tk.Scrollbar(workingFrame, orient=tk.HORIZONTAL)
         self.scrollbar.pack(side='bottom', fill='x')
         self.scrollbar.config(command=self.scroll)
         self.scrollbar_width = 1
