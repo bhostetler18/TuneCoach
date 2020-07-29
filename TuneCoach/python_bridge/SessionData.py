@@ -54,14 +54,6 @@ class SessionData:
         self._cent_history = []
         self._score_history = []
 
-
-    @staticmethod
-    def get_existing_sessions():
-        session_list = []
-        for file in os.listdir("./user_sessions"):
-            session_list.append(file)
-        return session_list
-
     def get_overall(self):
         if self._overall_count == 0:
             return 0

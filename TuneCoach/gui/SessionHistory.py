@@ -29,19 +29,17 @@ class SessionHistory:
         self.scrollbar.set(1 - self.scrollbar_width, 1)
         self.buffer = []
 
-        self.width = self.frame.winfo_width()
-        self.height = self.frame.winfo_height()
-
         self.aspect_ratio = 580/820
         self.piano = Piano(self.canvas, self.mainWindow, width=50, height=90)
         self.piano.pack(side='bottom', expand=True, fill='y', anchor='w')
 
-        self.available_width = self.width
-        self.circle_size = self.available_width/(self.display_size + 1)
+        self.circle_size = 5
         self.circle_start = 0
         self.circle_list = [None] * self.display_size
 
         self.frame.bind("<Configure>", self.setup)
+        self.canvas.bind("<Configure>", self.setup)
+        self.setup(None)
 
     def scroll(self, *args):
         if args[0] == 'update_width':
@@ -68,43 +66,45 @@ class SessionHistory:
         self.clear()
         self.canvas.delete("all")
 
-        self.width = self.frame.winfo_width()
-        self.height = self.frame.winfo_height() - 10  # Subtract 10 because MainWindow sets bd=5
+        width = self.frame.winfo_width()
+        height = self.canvas.winfo_height() # Don't count the scrollbar
 
-        piano_width = self.height*self.aspect_ratio
+        piano_width = height*self.aspect_ratio
         self.piano.configure(width=piano_width)
             
-        self.available_width = self.width - piano_width
+        available_width = width - piano_width
         self.circle_start = piano_width
-        self.circle_size = 0.5*self.available_width/self.display_size
+        self.circle_size = 0.5*available_width/self.display_size
         
         self.noteDict = {
-            11: self.height / 14,
-            10: self.height / 7,
-            9: self.height / 14 * 3,
-            8: self.height / 7 * 2,
-            7: self.height / 14 * 5,
-            6: self.height / 7 * 3,
-            5: self.height / 14 * 7,
-            4: self.height / 14 * 9,
-            3: self.height / 7 * 5,
-            2: self.height / 14 * 11,
-            1: self.height / 7 * 6,
-            0: self.height / 14 * 13
+            11: height / 14,
+            10: height / 7,
+            9: height / 14 * 3,
+            8: height / 7 * 2,
+            7: height / 14 * 5,
+            6: height / 7 * 3,
+            5: height / 14 * 7,
+            4: height / 14 * 9,
+            3: height / 7 * 5,
+            2: height / 14 * 11,
+            1: height / 7 * 6,
+            0: height / 14 * 13
         }
 
         for note in self.noteDict:
-            self.canvas.create_line(piano_width, self.noteDict[note], self.width, self.noteDict[note], width=3)
+            self.canvas.create_line(piano_width, self.noteDict[note], width, self.noteDict[note], width=3)
 
         self.display_notes(self.current_pos) # redraw the notes the user was currently looking at
 
     def update(self, data):
-        recent = data.display_buffer
-        self.buffer.append(recent[-1]) # TODO: use note_history, replace note names with integral values, remove buffer
-        self.scroll('update_width', 1 / max(1, len(self.buffer) / self.display_size))
-        pitch_errors = [(100.0 * data._in_tune_count[i]) / (data._pitch_count[i] if data._pitch_count[i] != 0 else 1) for i in range(0,12)]
-        self.piano.set_scores(pitch_errors, data)
-        self.display_recent_notes()
+        if len(data.display_buffer) > 0:
+            recent = data.display_buffer[-1] #TODO: this could miss events
+            self.buffer.append(recent) # TODO: use note_history, replace note names with integral values, remove buffer
+            if len(self.buffer) % 10 == 0:
+                self.scroll('update_width', 1 / max(1, len(self.buffer) / self.display_size))
+            pitch_errors = [(100.0 * data._in_tune_count[i]) / (data._pitch_count[i] if data._pitch_count[i] != 0 else 1) for i in range(0,12)]
+            self.piano.set_scores(pitch_errors, data)
+            self.display_recent_notes()
 
     def display_recent_notes(self):
         self.display_notes(max(0, len(self.buffer) - self.display_size))
