@@ -1,6 +1,6 @@
 import tkinter.ttk as ttk
 import tkinter as tk
-from TuneCoach.gui.constants import background_color
+from TuneCoach.gui.constants import Colors
 
 
 class IntroWindow:

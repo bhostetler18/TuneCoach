@@ -1,9 +1,10 @@
 import tkinter as tk
+from TuneCoach.gui.constants import *
 
 
 class IndicatorLight(tk.Canvas):
 	def __init__(self, parent, size=20):
-		super().__init__(parent, width=size, height=size)
+		super().__init__(parent, width=size, height=size, bg=Colors.background, bd=0, highlightthickness=0)
 		self._parent = parent
 		self.light = self.create_oval(0.15*size, 0.15*size, 0.85*size, 0.85*size, fill='red', width=0, state=tk.HIDDEN)
 		# self._parent.itemconfig(self.light, bg='#f5f6f7')

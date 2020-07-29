@@ -15,7 +15,7 @@ class TunerSettingsWindow:
             from_midi = note_to_midi(self.major_key_names, f_note, f_oct)
             to_midi = note_to_midi(self.major_key_names, t_note, t_oct)
         if from_midi >= to_midi:
-            error_frame = tk.Frame(window, bd=5, bg=background_color)
+            error_frame = tk.Frame(window, bd=5, bg=Colors.background)
             error_frame.grid(row=4, column=0, columnspan=3, sticky="nsew")
             error_label = tk.Label(error_frame, text="Invalid Note Range!")
             error_label.config(bg=background_color, fg="red", font=(None, 12))
@@ -96,19 +96,19 @@ class TunerSettingsWindow:
         v.set(data.threshold)
 
         cent_scale = tk.Scale(middle_frame2, from_=1, to=25, orient=tk.HORIZONTAL, variable=v)
-        cent_scale.config(bg=background_color, fg="white")
+        cent_scale.config(bg=Colors.background, fg="white")
         cent_scale.pack()
 
         in_cents = tk.Label(middle_frame3, text="cents")
-        in_cents.config(bg=background_color, fg="white")
+        in_cents.config(bg=Colors.background, fg="white")
         in_cents.pack()
 
         sig_label = tk.Label(bottom_frame1, text="Key Signature")
-        sig_label.config(bg=background_color, fg="white")
+        sig_label.config(bg=Colors.background, fg="white")
         sig_label.pack()
 
         range_label = tk.Label(range_frame1, text="Note Range")
-        range_label.config(bg=background_color, fg="white")
+        range_label.config(bg=Colors.background, fg="white")
         range_label.pack()
 
         self.major_key_names = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
@@ -153,7 +153,7 @@ class TunerSettingsWindow:
         from_octave_menu.grid(row=1, column=1)
 
         to_text = tk.Label(range_frame2, text="to")
-        to_text.config(bg=background_color, fg="white")
+        to_text.config(bg=Colors.background, fg="white")
         to_text.grid(row=1, column=3)
 
         self.to_note_menu = tk.OptionMenu(range_frame3, self.to_note, *self.major_key_names)
