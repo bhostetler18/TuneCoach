@@ -33,7 +33,7 @@ class SessionHistory:
         self.height = self.frame.winfo_height()
 
         self.aspect_ratio = 580/820
-        self.piano = Piano(self.canvas, width=50, height=90)
+        self.piano = Piano(self.canvas, self.mainWindow, width=50, height=90)
         self.piano.pack(side='bottom', expand=True, fill='y', anchor='w')
 
         self.available_width = self.width
@@ -47,7 +47,7 @@ class SessionHistory:
         if args[0] == 'update_width':
             self.scrollbar_width = args[1]
             self.scrollbar.set(1 - self.scrollbar_width, 1)
-        if not self.mainWindow.paused:
+        if not self.mainWindow.controller.paused:
             # TODO: change color to indicate the user can't scroll
             return
 
@@ -79,18 +79,18 @@ class SessionHistory:
         self.circle_size = 0.5*self.available_width/self.display_size
         
         self.noteDict = {
-            "B": self.height / 14,
-            "A#": self.height / 7,
-            "A": self.height / 14 * 3,
-            "G#": self.height / 7 * 2,
-            "G": self.height / 14 * 5,
-            "F#": self.height / 7 * 3,
-            "F": self.height / 14 * 7,
-            "E": self.height / 14 * 9,
-            "D#": self.height / 7 * 5,
-            "D": self.height / 14 * 11,
-            "C#": self.height / 7 * 6,
-            "C": self.height / 14 * 13
+            11: self.height / 14,
+            10: self.height / 7,
+            9: self.height / 14 * 3,
+            8: self.height / 7 * 2,
+            7: self.height / 14 * 5,
+            6: self.height / 7 * 3,
+            5: self.height / 14 * 7,
+            4: self.height / 14 * 9,
+            3: self.height / 7 * 5,
+            2: self.height / 14 * 11,
+            1: self.height / 7 * 6,
+            0: self.height / 14 * 13
         }
 
         for note in self.noteDict:
@@ -98,15 +98,13 @@ class SessionHistory:
 
         self.display_notes(self.current_pos) # redraw the notes the user was currently looking at
 
-    def update(self, data, force=False):
-        if data is not None and (force or data.has_new_data):
-            data.has_new_data = False
-            recent = data.display_buffer
-            self.buffer.append(recent[-1]) # TODO: use note_history, replace note names with integral values, remove buffer
-            self.scroll('update_width', 1 / max(1, len(self.buffer) / self.display_size))
-            pitch_errors = [(100.0 * data._in_tune_count[i]) / (data._pitch_count[i] if data._pitch_count[i] != 0 else 1) for i in range(0,12)]
-            self.piano.set_scores(pitch_errors)
-            self.display_recent_notes()
+    def update(self, data):
+        recent = data.display_buffer
+        self.buffer.append(recent[-1]) # TODO: use note_history, replace note names with integral values, remove buffer
+        self.scroll('update_width', 1 / max(1, len(self.buffer) / self.display_size))
+        pitch_errors = [(100.0 * data._in_tune_count[i]) / (data._pitch_count[i] if data._pitch_count[i] != 0 else 1) for i in range(0,12)]
+        self.piano.set_scores(pitch_errors, data)
+        self.display_recent_notes()
 
     def display_recent_notes(self):
         self.display_notes(max(0, len(self.buffer) - self.display_size))
@@ -120,9 +118,9 @@ class SessionHistory:
         notes = self.buffer[pos : pos + self.display_size]
         for i, (note, cents) in enumerate(notes):
             color = "red"
-            if abs(cents) <= self.mainWindow.threshold:
+            if abs(cents) <= self.mainWindow.controller.threshold:
                 color = "green"
-            elif abs(cents) <= self.mainWindow.yellow_threshold:
+            elif abs(cents) <= self.mainWindow.controller.yellow_threshold:
                 color = "yellow"
 
             circle = self.circle_list[i]

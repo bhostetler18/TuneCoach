@@ -29,7 +29,13 @@ class TutorialWindow: #TODO: Style Tutorial Window so it's not ugly - Jenny
                   "Keyboard Shortcuts:\n" \
                   "------------------------------------------\n" \
                   "Space: Pause or resume the session.\n" \
-
+                  "n: Create a new session.\n" \
+                  "s: Save the current session (save as if in Temporary Session).\n" \
+                  "F12: Opens the \"Save as\" menu.\n" \
+                  "l: Opens the menu to load an existing session.\n" \
+                  "o: Opens the tuner options and settings window.\n" \
+                  "F1: Opens the tutorial.\n" \
+                  "F2: Opens the Frequently Asked Questions.\n"
 
         tutorial_label = ttk.Label(tutorial_window, text=message)#, font=("Calibri", 12), justify=tk.LEFT)
         # tutorial_label.config(bg=background_color, fg="white")
