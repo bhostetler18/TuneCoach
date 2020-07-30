@@ -43,6 +43,10 @@ class PitchDisplay:
 
         style = ttk.Style()
         style.configure("Pitch.TCheckbutton", background=Colors.background, foreground=Colors.text)
+        style.map('Pitch.TCheckbutton',
+        foreground=[('active', Colors.text)],
+        background=[('pressed', '!focus', '#232323'),
+                    ('active', Colors.aux)])
         c = ttk.Checkbutton(self.canvas, text="Show Hertz", variable=self.showsHertz, takefocus=False, command=self.display_default_gui, style="Pitch.TCheckbutton")
         c.pack(anchor='e', side='bottom')
 
@@ -152,16 +156,17 @@ class PitchDisplay:
         if hz != 0:
             self._clearing = False
             midi = hz_to_midi(hz)
-            pitch_class = midi_to_pitch_class(midi)
-            desired_hz = closest_in_tune_frequency(hz)
-            cent = cents(desired_hz, hz)
-            name = data.key_signature.get_display_for(pitch_class)
-            self.update_cents(cent)
-            self.update_hertz(f"{round(hz)} Hz")
-            self.update_octave(f"{get_octave(midi)}")
-            self.update_pitch(name)
-            self.display_current_gui()
-            self._last_time = time.time()
+            if data.midi_range[0] <= midi <= data.midi_range[1]:
+                pitch_class = midi_to_pitch_class(midi)
+                desired_hz = closest_in_tune_frequency(hz)
+                cent = cents(desired_hz, hz)
+                name = data.key_signature.get_display_for(pitch_class)
+                self.update_cents(cent)
+                self.update_hertz(f"{round(hz)} Hz")
+                self.update_octave(f"{get_octave(midi)}")
+                self.update_pitch(name)
+                self.display_current_gui()
+                self._last_time = time.time()
         else:
             self.clear()
 
@@ -175,7 +180,7 @@ class PitchDisplay:
             self.update_hertz('')
             self.update_octave('')
             self.display_current_gui()
-        else:
+        elif self._centsValue == -50: # clearing animation has finished
             self._clearing = False
 
     def needs_update(self):

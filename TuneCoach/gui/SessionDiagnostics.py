@@ -30,7 +30,10 @@ class SessionDiagnostics:
                                "-------------------\n" \
                                "Threshold: ±%d cents\n" \
                                "Key Signature: %s\n" \
-                               "Range: %s%s to %s%s" % (data.threshold, data.key_signature.name, data.from_note, data.from_octave, data.to_note, data.to_octave)
+                               "Range: %s%s to %s%s" % (data.green_thresh, data.key_signature.name, data.lowest_note, 
+                                                                                                    data.lowest_octave, 
+                                                                                                    data.highest_note, 
+                                                                                                    data.highest_octave)
             self.settings.set_text(display_settings)
 
             data.update_score_history()
@@ -56,7 +59,7 @@ class SessionDiagnostics:
         left_frame.grid(row=1, column=0, rowspan=3, sticky="nsew")
         right_frame.grid(row=1, column=1, rowspan=3, sticky="nsew")
 
-        workingFrame.grid_rowconfigure(0, weight=1)
+        workingFrame.grid_rowconfigure(0, weight=0)
         workingFrame.grid_rowconfigure(1, weight=1)
         workingFrame.grid_rowconfigure(2, weight=1)
         workingFrame.grid_rowconfigure(3, weight=1)

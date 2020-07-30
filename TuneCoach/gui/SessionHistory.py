@@ -14,7 +14,6 @@ class SessionHistory:
         y1 = y + r
         #return canvas.create_oval(x0, y0, x1, y1, fill=fillColor, outline="")
         return canvas.create_rectangle(x0, y0, x1, y1, fill=fillColor, outline="")
-        return 
 
     def __init__(self, mainWindow, workingFrame):
         self.mainWindow = mainWindow
@@ -28,6 +27,7 @@ class SessionHistory:
         self.scrollbar = tk.Scrollbar(workingFrame, orient=tk.HORIZONTAL)
         self.scrollbar.pack(side='bottom', fill='x')
         self.scrollbar.config(command=self.scroll)
+        self.scrollbar.config(bg=Colors.aux, activebackground="darkgrey")
         self.scrollbar_width = 1
         self.scrollbar.set(1 - self.scrollbar_width, 1)
         self.buffer = []
@@ -43,6 +43,7 @@ class SessionHistory:
         self.frame.bind("<Configure>", self.setup)
         self.canvas.bind("<Configure>", self.setup)
         self.setup(None)
+        self.pause_scrollbar()
 
     def scroll(self, *args):
         if args[0] == 'update_width':
@@ -56,7 +57,7 @@ class SessionHistory:
             offset = max(0, min(float(args[1]), 1 - self.scrollbar_width))
             self.scrollbar.set(offset, offset + self.scrollbar_width)
             self.display_notes(int(len(self.buffer) * offset))
-        elif args[0] == 'scroll':
+        elif args[0] == 'scroll' and len(self.buffer) > 0:
             amount = int(args[1])
             if args[2] == 'pages':
                 self.display_notes(self.current_pos + int(0.5*self.display_size*amount))
@@ -103,10 +104,9 @@ class SessionHistory:
         if len(data.display_buffer) > 0:
             recent = data.display_buffer[-1] #TODO: this could miss events
             self.buffer.append(recent) # TODO: use note_history, replace note names with integral values, remove buffer
-            if len(self.buffer) % 10 == 0:
-                self.scroll('update_width', 1 / max(1, len(self.buffer) / self.display_size))
+            self.scroll('update_width', 1 / max(1, len(self.buffer) / self.display_size))
             pitch_errors = [(100.0 * data._in_tune_count[i]) / (data._pitch_count[i] if data._pitch_count[i] != 0 else 1) for i in range(0,12)]
-            self.piano.set_scores(pitch_errors, data)
+            self.piano.set_scores(pitch_errors, data.key_signature)
             self.display_recent_notes()
 
     def display_recent_notes(self):
@@ -140,3 +140,12 @@ class SessionHistory:
         for circle in self.circle_list:
             self.canvas.delete(circle)
         self.circle_list = [None] * self.display_size
+
+    def pause_scrollbar(self):
+        self.scrollbar.pack(side='bottom', fill='x')
+
+    def resume_scrollbar(self):
+        self.scrollbar.pack_forget()
+        self.display_recent_notes()
+
+
