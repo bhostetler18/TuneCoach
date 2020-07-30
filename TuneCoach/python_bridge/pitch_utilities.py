@@ -13,6 +13,28 @@ class KeySignatureType(Enum):
     MAJOR = "Major"
     MINOR = "Minor"
 
+class Notes:
+    FLAT_NOTES = ["C", "D♭", "D", "E♭", "E", "F", "G♭", "G", "A♭", "A", "B♭", "B"]
+    SHARP_NOTES = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"]
+    NOTE_DICT = {
+        "C": 0,
+        "C♯": 1,
+        "D♭": 1,
+        "D": 2,
+        "D♯": 2, 
+        "E♭": 3, 
+        "E": 4, 
+        "F": 5,
+        "F♯": 6, 
+        "G♭": 6, 
+        "G": 7,
+        "G♯": 8, 
+        "A♭": 8, 
+        "A": 9, 
+        "A♯": 10,
+        "B♭": 10,
+        "B": 11
+    }
 
 @dataclass
 class KeySignature:
@@ -61,16 +83,14 @@ def midi_to_pitch_class(midi):
 def get_octave(midi):
     return int(midi/12) - 1
 
+def pitch_with_octave(pitch_class, octave):
+    return 12 * (octave + 1) + pitch_class
 
 def pitch_class_to_name(pitch, acc):
-    flat = ["C", "D♭", "D", "E♭", "E", "F", "G♭", "G", "A♭", "A", "B♭", "B"]
-    sharp = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"]
-
     if acc == Accidental.FLAT:
-        return flat[pitch]
+        return Notes.FLAT_NOTES[pitch]
     elif acc == Accidental.SHARP:
-        return sharp[pitch]
-
+        return Notes.SHARP_NOTES[pitch]
 
 def cents(target, actual):
     return 1200.0 * math.log(actual/target, 2)
@@ -80,7 +100,5 @@ def closest_in_tune_frequency(hz):
     return midi_to_hz(hz_to_midi(hz))
 
 
-def note_to_midi(notes, note, octave):
-    base = 12 + notes.index(note)
-    adj = 12 * int(octave)
-    return base + adj
+def string_to_pitch_class(string):
+    return Notes.NOTE_DICT.get(string, 0) #TODO: more robust error handling
