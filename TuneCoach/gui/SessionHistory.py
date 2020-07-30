@@ -14,7 +14,6 @@ class SessionHistory:
         y1 = y + r
         #return canvas.create_oval(x0, y0, x1, y1, fill=fillColor, outline="")
         return canvas.create_rectangle(x0, y0, x1, y1, fill=fillColor, outline="")
-        return 
 
     def __init__(self, mainWindow, workingFrame):
         self.mainWindow = mainWindow
@@ -43,6 +42,7 @@ class SessionHistory:
         self.frame.bind("<Configure>", self.setup)
         self.canvas.bind("<Configure>", self.setup)
         self.setup(None)
+        self.pause_scrollbar()
 
     def scroll(self, *args):
         if args[0] == 'update_width':
@@ -56,7 +56,7 @@ class SessionHistory:
             offset = max(0, min(float(args[1]), 1 - self.scrollbar_width))
             self.scrollbar.set(offset, offset + self.scrollbar_width)
             self.display_notes(int(len(self.buffer) * offset))
-        elif args[0] == 'scroll':
+        elif args[0] == 'scroll' and len(self.buffer) > 0:
             amount = int(args[1])
             if args[2] == 'pages':
                 self.display_notes(self.current_pos + int(0.5*self.display_size*amount))
@@ -140,3 +140,11 @@ class SessionHistory:
         for circle in self.circle_list:
             self.canvas.delete(circle)
         self.circle_list = [None] * self.display_size
+
+    def pause_scrollbar(self):
+        self.scrollbar.config(bg=Colors.aux, activebackground="darkgrey")
+
+    def resume_scrollbar(self):
+        self.scrollbar.config(bg="lightgray", activebackground="lightgray")
+
+

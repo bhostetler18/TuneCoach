@@ -179,9 +179,11 @@ class MainWindow:
 
     def pause(self):
         self.pitch_display.pause()
+        self.history.pause_scrollbar()
 
     def resume(self):
         self.pitch_display.resume()
+        self.history.resume_scrollbar()
 
     def error(self, msg, title="Error!"):
         tk.messagebox.showerror(title, msg)

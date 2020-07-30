@@ -56,7 +56,7 @@ class SessionDiagnostics:
         left_frame.grid(row=1, column=0, rowspan=3, sticky="nsew")
         right_frame.grid(row=1, column=1, rowspan=3, sticky="nsew")
 
-        workingFrame.grid_rowconfigure(0, weight=1)
+        workingFrame.grid_rowconfigure(0, weight=0)
         workingFrame.grid_rowconfigure(1, weight=1)
         workingFrame.grid_rowconfigure(2, weight=1)
         workingFrame.grid_rowconfigure(3, weight=1)
