@@ -27,6 +27,7 @@ class SessionHistory:
         self.scrollbar = tk.Scrollbar(workingFrame, orient=tk.HORIZONTAL)
         self.scrollbar.pack(side='bottom', fill='x')
         self.scrollbar.config(command=self.scroll)
+        self.scrollbar.config(bg=Colors.aux, activebackground="darkgrey")
         self.scrollbar_width = 1
         self.scrollbar.set(1 - self.scrollbar_width, 1)
 
@@ -138,9 +139,10 @@ class SessionHistory:
         self.circle_list = [None] * self.display_size
 
     def pause_scrollbar(self):
-        self.scrollbar.config(bg=Colors.aux, activebackground="darkgrey")
+        self.scrollbar.pack(side='bottom', fill='x')
 
     def resume_scrollbar(self):
-        self.scrollbar.config(bg="lightgray", activebackground="lightgray")
+        self.scrollbar.pack_forget()
+        self.display_recent_notes()
 
 
