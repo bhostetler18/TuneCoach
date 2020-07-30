@@ -15,24 +15,17 @@ class TunerSettingsWindow:
             from_midi = note_to_midi(self.major_key_names, f_note, f_oct)
             to_midi = note_to_midi(self.major_key_names, t_note, t_oct)
         if from_midi >= to_midi:
-            error_frame = tk.Frame(window, bd=5, bg=background_color)
+            error_frame = tk.Frame(window, bd=5, bg=Colors.background)
             error_frame.grid(row=4, column=0, columnspan=3, sticky="nsew")
             error_label = tk.Label(error_frame, text="Invalid Note Range!")
-            error_label.config(bg=background_color, fg="red", font=(None, 12))
+            error_label.config(bg=Colors.background, fg="red", font=(None, 12))
             error_label.pack()
         else:
             self.update_tuner_settings(new_cents, self.current_key_signature, f_note, f_oct, t_note, t_oct, window)
 
     def update_tuner_settings(self, cent_threshold, key_signature, f_note, f_oct, t_note, t_oct, oldSettingsView):
-        self.mainWindow.threshold = cent_threshold
-        self.mainWindow.pitch_display.set_threshold(cent_threshold)
-        self.mainWindow.controller.session.data.threshold = cent_threshold
-        self.mainWindow.controller.session.data.key_signature = key_signature
-        self.mainWindow.controller.session.data.from_note = f_note
-        self.mainWindow.controller.session.data.from_octave = f_oct
-        self.mainWindow.controller.session.data.to_note = t_note
-        self.mainWindow.controller.session.data.to_octave = t_oct
 
+        self.mainWindow.controller.update_tuner_settings(cent_threshold, key_signature, f_note, f_oct, t_note, t_oct)
         oldSettingsView.destroy()
 
     def __init__(self, mainWindow):
@@ -43,17 +36,25 @@ class TunerSettingsWindow:
 
         tuner_settings_window.grid()
 
-        top_frame = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
-        middle_frame1 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
-        middle_frame2 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
-        middle_frame3 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
-        bottom_frame1 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
-        bottom_frame2 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
-        bottom_frame3 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
-        range_frame1 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
-        range_frame2 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
-        range_frame3 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
-        done_frame = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
+        top_frame = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        middle_frame1 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        middle_frame2 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        middle_frame3 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        # bottom_frame = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
+        # bottom_frame1 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
+        # bottom_frame2 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
+        bottomest_frame = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        # top_frame = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
+        # middle_frame1 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
+        # middle_frame2 = tk.Frame(tuner_settings_window, bd=5, bg=background_color)
+        #middle_frame3 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        bottom_frame1 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        bottom_frame2 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        bottom_frame3 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        range_frame1 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        range_frame2 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        range_frame3 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        done_frame = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
 
         # putting the frames into a grid layout
         top_frame.grid(row=0, column=0, columnspan=3, sticky="nsew")
@@ -78,31 +79,36 @@ class TunerSettingsWindow:
         tuner_settings_window.grid_columnconfigure(1, weight=1)
         tuner_settings_window.grid_columnconfigure(2, weight=1)
 
-        tuner_label = tk.Label(top_frame, text="Tuner Settings", font=("Calibri", 20))
-        tuner_label.config(bg=background_color, fg="white")
+        tuner_label = ttk.Label(top_frame, text="Tuner Settings")#, font=("Calibri", 20))
+        # tuner_label.config(bg=background_color, fg="white")
         tuner_label.pack()
 
-        centsitivity = tk.Label(middle_frame1, text="Margin of Acceptable Pitch Error +- ")
-        centsitivity.config(bg=background_color, fg="white")
+
+        centsitivity = ttk.Label(middle_frame1, text="Margin of Acceptable Pitch Error +- ")
+        # centsitivity.config(bg=background_color, fg="white")
+
+        # centsitivity = tk.Label(middle_frame1, text="Margin of Acceptable Pitch Error +- ")
+        # centsitivity.config(bg=background_color, fg="white")
+
         centsitivity.pack()
 
         v = tk.DoubleVar()
-        v.set(data.threshold)
+        v.set(data.green_thresh)
 
         cent_scale = tk.Scale(middle_frame2, from_=1, to=25, orient=tk.HORIZONTAL, variable=v)
-        cent_scale.config(bg=background_color, fg="white")
+        cent_scale.config(bg=Colors.background, fg="white")
         cent_scale.pack()
 
         in_cents = tk.Label(middle_frame3, text="cents")
-        in_cents.config(bg=background_color, fg="white")
+        in_cents.config(bg=Colors.background, fg="white")
         in_cents.pack()
 
         sig_label = tk.Label(bottom_frame1, text="Key Signature")
-        sig_label.config(bg=background_color, fg="white")
+        sig_label.config(bg=Colors.background, fg="white")
         sig_label.pack()
 
         range_label = tk.Label(range_frame1, text="Note Range")
-        range_label.config(bg=background_color, fg="white")
+        range_label.config(bg=Colors.background, fg="white")
         range_label.pack()
 
         self.major_key_names = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
@@ -147,7 +153,7 @@ class TunerSettingsWindow:
         from_octave_menu.grid(row=1, column=1)
 
         to_text = tk.Label(range_frame2, text="to")
-        to_text.config(bg=background_color, fg="white")
+        to_text.config(bg=Colors.background, fg="white")
         to_text.grid(row=1, column=3)
 
         self.to_note_menu = tk.OptionMenu(range_frame3, self.to_note, *self.major_key_names)

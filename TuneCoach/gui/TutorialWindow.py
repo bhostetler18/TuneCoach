@@ -1,8 +1,9 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 from TuneCoach.gui.constants import *
 
 
-class TutorialWindow:
+class TutorialWindow: #TODO: Style Tutorial Window so it's not ugly - Jenny
     def __init__(self, mainWindow):
         tutorial_window = tk.Toplevel(mainWindow.master)
         tutorial_window.geometry()
@@ -36,7 +37,7 @@ class TutorialWindow:
                   "F1: Opens the tutorial.\n" \
                   "F2: Opens the Frequently Asked Questions.\n"
 
-        tutorial_label = tk.Label(tutorial_window, text=message, font=("Calibri", 12), justify=tk.LEFT)
-        tutorial_label.config(bg=background_color, fg="white")
+        tutorial_label = ttk.Label(tutorial_window, text=message)#, font=("Calibri", 12), justify=tk.LEFT)
+        # tutorial_label.config(bg=background_color, fg="white")
         tutorial_label.pack()
         tutorial_window.lift(mainWindow.master)

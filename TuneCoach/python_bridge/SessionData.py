@@ -25,16 +25,16 @@ def load_from_file(path):
 
 
 class SessionData:
-    def __init__(self, cent_range):
+    def __init__(self, green_thresh, yellow_thresh):
         self._in_tune_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self._pitch_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self._freq_history = []
         self._cents = 0.0
         self._overall = 0
         self._overall_count = 0
-        self.threshold = cent_range
+        self.green_thresh = green_thresh
+        self.yellow_thresh = yellow_thresh
         self._timestamp = datetime.date.today()
-        self._recent_notes = collections.deque([])
         self.display_buffer = collections.deque([])
         self.has_new_data = False
 
@@ -49,18 +49,7 @@ class SessionData:
         self.timer.start()
         self.timer.pause()
 
-        # Potential data storage
-        self._note_history = []
-        self._cent_history = []
         self._score_history = []
-
-
-    @staticmethod
-    def get_existing_sessions():
-        session_list = []
-        for file in os.listdir("./user_sessions"):
-            session_list.append(file)
-        return session_list
 
     def get_overall(self):
         if self._overall_count == 0:
@@ -76,6 +65,9 @@ class SessionData:
             return self._cents / self._overall_count
 
     @property
+    def score_history(self): return self._score_history
+
+    @property
     def empty(self):
         return self._overall_count == 0
     
@@ -85,6 +77,10 @@ class SessionData:
         if len(self._score_history) > 10:
                 self._score_history.pop(0)
 
+    def set_thresholds(self, green_thresh, yellow_thresh):
+        self.green_thresh = green_thresh
+        self.yellow_thresh = yellow_thresh
+
     # Takes in frequency and calculates and stores all data
     def collect_data(self, hz):
         self.has_new_data = True
@@ -93,12 +89,17 @@ class SessionData:
         index = midi_to_pitch_class(midi)
         desired_hz = closest_in_tune_frequency(hz)
         cent = cents(desired_hz, hz)
-        octave = 2 + math.floor(math.log2(desired_hz / 65.4))
+        octave = get_octave(midi)
 
         # Gets counts of everything to calculate accuracy
-        if abs(cent) <= self.threshold:
+        if abs(cent) <= self.green_thresh:
             self._in_tune_count[index] += 1
             self._overall += 1
+        elif abs(cent) <= self.yellow_thresh:
+            weight = 0.5 # TODO: scale by cent value?
+            self._in_tune_count[index] += weight
+            self._overall += weight
+
         self._pitch_count[index] += 1
         self._overall_count += 1
         self._cents += abs(cent)
@@ -106,12 +107,4 @@ class SessionData:
         self.display_buffer.append((index, cent))
         if len(self.display_buffer) > 64:
             self.display_buffer.popleft()
-
-        # Only inserts a note if it's different than the last
-        if len(self._recent_notes) == 0 or index != self._recent_notes[-1]:
-            self._recent_notes.append(index)
-
-        # If deque is full, pop
-        if len(self._recent_notes) > 8:
-            self._recent_notes.popleft()
 
