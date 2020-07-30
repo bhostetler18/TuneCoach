@@ -8,7 +8,7 @@ PitchDetector::PitchDetector(int sample_rate, int buffer_size, double lowest_fre
     this->nsdf_size = hertz_to_lag(lowest_freq, sample_rate);
     this->nsdf = new float[nsdf_size]; //allocate memory for nsdf results to avoid constant reallocation
     this->hz_min = lowest_freq;
-    this->hz_max = 2093.0; //default for now
+    this->hz_max = 4000.0; //default for now (slightly sharp B7)
 }
 
 double PitchDetector::get_frequency(float *buffer)

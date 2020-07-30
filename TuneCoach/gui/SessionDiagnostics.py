@@ -16,12 +16,15 @@ class SessionDiagnostics:
                                    "-------------------\n" \
                                "Threshold: ±%d cents\n" \
                                "Key Signature: %s\n" \
-                               "Range: %s%s to %s%s" % (data.threshold, data.key_signature.name, data.from_note, data.from_octave, data.to_note, data.to_octave)
-            updated_disply_text = "Overall Score: %.2f" % data.get_overall() + '\n'\
+                               "Range: %s%s to %s%s" % (data.green_thresh, data.key_signature.name, data.lowest_note, 
+                                                                                                    data.lowest_octave, 
+                                                                                                    data.highest_note, 
+                                                                                                    data.highest_octave)
+            updated_display_text = "Overall Score: %.2f" % data.get_overall() + '\n'\
                 + "You are off by an average of %.2f cents." % data.avg_cents + '\n' \
                 + display_settings
 
-            self.summary.set_text(updated_disply_text)
+            self.summary.set_text(updated_display_text)
             data.update_score_history()
 
     def __init__(self, mainWindow):
@@ -38,7 +41,7 @@ class SessionDiagnostics:
         left_frame.grid(row=1, column=0, rowspan=3, sticky="nsew")
         right_frame.grid(row=1, column=1, rowspan=3, sticky="nsew")
 
-        workingFrame.grid_rowconfigure(0, weight=1)
+        workingFrame.grid_rowconfigure(0, weight=0)
         workingFrame.grid_rowconfigure(1, weight=1)
         workingFrame.grid_rowconfigure(2, weight=1)
         workingFrame.grid_rowconfigure(3, weight=1)
