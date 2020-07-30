@@ -18,7 +18,7 @@ class TunerSettingsWindow:
             error_frame = tk.Frame(window, bd=5, bg=Colors.background)
             error_frame.grid(row=4, column=0, columnspan=3, sticky="nsew")
             error_label = tk.Label(error_frame, text="Invalid Note Range!")
-            error_label.config(bg=background_color, fg="red", font=(None, 12))
+            error_label.config(bg=Colors.background, fg="red", font=(None, 12))
             error_label.pack()
         else:
             self.update_tuner_settings(new_cents, self.current_key_signature, f_note, f_oct, t_note, t_oct, window)
