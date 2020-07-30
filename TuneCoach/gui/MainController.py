@@ -4,11 +4,10 @@ from TuneCoach.gui.Session import Session, load_session, save_session
 class MainController:
     def __init__(self, view):
         self.view = view
-        self.threshold = None
-        self.session = Session(SessionData(15), None)
-        self.audio_manager = AudioManager(self.session.data)
         self.threshold = 15
         self.yellow_threshold = 35
+        self.session = Session(SessionData(self.threshold, self.yellow_threshold), None)
+        self.audio_manager = AudioManager(self.session.data)
         self.paused = True
         self.should_save = False
     
@@ -42,7 +41,8 @@ class MainController:
             self.view.after(10, self.update_pitch)
     
     def update_tuner_settings(self, cent_threshold, key_signature, f_note, f_oct, t_note, t_oct):
-        self.session.data.threshold = cent_threshold
+        self.threshold = cent_threshold
+        self.session.data.set_thresholds(cent_threshold, self.yellow_threshold)
         self.session.data.key_signature = key_signature
         self.session.data.from_note = f_note
         self.session.data.from_octave = f_oct
@@ -130,7 +130,7 @@ class MainController:
     def new_session(self):
         if self.should_save:
             self.save()
-        data = SessionData(self.threshold)
+        data = SessionData(self.threshold, self.yellow_threshold)
         self.session = Session(data)
         self.setup_session()
 

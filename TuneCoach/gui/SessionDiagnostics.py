@@ -30,7 +30,7 @@ class SessionDiagnostics:
                                "-------------------\n" \
                                "Threshold: ±%d cents\n" \
                                "Key Signature: %s\n" \
-                               "Range: %s%s to %s%s" % (data.threshold, data.key_signature.name, data.from_note, data.from_octave, data.to_note, data.to_octave)
+                               "Range: %s%s to %s%s" % (data.green_thresh, data.key_signature.name, data.from_note, data.from_octave, data.to_note, data.to_octave)
             self.settings.set_text(display_settings)
 
             data.update_score_history()
