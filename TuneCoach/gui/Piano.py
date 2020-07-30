@@ -1,5 +1,5 @@
 import tkinter as tk
-from TuneCoach.python_bridge.pitch_utilities import Accidental
+from TuneCoach.python_bridge.pitch_utilities import *
 
 # set_score uses session.data.key_signature.accidental
 class Piano(tk.Canvas):
@@ -12,8 +12,8 @@ class Piano(tk.Canvas):
         self.configure(highlightthickness=0)
         self.bind("<Configure>", self.draw)
         self.keys = []
-        self.flat_notes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
-        self.sharp_notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+        self.cached_scores = [0] * 12
+        self.cached_key = KeySignature("C", 0, Accidental.SHARP, 0, KeySignatureType.MAJOR)
         self.draw(None)
 
     def draw(self, event):
@@ -32,6 +32,7 @@ class Piano(tk.Canvas):
                 self.keys.append(b)
             self.keys.append(w)
         self.keys.reverse()
+        self.set_scores(self.cached_scores, self.cached_key)
     
     # pass in a list of 12 percentages for C through B
     def set_scores(self, scores, key_signature):
@@ -39,12 +40,9 @@ class Piano(tk.Canvas):
             print("INVALID SCORE LIST")
             return
 
+        self.cached_scores = scores
+        self.cached_key = key_signature
         self.delete("text")
-        notes = None
-        if key_signature.accidental == Accidental.SHARP: # TODO: refactor
-            notes = self.sharp_notes
-        else:
-            notes = self.flat_notes
 
         for i in [0,2,4,5,7,9,11]:
             key = self.keys[i]
@@ -57,7 +55,7 @@ class Piano(tk.Canvas):
                 textColor = "gold"
             else:
                 textColor = "red"        
-            textID = self.create_text(x, y, text=f"{notes[i]}: {round(scores[i])}%", fill=textColor, tag="text")
+            textID = self.create_text(x, y, text=f"{key_signature.get_display_for(i)}: {round(scores[i])}%", fill=textColor, tag="text")
         for i in [1,3,6,8,10]:
             key = self.keys[i]
             coords = self.coords(key)
@@ -69,4 +67,4 @@ class Piano(tk.Canvas):
                 textColor = "gold"
             else:
                 textColor = "red"  
-            textID = self.create_text(x, y, text=f"{notes[i]}: {round(scores[i])}%", fill=textColor, tag="text")
+            textID = self.create_text(x, y, text=f"{key_signature.get_display_for(i)}: {round(scores[i])}%", fill=textColor, tag="text")
