@@ -5,9 +5,9 @@ from TuneCoach.gui.constants import *
 class RoundedLabel(tk.Canvas):
     def __init__(self, parent, text, width, height):
         super().__init__(parent, width=width, height=height, bg=Colors.aux, bd=0, highlightthickness=0)# bg=parent["background"]
-        self.backdrop = self.round_rectangle(0, 0, width, height, radius=40, fill='green')
-        self._text = self.create_text(width/2, height/2, fill='white')
-        self.itemconfig(self._text, text=text, font=(None, 10))
+        self.backdrop = self.round_rectangle(0, 0, width, height, radius=40, fill='#f2fdff')
+        self._text = self.create_text(width/2, height/2, fill='#424651')
+        self.itemconfig(self._text, text=text, font=(None, 10, 'bold'))
         self.set_text(text)
 
     def set_text(self, text):
