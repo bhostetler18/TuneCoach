@@ -130,6 +130,9 @@ class MainController:
         data = SessionData(self.threshold, self.yellow_threshold)
         self.session = Session(data)
         self.setup_session()
+        self.toggle_pause()
+        self.toggle_pause()
+
 
     def load_from(self):
         # if current sesion isn't saved, ask if we should save. If we should
@@ -148,4 +151,7 @@ class MainController:
         else:
             self.session = session
             self.setup_session()
+            self.toggle_pause()
+            self.toggle_pause()
             self.should_save = False
+
