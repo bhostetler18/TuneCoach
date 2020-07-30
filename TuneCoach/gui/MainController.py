@@ -1,17 +1,19 @@
 from TuneCoach.python_bridge import SessionData, AudioManager
 from TuneCoach.gui.Session import Session, load_session, save_session
+from collections import deque
+
+
 
 class MainController:
     def __init__(self, view):
         self.view = view
-
+        self.queue = deque([])
         self.session = Session(SessionData(15), None)
-        self.audio_manager = AudioManager(self.session.data)
+        self.audio_manager = AudioManager(self.session.data, lambda hz: self.queue.append(hz))
         self.threshold = 15
         self.yellow_threshold = 35
         self.paused = True
         self.saved = False
-    
     def cleanup(self):
         if not self.saved and self.view.ask_should_save() and not self.save():
             return False
@@ -19,18 +21,26 @@ class MainController:
         self.audio_manager.destroy()
         return True
 
+    def process_queue(self):
+        if not self.paused:
+            if len(self.queue) != 0:
+                top = self.queue.popleft()
+                self.session.data.collect_data(top)
+                self.update_history()
+            self.view.after(20, lambda: self.process_queue())
+
+
     def update_diagnostics(self):
         if not self.paused:
             self.view.update_diagnostics(self.session.data)
-        if not self.paused:
             self.view.after(500, self.update_diagnostics)
 
     def update_history(self):
         if self.session.data.has_new_data:
             self.session.data.has_new_data = False # TODO lock
             self.view.update_history(self.session.data)
-        if not self.paused:
-            self.view.after(20, lambda: self.update_history())
+        # if not self.paused:
+        #     self.view.after(20, lambda: self.update_history())
 
     def update_pitch(self):
         self.view.update_pitch(self.audio_manager.peek())
@@ -43,7 +53,7 @@ class MainController:
             self.paused = False
             self.view.resume()
             self.audio_manager.resume()
-            self.update_history()
+            self.process_queue()
             self.update_diagnostics()
             self.update_pitch()
         else:
@@ -53,6 +63,10 @@ class MainController:
             
             self.view.pause()
             self.audio_manager.pause()
+
+            # add remaining data to session
+            while len(queue) > 0:
+                self.session.data.collect_data(queue.popleft())
 
     def force_pause(self):
         if not self.paused and not self.audio_manager.is_paused():

@@ -5,33 +5,21 @@ from TuneCoach.python_bridge.SessionData import *
 from TuneCoach.pitch_detection import TunerStream
 from time import sleep
 
-class Reader(threading.Thread):
-    def __init__(self, stream, session):
-        super().__init__(daemon=True)
-        self._stream = stream
-        # self.daemon = True
-        if session is None:
-            raise AttributeError('Session cannot be None!')
-        self.session = session
-
-    def run(self):
-        # print("Starting reader")
-        while (self._stream.is_alive()):
-            response, success = self._stream.read()
-            if success and response:
-                hz = response
-                self.session.collect_data(hz)
-            sleep(.01)
-        # print("Reader stopped")
-
+def read(stream, emit):
+    while (stream.is_alive()):
+        response, success = stream.read()
+        if success and response:
+            hz = response
+            emit(hz)
+        sleep(.01)
 
 class AudioManager(TunerStream):
-    def __init__(self, session):
+    def __init__(self, session, emit):
         super().__init__(44100)
         
         self._background_audio = threading.Thread(target=lambda: self.mainloop(), daemon=True)
         self._background_audio.start()
-        self._background_reader = Reader(self, session)
+        self._background_reader = threading.Thread(target=lambda: read(self, emit))
         self._background_reader.start()
 
     def destroy(self):
