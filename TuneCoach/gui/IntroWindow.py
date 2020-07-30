@@ -23,7 +23,8 @@ class IntroWindow:
         introWindow = tk.Toplevel(self.master)
         # introWindow.configure(bg=background_color)
         introWindow.geometry("520x300")
-
+        introWindow.minsize(width = 520, height = 300)
+        introWindow.maxsize(width = 520, height = 300)
         intro_window_style = ttk.Style()
         intro_window_style.configure("Intro.TFrame")#, background=background_color)
         topFrame = ttk.Frame(introWindow, style="Intro.TFrame")
