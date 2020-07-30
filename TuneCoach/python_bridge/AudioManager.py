@@ -14,7 +14,7 @@ def read(stream, emit):
         sleep(.01)
 
 class AudioManager(TunerStream):
-    def __init__(self, session, emit):
+    def __init__(self, emit):
         super().__init__(44100)
         
         self._background_audio = threading.Thread(target=lambda: self.mainloop(), daemon=True)

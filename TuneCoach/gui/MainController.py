@@ -7,15 +7,15 @@ from collections import deque
 class MainController:
     def __init__(self, view):
         self.view = view
-        self.queue = deque([])
-        self.session = Session(SessionData(15), None)
-        self.audio_manager = AudioManager(self.session.data, lambda hz: self.queue.append(hz))
+
         self.threshold = 15
         self.yellow_threshold = 35
-        self.session = Session(SessionData(self.threshold, self.yellow_threshold), None)
-
         self.paused = True
         self.should_save = False
+
+        self.queue = deque([])
+        self.session = Session(SessionData(self.threshold, self.yellow_threshold), None)
+        self.audio_manager = AudioManager(lambda hz: self.queue.append(hz))
     
     def cleanup(self):
         if self.should_save and self.view.ask_should_save() and not self.save():
@@ -83,8 +83,8 @@ class MainController:
 
 
             # add remaining data to session
-            while len(queue) > 0:
-                self.session.data.collect_data(queue.popleft())
+            while len(self.queue) > 0:
+                self.session.data.collect_data(self.queue.popleft())
 
     def force_pause(self):
         if not self.paused and not self.audio_manager.is_paused():
