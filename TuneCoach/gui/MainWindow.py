@@ -91,7 +91,7 @@ class MainWindow:
         self.pitch_display = PitchDisplay(self, self.controller.threshold)
     
     def perform_save_as(self):
-        # self.force_pause()
+        # self.toggle_pause(True)
         path = tk.filedialog.asksaveasfilename(initialdir = './', title="Save session as...", filetypes = [('session files', '*.session')])
         if invalid_path(path): # if the user cancels the dialog, don't do anything
             return (None, True) # this tuple means the user canceled
@@ -112,7 +112,7 @@ class MainWindow:
     
     def disable(self):
         self.master.protocol("WM_DELETE_WINDOW", self.do_nothing)
-        self.controller.force_pause()
+        self.controller.toggle_pause(True)
 
     def enable(self):
         self.master.protocol("WM_DELETE_WINDOW", self.cleanup)

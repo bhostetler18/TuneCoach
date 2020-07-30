@@ -62,8 +62,8 @@ class MainController:
         self.view.update_threshold(cent_threshold)
 
 
-    def toggle_pause(self):
-        if self.audio_manager.is_paused():
+    def toggle_pause(self, force=False):
+        if self.audio_manager.is_paused() and not force:
             # print("Resuming")
             self.paused = False
             self.view.resume()
@@ -76,24 +76,15 @@ class MainController:
             # print("Pausing")
             self.paused = True
             self.should_save = True # when we pause, we're ready to save new data
-            
             self.view.pause()
             self.audio_manager.pause()
             self.session.data.timer.pause()
+            self.flush_queue()
 
-
-            # add remaining data to session
-            while len(self.queue) > 0:
-                self.session.data.collect_data(self.queue.popleft())
-
-    def force_pause(self):
-        if not self.paused and not self.audio_manager.is_paused():
-            # print("Pausing")
-            self.should_save = True
-            self.paused = True
-            self.view.pause()
-            self.audio_manager.pause()
-            self.session.data.timer.pause()
+    def flush_queue(self):
+        # add remaining data to session
+        while len(self.queue) > 0:
+            self.session.data.collect_data(self.queue.popleft())
 
     def setup_session(self):
         
@@ -110,12 +101,12 @@ class MainController:
             self.view.update_history(self.session.data)
     
     def reset_everything(self):
-        self.force_pause()
+        self.toggle_pause(True)
         self.view.clear()
         
     
     def save_as(self):
-        self.force_pause()
+        self.toggle_pause(True)
         path, cancel = self.view.perform_save_as()
         if cancel:
             return False
@@ -138,7 +129,7 @@ class MainController:
         if self.session.path is None:
             return self.save_as()
         
-        self.force_pause()
+        self.toggle_pause(True)
         self._save()
         return True
 
