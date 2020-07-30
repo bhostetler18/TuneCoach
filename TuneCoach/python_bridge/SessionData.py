@@ -35,7 +35,6 @@ class SessionData:
         self.green_thresh = green_thresh
         self.yellow_thresh = yellow_thresh
         self._timestamp = datetime.date.today()
-        self._recent_notes = collections.deque([])
         self.display_buffer = collections.deque([])
         self.has_new_data = False
 
@@ -50,9 +49,6 @@ class SessionData:
         self.timer.start()
         self.timer.pause()
 
-        # Potential data storage
-        self._note_history = []
-        self._cent_history = []
         self._score_history = []
 
     def get_overall(self):
@@ -111,12 +107,4 @@ class SessionData:
         self.display_buffer.append((index, cent))
         if len(self.display_buffer) > 64:
             self.display_buffer.popleft()
-
-        # Only inserts a note if it's different than the last
-        if len(self._recent_notes) == 0 or index != self._recent_notes[-1]:
-            self._recent_notes.append(index)
-
-        # If deque is full, pop
-        if len(self._recent_notes) > 8:
-            self._recent_notes.popleft()
 

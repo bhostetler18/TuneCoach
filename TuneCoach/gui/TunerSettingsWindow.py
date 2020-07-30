@@ -93,7 +93,7 @@ class TunerSettingsWindow:
         centsitivity.pack()
 
         v = tk.DoubleVar()
-        v.set(data.threshold)
+        v.set(data.green_thresh)
 
         cent_scale = tk.Scale(middle_frame2, from_=1, to=25, orient=tk.HORIZONTAL, variable=v)
         cent_scale.config(bg=Colors.background, fg="white")
