@@ -40,10 +40,7 @@ class SessionData:
 
         self.key_signature = KeySignature("C", 0, Accidental.SHARP, 0, KeySignatureType.MAJOR)
 
-        self.from_note = "C"
-        self.from_octave = 2
-        self.to_note = "B"
-        self.to_octave = 7
+        self.midi_range = (36, 107)
 
         self.timer = Timer()
         self.timer.start()
@@ -70,6 +67,22 @@ class SessionData:
     @property
     def empty(self):
         return self._overall_count == 0
+
+    @property
+    def lowest_octave(self):
+        return get_octave(self.midi_range[0])
+
+    @property
+    def highest_octave(self):
+        return get_octave(self.midi_range[1])
+    
+    @property
+    def lowest_note(self):
+        return self.key_signature.get_display_for(self.midi_range[0] % 12)
+
+    @property
+    def highest_note(self):
+        return self.key_signature.get_display_for(self.midi_range[1] % 12)
     
     def update_score_history(self):
         new_score = self.get_overall()

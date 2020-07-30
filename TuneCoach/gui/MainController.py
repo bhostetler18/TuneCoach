@@ -40,14 +40,11 @@ class MainController:
         if not self.paused or self.view.pitch_display.needs_update():
             self.view.after(10, self.update_pitch)
     
-    def update_tuner_settings(self, cent_threshold, key_signature, f_note, f_oct, t_note, t_oct):
+    def update_tuner_settings(self, cent_threshold, key_signature, from_midi, to_midi):
         self.threshold = cent_threshold
         self.session.data.set_thresholds(cent_threshold, self.yellow_threshold)
         self.session.data.key_signature = key_signature
-        self.session.data.from_note = f_note
-        self.session.data.from_octave = f_oct
-        self.session.data.to_note = t_note
-        self.session.data.to_octave = t_oct
+        self.session.data.midi_range = (from_midi, to_midi)
         self.view.update_threshold(cent_threshold)
 
 
