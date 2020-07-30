@@ -126,18 +126,18 @@ class TunerSettingsWindow:
 
 
         self.current_key_signature = data.key_signature
-        current = self.current_key_signature.name.split()
-        if current[1] == "Minor":
-            index = self.minor_key_names.index(current[0])
-        else:
-            index = self.major_key_names.index(current[0])
-        self.root = tk.IntVar(value=index)
-        self.ktype = tk.StringVar(value=current[1])
+        current_type = data.key_signature.ktype
+        self.root = tk.IntVar(value=self.current_key_signature.raw_value)
+        self.ktype = tk.StringVar(value=current_type.value)
         self.radio_buttons = []
 
         # Grid of key signature buttons
         for i in range(0, 12):
-            name = self.major_key_names[i]
+            name = ""
+            if current_type == KeySignatureType.MINOR:
+                name = self.minor_key_names[i]
+            else:
+                name = self.major_key_names[i]
             button = tk.Radiobutton(bottom_frame2, text=name, indicatoron=0, width=3, variable=self.root, value=i, command=self.selection_changed)
             button.grid(row=i//4 + 1, column=i%4)
             self.radio_buttons.append(button)
@@ -195,7 +195,6 @@ class TunerSettingsWindow:
             name = self.major_key_names[index]
             num_accidentals = self.major_numbers[index]
             
-        print(type(num_accidentals))
         self.current_key_signature = KeySignature(name, index, accidental, num_accidentals, keytype)
 
     def refresh_om(self, major, from_def, to_def):

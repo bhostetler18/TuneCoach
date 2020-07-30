@@ -4,8 +4,8 @@ from dataclasses import dataclass
 
 
 class Accidental(Enum):
-    FLAT = "b"
-    SHARP = "#"
+    FLAT = "♭"
+    SHARP = "♯"
     NATURAL = "♮"
 
 
@@ -28,10 +28,7 @@ class KeySignature:
         flat_order = [11, 4, 9, 2, 7, 0, 5] # BEADGCF
         sharp_order = list(reversed(flat_order)) # FCGDAEB
         notes = { 0:"C", 2:"D", 4:"E", 5:"F", 7:"G", 9:"A", 11:"B"}
-        flat = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]
-        sharp = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
-        print(type(self.num_accidentals))
         relevant_accidentals = []
         if self.accidental == Accidental.SHARP:
             relevant_accidentals = sharp_order[:self.num_accidentals]
@@ -66,8 +63,8 @@ def get_octave(midi):
 
 
 def pitch_class_to_name(pitch, acc):
-    flat = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]
-    sharp = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+    flat = ["C", "D♭", "D", "E♭", "E", "F", "G♭", "G", "A♭", "A", "B♭", "B"]
+    sharp = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"]
 
     if acc == Accidental.FLAT:
         return flat[pitch]
