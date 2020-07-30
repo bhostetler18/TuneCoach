@@ -3,10 +3,9 @@ from TuneCoach.python_bridge.pitch_utilities import *
 
 # set_score uses session.data.key_signature.accidental
 class Piano(tk.Canvas):
-    def __init__(self, parent, mainWindow, **kwargs):
+    def __init__(self, parent, **kwargs):
         super().__init__(parent, kwargs)
         self._parent = parent
-        self.mainWindow = mainWindow
         self.configure(bd=0)
         self.configure(bg='black')
         self.configure(highlightthickness=0)

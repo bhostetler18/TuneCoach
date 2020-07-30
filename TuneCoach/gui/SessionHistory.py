@@ -30,10 +30,9 @@ class SessionHistory:
         self.scrollbar.config(bg=Colors.aux, activebackground="darkgrey")
         self.scrollbar_width = 1
         self.scrollbar.set(1 - self.scrollbar_width, 1)
-        self.buffer = []
 
         self.aspect_ratio = 580/820
-        self.piano = Piano(self.canvas, self.mainWindow, width=50, height=90)
+        self.piano = Piano(self.canvas, width=50, height=90)
         self.piano.pack(side='bottom', expand=True, fill='y', anchor='w')
 
         self.circle_size = 5
@@ -45,14 +44,14 @@ class SessionHistory:
         self.setup(None)
         self.pause_scrollbar()
 
+    @property
+    def buffer(self):
+        return self.mainWindow.controller.session.data.note_history
+    
     def scroll(self, *args):
         if args[0] == 'update_width':
             self.scrollbar_width = args[1]
             self.scrollbar.set(1 - self.scrollbar_width, 1)
-        if not self.mainWindow.controller.paused:
-            # TODO: change color to indicate the user can't scroll
-            return
-
         if args[0] == 'moveto':
             offset = max(0, min(float(args[1]), 1 - self.scrollbar_width))
             self.scrollbar.set(offset, offset + self.scrollbar_width)
@@ -101,9 +100,7 @@ class SessionHistory:
         self.display_notes(self.current_pos) # redraw the notes the user was currently looking at
 
     def update(self, data):
-        if len(data.display_buffer) > 0:
-            recent = data.display_buffer[-1] #TODO: this could miss events
-            self.buffer.append(recent) # TODO: use note_history, replace note names with integral values, remove buffer
+        if len(data.note_history) > 0:
             self.scroll('update_width', 1 / max(1, len(self.buffer) / self.display_size))
             pitch_errors = [(100.0 * data._in_tune_count[i]) / (data._pitch_count[i] if data._pitch_count[i] != 0 else 1) for i in range(0,12)]
             self.piano.set_scores(pitch_errors, data.key_signature)
@@ -119,16 +116,16 @@ class SessionHistory:
             pos = min(max(0, pos), len(self.buffer) - self.display_size)
         self.current_pos = pos
         notes = self.buffer[pos : pos + self.display_size]
-        for i, (note, cents) in enumerate(notes):
+        for i, note in enumerate(notes):
             color = "red"
-            if abs(cents) <= self.mainWindow.controller.threshold:
+            if abs(note.cents) <= self.mainWindow.controller.threshold:
                 color = "green"
-            elif abs(cents) <= self.mainWindow.controller.yellow_threshold:
+            elif abs(note.cents) <= self.mainWindow.controller.yellow_threshold:
                 color = "yellow"
 
             circle = self.circle_list[i]
             x = self.circle_start + self.circle_size + 2*self.circle_size*i
-            y = self.noteDict[note]
+            y = self.noteDict[note.pitch_class]
             if circle is None:
                 c = self.create_note(x, y, self.circle_size, self.canvas, color)
                 self.circle_list[i] = c
