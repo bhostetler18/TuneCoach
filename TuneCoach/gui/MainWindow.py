@@ -43,12 +43,12 @@ class MainWindow:
 
         master.bind('<space>', lambda ev: self.controller.toggle_pause())
         master.bind('<Control-Key-o>', lambda ev: self.controller.load_from())
-        master.bind('t', lambda ev: TunerSettingsWindow(self))
+        master.bind('<Control-Key-t>', lambda ev: TunerSettingsWindow(self))
         master.bind('<Control-Key-n>', lambda ev: self.controller.new_session())
         master.bind('<F1>', lambda ev: TutorialWindow(self))
         master.bind('<F2>', lambda ev: FAQWindow(self))
         master.bind('<F12>', lambda ev: self.controller.save_as())
-        master.bind('<Control-Shift-Key-s>', lambda ev: self.controller.save_as())
+        master.bind('<Control-Shift-Key-S>', lambda ev: self.controller.save_as())
         if self.controller.save:
             master.bind('<Control-Key-s>', lambda ev: self.controller.save())
         else:
@@ -133,10 +133,10 @@ class MainWindow:
         # File menubar
         menubar.add_cascade(label="File", menu=file_menu)
         commands = ( 
-            ("New Practice Session", self.controller.new_session), \
-            ("Save Current Session", self.controller.save), \
-            ("Save Current Session As...", self.controller.save_as), \
-            ("Load Existing Session", self.controller.load_from) )
+            ("New Practice Session (CTRL-N)", self.controller.new_session), \
+            ("Save Current Session (CTRL-S)", self.controller.save), \
+            ("Save Current Session As... (CTRL-SHIFT-S)", self.controller.save_as), \
+            ("Load Existing Session (CTRL-O)", self.controller.load_from) )
         
         for label, fn in commands:
             file_menu.add_command(label=label, command=session_menu_item(fn), background='white')
@@ -148,13 +148,13 @@ class MainWindow:
         # Settings menubar
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
-        settings_menu.add_command(label="Tuner Settings", command=lambda: TunerSettingsWindow(self), background='white')
+        settings_menu.add_command(label="Tuner Settings (CTRL-T)", command=lambda: TunerSettingsWindow(self), background='white')
 
         # Help menubar
         help_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Help", menu=help_menu)
-        help_menu.add_command(label="FAQ", command=lambda: FAQWindow(self), background='white')
-        help_menu.add_command(label="Tutorial", command=lambda: TutorialWindow(self), background='white')
+        help_menu.add_command(label="Tutorial (F1)", command=lambda: TutorialWindow(self), background='white')
+        help_menu.add_command(label="FAQ (F2)", command=lambda: FAQWindow(self), background='white')
 
    ### METHODS IMPLEMENTED FOR CONTROLLER ### 
 
