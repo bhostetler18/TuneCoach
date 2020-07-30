@@ -179,7 +179,7 @@ class PitchDisplay:
             self.update_hertz('')
             self.update_octave('')
             self.display_current_gui()
-        else:
+        elif self._centsValue == -50: # clearing animation has finished
             self._clearing = False
 
     def needs_update(self):

@@ -34,9 +34,10 @@ class MainController:
             self.view.after(20, lambda: self.update_history())
 
     def update_pitch(self):
-        print(self.view.pitch_display.needs_update())
-        self.view.update_pitch(self.audio_manager.peek(), self.session.data)
-        print(self.view.pitch_display.needs_update())
+        if not self.paused:
+            self.view.update_pitch(self.audio_manager.peek(), self.session.data)
+        else:
+            self.view.update_pitch(0, self.session.data)
         if not self.paused or self.view.pitch_display.needs_update():
             self.view.after(10, self.update_pitch)
     
