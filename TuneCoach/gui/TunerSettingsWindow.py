@@ -203,7 +203,7 @@ class TunerSettingsWindow:
         self.to_note_menu['menu'].delete(0, 'end')
         notes = [self.current_key_signature.get_display_for(n) for n in range(0,12)]
         start = self.current_key_signature.raw_value
-        notes = notes[start:] + notes[:start]
+        notes = notes[start:] + notes[:start] # rotate so current root is first
         for note in notes:
             self.from_note_menu['menu'].add_command(label=note, command=tk._setit(from_def, note))
             self.to_note_menu['menu'].add_command(label=note, command=tk._setit(to_def, note))

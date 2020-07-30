@@ -96,9 +96,12 @@ class SessionData:
 
     # Takes in frequency and calculates and stores all data
     def collect_data(self, hz):
+        midi = hz_to_midi(hz)
+        if not (self.midi_range[0] <= midi <= self.midi_range[1]):
+            return
+        
         self.has_new_data = True
         self._freq_history.append(hz)
-        midi = hz_to_midi(hz)
         index = midi_to_pitch_class(midi)
         desired_hz = closest_in_tune_frequency(hz)
         cent = cents(desired_hz, hz)
