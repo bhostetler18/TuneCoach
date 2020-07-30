@@ -4,8 +4,9 @@ from dataclasses import dataclass
 
 
 class Accidental(Enum):
-    FLAT = "b"
-    SHARP = "#"
+    FLAT = "♭"
+    SHARP = "♯"
+    NATURAL = "♮"
 
 
 class KeySignatureType(Enum):
@@ -18,10 +19,26 @@ class KeySignature:
     root: str
     raw_value: int
     accidental: Accidental
+    num_accidentals: int
     ktype: KeySignatureType
     
+    # raw_value should be in [0,11]
     def get_display_for(self, raw_value):
-        return pitch_class_to_name(raw_value, self.accidental)
+        # TODO: don't create these on every function call
+        flat_order = [11, 4, 9, 2, 7, 0, 5] # BEADGCF
+        sharp_order = list(reversed(flat_order)) # FCGDAEB
+        notes = { 0:"C", 2:"D", 4:"E", 5:"F", 7:"G", 9:"A", 11:"B"}
+
+        relevant_accidentals = []
+        if self.accidental == Accidental.SHARP:
+            relevant_accidentals = sharp_order[:self.num_accidentals]
+        elif self.accidental == Accidental.FLAT:
+            relevant_accidentals = flat_order[:self.num_accidentals]
+
+        if raw_value in relevant_accidentals:
+            return notes[raw_value] + Accidental.NATURAL.value
+        else:
+            return pitch_class_to_name(raw_value, self.accidental)
 
     @property
     def name(self):
@@ -38,7 +55,7 @@ def midi_to_hz(midi):
 
 
 def midi_to_pitch_class(midi):
-    return midi % 12
+    return int(midi % 12)
 
 
 def get_octave(midi):
@@ -46,8 +63,9 @@ def get_octave(midi):
 
 
 def pitch_class_to_name(pitch, acc):
-    flat = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]
-    sharp = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+    flat = ["C", "D♭", "D", "E♭", "E", "F", "G♭", "G", "A♭", "A", "B♭", "B"]
+    sharp = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"]
+
     if acc == Accidental.FLAT:
         return flat[pitch]
     elif acc == Accidental.SHARP:

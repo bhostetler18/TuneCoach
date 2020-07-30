@@ -103,10 +103,9 @@ class SessionHistory:
         if len(data.display_buffer) > 0:
             recent = data.display_buffer[-1] #TODO: this could miss events
             self.buffer.append(recent) # TODO: use note_history, replace note names with integral values, remove buffer
-            if len(self.buffer) % 10 == 0:
-                self.scroll('update_width', 1 / max(1, len(self.buffer) / self.display_size))
+            self.scroll('update_width', 1 / max(1, len(self.buffer) / self.display_size))
             pitch_errors = [(100.0 * data._in_tune_count[i]) / (data._pitch_count[i] if data._pitch_count[i] != 0 else 1) for i in range(0,12)]
-            self.piano.set_scores(pitch_errors, data)
+            self.piano.set_scores(pitch_errors, data.key_signature)
             self.display_recent_notes()
 
     def display_recent_notes(self):

@@ -111,28 +111,33 @@ class TunerSettingsWindow:
         range_label.config(bg=Colors.background, fg="white")
         range_label.pack()
 
+        # TODO: extract into keysignature and allow for better initialization, create circle-of-fifths-based data structure
         self.major_key_names = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
         self.major_accidentals = [Accidental.SHARP, Accidental.FLAT, Accidental.SHARP, Accidental.FLAT,
                                     Accidental.SHARP, Accidental.FLAT, Accidental.SHARP, Accidental.SHARP,
                                         Accidental.FLAT, Accidental.SHARP, Accidental.FLAT, Accidental.SHARP]
+        self.major_numbers = [0, 5, 2, 3, 4, 1, 6, 1, 4, 3, 2, 5] # number of sharps/flats in each key
         self.minor_key_names = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"]
         self.minor_accidentals = [Accidental.FLAT, Accidental.SHARP, Accidental.FLAT, Accidental.FLAT,
                                     Accidental.SHARP, Accidental.FLAT, Accidental.SHARP, Accidental.FLAT,
                                         Accidental.SHARP, Accidental.SHARP, Accidental.FLAT, Accidental.SHARP]
+        self.minor_numbers = [3, 4, 1, 6, 1, 4, 3, 2, 5, 0, 5, 2]
+
+
 
         self.current_key_signature = data.key_signature
-        current = self.current_key_signature.name.split()
-        if current[1] == "Minor":
-            index = self.minor_key_names.index(current[0])
-        else:
-            index = self.major_key_names.index(current[0])
-        self.root = tk.IntVar(value=index)
-        self.ktype = tk.StringVar(value=current[1])
+        current_type = data.key_signature.ktype
+        self.root = tk.IntVar(value=self.current_key_signature.raw_value)
+        self.ktype = tk.StringVar(value=current_type.value)
         self.radio_buttons = []
 
         # Grid of key signature buttons
         for i in range(0, 12):
-            name = self.major_key_names[i]
+            name = ""
+            if current_type == KeySignatureType.MINOR:
+                name = self.minor_key_names[i]
+            else:
+                name = self.major_key_names[i]
             button = tk.Radiobutton(bottom_frame2, text=name, indicatoron=0, width=3, variable=self.root, value=i, command=self.selection_changed)
             button.grid(row=i//4 + 1, column=i%4)
             self.radio_buttons.append(button)
@@ -179,14 +184,17 @@ class TunerSettingsWindow:
 
         index = self.root.get()
         keytype = KeySignatureType[self.ktype.get().upper()]
+        num_accidentals = 0
         if keytype == KeySignatureType.MINOR:
             accidental = self.minor_accidentals[index]
             name = self.minor_key_names[index]
+            num_accidentals = self.minor_numbers[index]
         else:
             accidental = self.major_accidentals[index]
             name = self.major_key_names[index]
+            num_accidentals = self.major_numbers[index]
             
-        self.current_key_signature = KeySignature(name, index, accidental, keytype)
+        self.current_key_signature = KeySignature(name, index, accidental, num_accidentals, keytype)
 
     def refresh_om(self, major, from_def, to_def):
         fro = self.from_note.get()
