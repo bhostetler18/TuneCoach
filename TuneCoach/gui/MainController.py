@@ -93,7 +93,7 @@ class MainController:
         if self.audio_manager is not None:
             self.audio_manager.kill()
         
-        self.audio_manager = AudioManager(self.session.data)
+        self.audio_manager = AudioManager(lambda hz: self.queue.append(hz))
         self.view.update_session_name(self.session.name)
 
         if not self.session.data.empty:
