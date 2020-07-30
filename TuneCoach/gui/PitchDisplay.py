@@ -43,6 +43,9 @@ class PitchDisplay:
 
         style = ttk.Style()
         style.configure("Pitch.TCheckbutton", background=Colors.background, foreground=Colors.text)
+        style.map('Pitch.TCheckbutton',
+                  background=[('focus', Colors.background),
+                        ('!focus', Colors.background)],)
         c = ttk.Checkbutton(self.canvas, text="Show Hertz", variable=self.showsHertz, takefocus=False, command=self.display_default_gui, style="Pitch.TCheckbutton")
         c.pack(anchor='e', side='bottom')
 
