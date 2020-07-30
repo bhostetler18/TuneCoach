@@ -13,20 +13,22 @@ from TuneCoach.gui.MainController import MainController
 import tkinter.filedialog
 import tkinter.messagebox
 import tkinter as tk
+from ttkthemes import ThemedStyle
 
-def invalid_path(path): 
+
+def invalid_path(path):
     # print(path)
     return path == '' or path == () or path == None
 
 # Main GUI
 class MainWindow:
     def __init__(self, master):
+        style = ThemedStyle(master)
+        style.set_theme("yaru")
+
+
         self.controller = MainController(self)
         self.master = master
-
-        self.timer = Timer()
-        self.timer.start()
-        self.timer.pause()
 
         master.attributes('-fullscreen', True)
         master.state('iconic')
@@ -40,6 +42,16 @@ class MainWindow:
         master.maxsize(width=self.screen_width, height=self.screen_height)
 
         master.bind('<space>', lambda ev: self.controller.toggle_pause())
+        master.bind('l', lambda ev: self.controller.load_from())
+        master.bind('o', lambda ev: TunerSettingsWindow(self))
+        master.bind('n', lambda ev: self.controller.new_session())
+        master.bind('<F1>', lambda ev: TutorialWindow(self))
+        master.bind('<F2>', lambda ev: FAQWindow(self))
+        master.bind('<F12>', lambda ev: self.controller.save_as())
+        if self.controller.save:
+            master.bind('s', lambda ev: self.controller.save())
+        else:
+            master.bind('s', lambda ev: self.controller.save_as())
         
         self.enable()
         self.create_menubar()
@@ -56,20 +68,22 @@ class MainWindow:
         
     # Creating frames to organize the screen.
     def layout_frames(self, screen_width, screen_height):
-        self.bottom_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
-        self.left_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
-        self.right_frame = tk.Frame(self.master, bd=5, relief=tk.RAISED, bg=background_color)
+        frames_style = ttk.Style()
+        frames_style.configure('MainFrames.TFrame', background='white')
+        self.bottom_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
+        self.left_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
+        self.right_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
 
         # Putting the frames into a grid layout
-        self.bottom_frame.grid(row=1, column=0, columnspan=2, sticky="nsew")
         self.left_frame.grid(row=0, column=0, sticky="nsew")
         self.right_frame.grid(row=0, column=1, sticky="nsew")
+        self.bottom_frame.grid(row=1, column=0, columnspan=2, sticky="nsew")
 
         # setting up grid weights.
         self.master.grid_rowconfigure(0, weight=1)
-        self.master.grid_rowconfigure(1, weight=1)
-        self.master.grid_columnconfigure(0, weight=3)
-        self.master.grid_columnconfigure(1, weight=4)
+        self.master.grid_rowconfigure(1, weight=1, minsize=250)
+        self.master.grid_columnconfigure(0, weight=1, uniform="halfwidth")
+        self.master.grid_columnconfigure(1, weight=1, uniform="halfwidth")
 
         # Here we can work on creating the functionality for each frame, ex: tuner, pitch history, information
         self.history = SessionHistory(self, self.bottom_frame)
@@ -111,7 +125,7 @@ class MainWindow:
                 self.enable()
             return command_function
         
-        menubar = tk.Menu(self.master)
+        menubar = tk.Menu(self.master, bg='white')
         self.master.config(menu=menubar)
         file_menu = tk.Menu(menubar)
 
@@ -124,7 +138,7 @@ class MainWindow:
             ("Load Existing Session", self.controller.load_from) )
         
         for label, fn in commands:
-            file_menu.add_command(label=label, command=session_menu_item(fn))
+            file_menu.add_command(label=label, command=session_menu_item(fn), background='white')
 
         # TODO: Add functionality to remove sessions
         # file_menu.add_separator
@@ -133,39 +147,43 @@ class MainWindow:
         # Settings menubar
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
-        settings_menu.add_command(label="Tuner Settings", command=lambda: TunerSettingsWindow(self))
+        settings_menu.add_command(label="Tuner Settings", command=lambda: TunerSettingsWindow(self), background='white')
 
         # Help menubar
         help_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Help", menu=help_menu)
-        help_menu.add_command(label="FAQ", command=lambda: FAQWindow(self))
-        help_menu.add_command(label="Tutorial", command=lambda: TutorialWindow(self))
+        help_menu.add_command(label="FAQ", command=lambda: FAQWindow(self), background='white')
+        help_menu.add_command(label="Tutorial", command=lambda: TutorialWindow(self), background='white')
 
-
-    
-    ### METHODS IMPLEMENTED FOR CONTROLLER ###
+   ### METHODS IMPLEMENTED FOR CONTROLLER ### 
 
     def update_diagnostics(self, data):
         self.diagnostics.update_plot(data)
 
     def update_history(self, data):
         self.history.update(data)
+    
+    def update_threshold(self, threshold):
+        self.pitch_display.set_threshold(threshold)
 
-    def update_pitch(self, hz):
-        self.pitch_display.update_data(hz)
+    def update_pitch(self, hz, data):
+        self.pitch_display.update_data(hz, data)
     
     def update_session_name(self, name):
         self.diagnostics.session_name.configure(text=name)
     
-    def clear(self): 
+    def clear(self):
         self.history.clear()
         self.diagnostics.clear_plot()
-        self.pitch_display.update_data(0)
+        self.pitch_display.clear()
 
     def pause(self):
         self.pitch_display.pause()
+        self.history.pause_scrollbar()
+
     def resume(self):
         self.pitch_display.resume()
+        self.history.resume_scrollbar()
 
     def error(self, msg, title="Error!"):
         tk.messagebox.showerror(title, msg)

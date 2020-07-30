@@ -12,10 +12,13 @@ class MainController:
         self.audio_manager = AudioManager(self.session.data, lambda hz: self.queue.append(hz))
         self.threshold = 15
         self.yellow_threshold = 35
+        self.session = Session(SessionData(self.threshold, self.yellow_threshold), None)
+
         self.paused = True
-        self.saved = False
+        self.should_save = False
+    
     def cleanup(self):
-        if not self.saved and self.view.ask_should_save() and not self.save():
+        if self.should_save and self.view.ask_should_save() and not self.save():
             return False
     
         self.audio_manager.destroy()
@@ -38,15 +41,27 @@ class MainController:
     def update_history(self):
         if self.session.data.has_new_data:
             self.session.data.has_new_data = False # TODO lock
+            self.should_save = True
             self.view.update_history(self.session.data)
         # if not self.paused:
         #     self.view.after(20, lambda: self.update_history())
 
     def update_pitch(self):
-        self.view.update_pitch(self.audio_manager.peek())
         if not self.paused:
+            self.view.update_pitch(self.audio_manager.peek(), self.session.data)
+        else:
+            self.view.update_pitch(0, self.session.data)
+        if not self.paused or self.view.pitch_display.needs_update():
             self.view.after(10, self.update_pitch)
-        
+    
+    def update_tuner_settings(self, cent_threshold, key_signature, from_midi, to_midi):
+        self.threshold = cent_threshold
+        self.session.data.set_thresholds(cent_threshold, self.yellow_threshold)
+        self.session.data.key_signature = key_signature
+        self.session.data.midi_range = (from_midi, to_midi)
+        self.view.update_threshold(cent_threshold)
+
+
     def toggle_pause(self):
         if self.audio_manager.is_paused():
             # print("Resuming")
@@ -56,13 +71,16 @@ class MainController:
             self.process_queue()
             self.update_diagnostics()
             self.update_pitch()
+            self.session.data.timer.resume()
         else:
             # print("Pausing")
             self.paused = True
-            self.saved = False # when we pause, we're ready to save new data
+            self.should_save = True # when we pause, we're ready to save new data
             
             self.view.pause()
             self.audio_manager.pause()
+            self.session.data.timer.pause()
+
 
             # add remaining data to session
             while len(queue) > 0:
@@ -71,11 +89,14 @@ class MainController:
     def force_pause(self):
         if not self.paused and not self.audio_manager.is_paused():
             # print("Pausing")
+            self.should_save = True
             self.paused = True
             self.view.pause()
             self.audio_manager.pause()
+            self.session.data.timer.pause()
 
     def setup_session(self):
+        
         self.reset_everything()
 
         if self.audio_manager is not None:
@@ -85,12 +106,13 @@ class MainController:
         self.view.update_session_name(self.session.name)
 
         if not self.session.data.empty:
-            self.update_diagnostics()
-            self.update_history()
+            self.view.update_diagnostics(self.session.data)
+            self.view.update_history(self.session.data)
     
     def reset_everything(self):
         self.force_pause()
         self.view.clear()
+        
     
     def save_as(self):
         self.force_pause()
@@ -107,10 +129,10 @@ class MainController:
     def _save(self):
         save_session(self.session)
         self.view.success(f'Session saved to "{self.session.path}" successfully', title="Session Saved")
-        self.saved = True
+        self.should_save = False
 
     def save(self):
-        if self.saved:
+        if not self.should_save:
             return True
         
         if self.session.path is None:
@@ -121,16 +143,16 @@ class MainController:
         return True
 
     def new_session(self):
-        if not self.saved:
+        if self.should_save:
             self.save()
-        data = SessionData(self.threshold)
+        data = SessionData(self.threshold, self.yellow_threshold)
         self.session = Session(data)
         self.setup_session()
 
     def load_from(self):
         # if current sesion isn't saved, ask if we should save. If we should
         # try to save. If the user cancels, don't bother to save
-        if not self.saved and self.view.ask_should_save():
+        if self.should_save and self.view.ask_should_save():
             self.save()
 
         path, cancel = self.view.perform_load()
@@ -145,3 +167,4 @@ class MainController:
         else:
             self.session = session
             self.setup_session()
+            self.should_save = False

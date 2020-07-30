@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 from TuneCoach.gui.constants import *
 
 
@@ -6,7 +7,13 @@ class FAQWindow:
     def __init__(self, mainWindow):
         faq_window = tk.Toplevel(mainWindow.master)
         faq_window.geometry()
+        faq_window.config(background="#f4f4f4")
 
+        faq_title_label_style = ttk.Style()
+        faq_title_label_style.configure("FAQTitle.TLabel") #font=("Calibri", 24), justify=tk.CENTER, background=background_color, foreground="white")
+        title = "TuneCoach FAQ"
+        faq_title_label = ttk.Label(faq_window, text=title)
+        faq_title_label.pack()
         message = "Q: How do I use TuneCoach?\n" \
                   "A: Thorough instructions can be found in \"Tutorial\" under the \"Help\" dropdown menu.\n" \
                   "\n" \
@@ -29,7 +36,8 @@ class FAQWindow:
                   "Q: Why am I not in tune?\n" \
                   "A: Git gud bro\n"
 
-        faq_label = tk.Label(faq_window, text=message, font=("Calibri", 12), justify=tk.LEFT)
-        faq_label.config(bg=background_color, fg="white")
+        faq_label_style = ttk.Style()
+        faq_label_style.configure("FAQ.TLabel")#, font=("Times New Roman", 12), justify=tk.LEFT, background=background_color, foreground="white")
+        faq_label = ttk.Label(faq_window, text=message, style="FAQ.TLabel")
         faq_label.pack()
         faq_window.lift(mainWindow.master)
