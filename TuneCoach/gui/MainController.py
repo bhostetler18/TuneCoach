@@ -56,6 +56,7 @@ class MainController:
             self.view.after(10, self.update_pitch)
     
     def update_tuner_settings(self, cent_threshold, key_signature, from_midi, to_midi):
+        print("update tuner settings")
         self.threshold = cent_threshold
         self.session.data.set_thresholds(cent_threshold, self.yellow_threshold)
         self.session.data.key_signature = key_signature
@@ -104,9 +105,8 @@ class MainController:
 
     def refresh_displays(self):
         self.view.update_session_name(self.session.name)
-        if not self.session.data.empty:
-            self.view.update_diagnostics(self.session.data)
-            self.view.update_history(self.session.data)
+        self.view.update_diagnostics(self.session.data)
+        self.view.update_history(self.session.data)
     
     def save_as(self):
         self.toggle_pause(True)
@@ -143,8 +143,6 @@ class MainController:
         self.session = Session(data)
         self.setup_session()
         NewSessionWindow(self.view)
-        self.reset_everything()
-        self.refresh_displays()
 
     def load_from(self):
         # if current sesion isn't saved, ask if we should save. If we should

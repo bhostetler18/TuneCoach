@@ -69,7 +69,7 @@ class MainWindow:
     # Creating frames to organize the screen.
     def layout_frames(self, screen_width, screen_height):
         frames_style = ttk.Style()
-        frames_style.configure('MainFrames.TFrame', background='white')
+        frames_style.configure('MainFrames.TFrame', background=Colors.background)
         self.bottom_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
         self.left_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
         self.right_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
