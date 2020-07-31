@@ -18,7 +18,7 @@ class Session:
         self.data = data
         self.path = path
         if self.path is None:
-            self.name = "Temporary Session"
+            self.name = "New Session"
         else:
             self.name = Path(self.path).stem
     

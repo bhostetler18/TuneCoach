@@ -1,5 +1,6 @@
 from TuneCoach.python_bridge import SessionData, AudioManager
 from TuneCoach.gui.Session import Session, load_session, save_session
+from TuneCoach.gui.NewSessionWindow import NewSessionWindow
 from collections import deque
 
 
@@ -139,6 +140,7 @@ class MainController:
         data = SessionData(self.threshold, self.yellow_threshold)
         self.session = Session(data)
         self.setup_session()
+        NewSessionWindow(self.view)
 
     def load_from(self):
         # if current sesion isn't saved, ask if we should save. If we should

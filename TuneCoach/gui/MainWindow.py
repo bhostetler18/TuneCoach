@@ -132,10 +132,10 @@ class MainWindow:
         # File menubar
         menubar.add_cascade(label="File", menu=file_menu)
         commands = ( 
-            ("New Practice Session", self.controller.new_session), \
-            ("Save Current Session", self.controller.save), \
-            ("Save Current Session As...", self.controller.save_as), \
-            ("Load Existing Session", self.controller.load_from) )
+            ("New Practice Session (n)", self.controller.new_session), \
+            ("Save Current Session (s)", self.controller.save), \
+            ("Save Current Session As... (F12)", self.controller.save_as), \
+            ("Load Existing Session (l)", self.controller.load_from) )
         
         for label, fn in commands:
             file_menu.add_command(label=label, command=session_menu_item(fn), background='white')
@@ -147,13 +147,13 @@ class MainWindow:
         # Settings menubar
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
-        settings_menu.add_command(label="Tuner Settings", command=lambda: TunerSettingsWindow(self), background='white')
+        settings_menu.add_command(label="Tuner Settings (o)", command=lambda: TunerSettingsWindow(self), background='white')
 
         # Help menubar
         help_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Help", menu=help_menu)
-        help_menu.add_command(label="FAQ", command=lambda: FAQWindow(self), background='white')
-        help_menu.add_command(label="Tutorial", command=lambda: TutorialWindow(self), background='white')
+        help_menu.add_command(label="FAQ (F2)", command=lambda: FAQWindow(self), background='white')
+        help_menu.add_command(label="Tutorial (F1)", command=lambda: TutorialWindow(self), background='white')
 
    ### METHODS IMPLEMENTED FOR CONTROLLER ### 
 

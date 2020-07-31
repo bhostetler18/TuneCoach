@@ -36,6 +36,8 @@ class TunerSettingsWindow:
         data = mainWindow.controller.session.data
         tuner_settings_window = tk.Toplevel(self.mainWindow.master)
         tuner_settings_window.geometry("500x300")
+        tuner_settings_window.minsize(width = 500, height = 300)
+        tuner_settings_window.maxsize(width  = 500, height = 300)
 
         tuner_settings_window.grid()
 

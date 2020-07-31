@@ -12,18 +12,19 @@ class IntroWindow:
         mainWindow.enable()
 
     @staticmethod
-    def intro_new_session(mainWindow, oldFrame):
+    def intro_save_session_as(mainWindow, oldFrame):
         oldFrame.destroy()
         mainWindow.disable()
-        mainWindow.controller.new_session()
+        mainWindow.controller.save_as()
         mainWindow.enable()
 
     def __init__(self, mainWindow):
         self.master = mainWindow.master
         introWindow = tk.Toplevel(self.master)
         # introWindow.configure(bg=background_color)
-        introWindow.geometry("410x250")
-
+        introWindow.geometry("520x300")
+        introWindow.minsize(width = 520, height = 300)
+        introWindow.maxsize(width = 520, height = 300)
         intro_window_style = ttk.Style()
         intro_window_style.configure("Intro.TFrame")#, background=background_color)
         topFrame = ttk.Frame(introWindow, style="Intro.TFrame")
@@ -50,9 +51,9 @@ class IntroWindow:
         introLabel = ttk.Label(topFrame, text="Welcome to Tune Coach!", anchor=tk.CENTER, style="IntroTitle.TLabel")#, fg="white", bg=background_color)
         introLabel.pack(side=tk.TOP)
 
-        text = "Please create a new session or load a previous session to begin using the application. \n" \
-               "If you don't create or load a session, a temporary session will be used.\n" \
-               "\n" \
+        text = "Click 'Load' if you would like to load a previous session from file. \n" \
+               "If you don't load an existing session, a temporary session will be used. You can choose to store this session under a name by clicking the 'Save Temporary Session As...' button.\n" \
+               "\n\n" \
                "For more information on using TuneCoach, navigate to the \"Help\" tab and then \"Tutorial\"."
 
         explain_label_style = ttk.Style()
@@ -64,8 +65,8 @@ class IntroWindow:
         loadButton = ttk.Button(bottomFrame, text="Load Session",
                                command=lambda: self.intro_load_session(mainWindow, introWindow))
         loadButton.pack(side=tk.LEFT, padx=15, pady=20)
-        newSession = ttk.Button(bottomFrame, text="New Session",
-                               command=lambda: self.intro_new_session(mainWindow, introWindow))
+        newSession = ttk.Button(bottomFrame, text="Save Temporary Session As...",
+                               command=lambda: self.intro_save_session_as(mainWindow, introWindow))
         newSession.pack(side=tk.LEFT, padx=15, pady=20)
 
         introWindow.lift(self.master)
