@@ -12,14 +12,14 @@ class Graph(tk.Canvas):
         self.clear_plot()
         if numScores != 0:
             for i in range(0, numScores-1):
-                yCoord = int((1 - (score_history[i])/100) * (self.canvasHeight-45)+25)
-                xCoord = int ((i)/9 * (self.canvasWidth - 45)) + 30
-                nextY = int((1-(score_history[i+1])/100)*(self.canvasHeight-45)+25)
-                nextX = int((i+1)/9*(self.canvasWidth-45))+30
+                yCoord = int((1 - (score_history[i])/100) * (self.canvasHeight-40)+10)
+                xCoord = int ((i)/9 * (self.canvasWidth - 55)) + 40
+                nextY = int((1-(score_history[i+1])/100)*(self.canvasHeight-40)+10)
+                nextX = int((i+1)/9*(self.canvasWidth-55))+40
                 self.create_circle(xCoord, yCoord, 4)
                 self.create_line(xCoord, yCoord, nextX, nextY, tag = "points")
-            yCoord = int((1-(score_history[numScores-1])/100) * (self.canvasHeight-45)+25)
-            xCoord = int((numScores-1)/9*(self.canvasWidth-45))+30
+            yCoord = int((1-(score_history[numScores-1])/100) * (self.canvasHeight-40)+10)
+            xCoord = int((numScores-1)/9*(self.canvasWidth-55))+40
             self.create_circle(xCoord, yCoord,4)
 
     def create_circle(self, x, y, r):
@@ -43,23 +43,23 @@ class Graph(tk.Canvas):
         self.delete("all")
         self.canvasHeight = self.winfo_height()
         self.canvasWidth = self.winfo_width()
-        self.create_line(30, 25, 30, self.canvasHeight-20, fill = "black")
-        self.create_line(30, self.canvasHeight-20, self.canvasWidth-15, self.canvasHeight-20, fill = "black")
-        self.create_text(self.canvasWidth/2, 10,text= "Accuracy Score over Time", fill = "black")
+        self.create_line(40, 10, 40, self.canvasHeight-30, fill = "black")
+        self.create_line(40, self.canvasHeight-30, self.canvasWidth-15, self.canvasHeight-30, fill = "black")
+        self.create_text(self.canvasWidth/2, self.canvasHeight-15,text= "Accuracy Score over Time", fill = "black")
 
-        self.create_text(15, 25, text = "100", fill = "black")
-        self.create_text(15, int((self.canvasHeight-45)*.2+25),text = "80", fill = "black")
-        self.create_text(15, int((self.canvasHeight-45)*.4+25), text = "60", fill = "black")
-        self.create_text(15, int((self.canvasHeight-45)*.6+25), text = "40", fill = "black")
-        self.create_text(15, int((self.canvasHeight-45)*.8+25), text = "20", fill = "black")
+        self.create_text(20, 10, text = "100%", fill = "black")
+        self.create_text(20, int((self.canvasHeight-40)*.2+10),text = "80%", fill = "black")
+        self.create_text(20, int((self.canvasHeight-40)*.4+10), text = "60%", fill = "black")
+        self.create_text(20, int((self.canvasHeight-40)*.6+10), text = "40%", fill = "black")
+        self.create_text(20, int((self.canvasHeight-40)*.8+10), text = "20%", fill = "black")
 
-        self.create_text(15, int((self.canvasHeight-45)+25), text = "0", fill = "black")
+        self.create_text(20, int((self.canvasHeight-40)+10), text = "0", fill = "black")
 
-        self.create_line(30,25, 34, 25, fill = "black")
-        self.create_line(30, int((self.canvasHeight-45)*.2+25), 34, int((self.canvasHeight-45)*.2+25), fill = "black")
-        self.create_line(30, int((self.canvasHeight-45)*.4+25), 34, int((self.canvasHeight-45)*.4+25), fill = "black")
-        self.create_line(30, int((self.canvasHeight-45)*.6+25), 34, int((self.canvasHeight-45)*.6+25), fill = "black")
-        self.create_line(30, int((self.canvasHeight-45)*.8+25), 34, int((self.canvasHeight-45)*.8+25), fill = "black")
+        self.create_line(40,10, 44, 10, fill = "black")
+        self.create_line(40, int((self.canvasHeight-40)*.2+10), 44, int((self.canvasHeight-40)*.2+10), fill = "black")
+        self.create_line(40, int((self.canvasHeight-40)*.4+10), 44, int((self.canvasHeight-40)*.4+10), fill = "black")
+        self.create_line(40, int((self.canvasHeight-40)*.6+10), 44, int((self.canvasHeight-40)*.6+10), fill = "black")
+        self.create_line(40, int((self.canvasHeight-40)*.8+10), 44, int((self.canvasHeight-40)*.8+10), fill = "black")
 
         #self.create_line(int((self.canvasWidth-45)+30), self.canvasHeight-29, int((self.canvasWidth-45)+30), self.canvasHeight-34, fill = "black")
 
