@@ -38,7 +38,7 @@ class MainWindow:
         master.deiconify()
         master.title("TuneCoach")
         master.geometry(f'{self.screen_width}x{self.screen_height}')
-        master.minsize(width=int(self.screen_width/2), height=int(self.screen_height/2))
+        master.minsize(width=int(self.screen_width * 0.7), height=int(self.screen_height*0.7))
         master.maxsize(width=self.screen_width, height=self.screen_height)
 
         master.bind('<space>', lambda ev: self.controller.toggle_pause())
@@ -69,7 +69,7 @@ class MainWindow:
     # Creating frames to organize the screen.
     def layout_frames(self, screen_width, screen_height):
         frames_style = ttk.Style()
-        frames_style.configure('MainFrames.TFrame', background='white')
+        frames_style.configure('MainFrames.TFrame', background=Colors.background)
         self.bottom_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
         self.left_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
         self.right_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
@@ -159,6 +159,7 @@ class MainWindow:
 
     def update_diagnostics(self, data):
         self.diagnostics.update_plot(data)
+        self.pitch_display.display_score(data.get_overall())
 
     def update_history(self, data):
         self.history.update(data)
