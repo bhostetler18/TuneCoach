@@ -61,6 +61,7 @@ class MainController:
         self.session.data.key_signature = key_signature
         self.session.data.midi_range = (from_midi, to_midi)
         self.view.update_threshold(cent_threshold)
+        self.refresh_displays()
 
 
     def toggle_pause(self, force=False):
@@ -81,6 +82,7 @@ class MainController:
             self.audio_manager.pause()
             self.session.data.timer.pause()
             self.flush_queue()
+            self.refresh_displays() # TODO: try to avoid events coming in after pause
 
     def flush_queue(self):
         # add remaining data to session
@@ -88,23 +90,23 @@ class MainController:
             self.session.data.collect_data(self.queue.popleft())
 
     def setup_session(self):
-        
         self.reset_everything()
 
         if self.audio_manager is not None:
             self.audio_manager.kill()
-        
         self.audio_manager = AudioManager(lambda hz: self.queue.append(hz))
-        self.view.update_session_name(self.session.name)
 
-        if not self.session.data.empty:
-            self.view.update_diagnostics(self.session.data)
-            self.view.update_history(self.session.data)
+        self.refresh_displays()
     
     def reset_everything(self):
         self.toggle_pause(True)
         self.view.clear()
-        
+
+    def refresh_displays(self):
+        self.view.update_session_name(self.session.name)
+        if not self.session.data.empty:
+            self.view.update_diagnostics(self.session.data)
+            self.view.update_history(self.session.data)
     
     def save_as(self):
         self.toggle_pause(True)
@@ -141,6 +143,8 @@ class MainController:
         self.session = Session(data)
         self.setup_session()
         NewSessionWindow(self.view)
+        self.reset_everything()
+        self.refresh_displays()
 
     def load_from(self):
         # if current sesion isn't saved, ask if we should save. If we should
@@ -161,3 +165,4 @@ class MainController:
             self.session = session
             self.setup_session()
             self.should_save = False
+        self.refresh_displays()

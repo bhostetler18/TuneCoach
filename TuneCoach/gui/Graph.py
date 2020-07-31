@@ -57,7 +57,7 @@ class Graph(tk.Canvas):
 
         self.create_text(20, int((self.canvasHeight-40)+10), text = "0", fill = Colors.graph_foreground)
 
-        self.create_line(40, 10, 44, 10, fill=Colors.graph_foreground")
+        self.create_line(40, 10, 44, 10, fill=Colors.graph_foreground)
         self.create_line(40, int((self.canvasHeight-40)*.2+20), 34, int((self.canvasHeight-40)*.2+20), fill=Colors.graph_foreground)
         self.create_line(40, int((self.canvasHeight-40)*.4+20), 34, int((self.canvasHeight-40)*.4+20), fill=Colors.graph_foreground)
         self.create_line(40, int((self.canvasHeight-40)*.6+20), 34, int((self.canvasHeight-40)*.6+20), fill=Colors.graph_foreground)

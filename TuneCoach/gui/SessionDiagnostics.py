@@ -21,7 +21,7 @@ class SessionDiagnostics:
                                                                                                     data.highest_note, 
                                                                                                     data.highest_octave)
             updated_display_text = "Average error: %.1f cents" % data.avg_cents
-            #self.settings.set_text(display_settings)
+            self.settings.config(text=display_settings)
             self.score.set_text(updated_display_text)
             data.update_score_history()
 
