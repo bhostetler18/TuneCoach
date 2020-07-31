@@ -33,16 +33,16 @@ class SessionDiagnostics:
 
         title_frame.grid(row=0, sticky="nsew", ipady=2.5)
         graph_frame.grid(row=1, sticky="nsew", ipady=2.5)
-        settings_frame.grid(row=2, sticky="nsew", ipady=2.5, ipadx=2.5)
+        settings_frame.grid(row=2, sticky="nsew", ipady=7.5, ipadx=2.5)
 
-        workingFrame.grid_rowconfigure(0, weight=1)
+        workingFrame.grid_rowconfigure(0, weight=0)
         workingFrame.grid_rowconfigure(1, weight=1)
-        workingFrame.grid_rowconfigure(2, weight=1)
-        workingFrame.grid_columnconfigure(0, weight=1, uniform="col")
+        workingFrame.grid_rowconfigure(2, weight=0)
+        workingFrame.grid_columnconfigure(0, weight=1)
         #workingFrame.grid_columnconfigure(1, weight=1, uniform="col")
 
         self.myGraph = Graph(graph_frame)
-        self.myGraph.pack(anchor=tk.CENTER, fill=tk.X, padx=20)
+        self.myGraph.pack(anchor=tk.CENTER, fill=tk.BOTH, expand=True, padx=20)
         title_label_style = ttk.Style()
         title_label_style.configure("TitleLabel.TLabel", font="Ubuntu 20", side=tk.TOP, foreground=Colors.text, background=Colors.aux)
         title_label = ttk.Label(title_frame, text="Current Session", style="TitleLabel.TLabel")
@@ -53,8 +53,8 @@ class SessionDiagnostics:
         self.session_name = ttk.Label(title_frame, text=mainWindow.controller.session.name, style="SessionName.TLabel")
         self.session_name.pack()
 
-        self.score = RoundedLabel(graph_frame, "Average error: 0.0 cents", Colors.score_label, width=230, height=45)
-        self.score.pack(anchor=tk.CENTER)
+        self.score = RoundedLabel(graph_frame, "Average error: 0.0 cents", Colors.score_label, width=225, height=35)
+        self.score.pack()
 
         self.thresh_label = RoundedLabel(settings_frame, "Threshold: ±15 cents", Colors.settings_color, height=45)
         self.thresh_label.grid(row=0, column=0, sticky='ew', padx=5)

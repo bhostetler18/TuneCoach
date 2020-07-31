@@ -56,7 +56,6 @@ class MainController:
             self.view.after(10, self.update_pitch)
     
     def update_tuner_settings(self, cent_threshold, key_signature, from_midi, to_midi):
-        print("update tuner settings")
         self.threshold = cent_threshold
         self.session.data.set_thresholds(cent_threshold, self.yellow_threshold)
         self.session.data.key_signature = key_signature
