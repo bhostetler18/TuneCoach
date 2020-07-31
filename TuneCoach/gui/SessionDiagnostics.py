@@ -20,11 +20,9 @@ class SessionDiagnostics:
                                                                                                     data.lowest_octave, 
                                                                                                     data.highest_note, 
                                                                                                     data.highest_octave)
-            updated_display_text = "Overall Score: %.2f" % data.get_overall() + '\n'\
-                + "You are off by an average of %.2f cents." % data.avg_cents + '\n' \
-                + display_settings
-
-            self.summary.set_text(updated_display_text)
+            updated_display_text = "Overall Score: %.2f" % data.get_overall() + '%\n' + "Average error: %.1f cents" % data.avg_cents
+            #self.settings.set_text(display_settings)
+            self.score.set_text(updated_display_text)
             data.update_score_history()
 
     def __init__(self, mainWindow):
@@ -49,10 +47,10 @@ class SessionDiagnostics:
         workingFrame.grid_columnconfigure(1, weight=1)
 
         self.myGraph = Graph(right_frame)
-        self.myGraph.pack(expand=True, anchor=tk.CENTER, fill=tk.BOTH)
+        self.myGraph.pack(side=tk.BOTTOM, anchor=tk.CENTER)
         title_label_style = ttk.Style()
         title_label_style.configure("TitleLabel.TLabel", font="Ubuntu 20", side=tk.TOP, foreground=Colors.text, background=Colors.aux)
-        title_label = ttk.Label(title_frame, text="Session Diagnostics", style="TitleLabel.TLabel")
+        title_label = ttk.Label(title_frame, text="Current Session", style="TitleLabel.TLabel")
         title_label.pack()
 
         session_name_label_style = ttk.Style()
@@ -61,7 +59,7 @@ class SessionDiagnostics:
         self.session_name.pack()
 
         v = "Overall Score: N/A"
-        c = "You are off by an average of N/A cents"
+        c = "Average error: 0.0 cents"
 
         display_settings = "Settings:\n" \
                            "-------------------\n" \
@@ -69,6 +67,13 @@ class SessionDiagnostics:
                            "Key Signature: C Major\n" \
                            "Range: C2 to B7"
 
-        self.summary = RoundedLabel(left_frame, v + '\n' + c + '\n' + display_settings, 300, 130)
-        self.summary.pack()
+
+        self.score = RoundedLabel(title_frame, v+'\n'+c, Colors.piano_track, width=250, height=75)
+        self.score.pack(anchor=tk.CENTER)
+
+        style = ttk.Style()
+        style.configure("Score.TLabel", foreground=Colors.text, background=Colors.aux)
+        self.settings = ttk.Label(left_frame, text=display_settings, style="Score.TLabel")
+        self.settings.pack(side=tk.LEFT, )
+
 

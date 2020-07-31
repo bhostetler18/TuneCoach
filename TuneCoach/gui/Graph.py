@@ -1,5 +1,5 @@
 import tkinter as tk
-
+from TuneCoach.gui.constants import *
 
 class Graph(tk.Canvas):
     def clear_plot(self):
@@ -30,7 +30,7 @@ class Graph(tk.Canvas):
         return self.create_oval(x0, y0, x1, y1, tag = "points", fill = "black")
 
     def __init__(self, frame, **kwargs):
-        super().__init__(frame, kwargs, bg="white")
+        super().__init__(frame, kwargs, bg=Colors.graph, bd=0, highlightthickness=0)
         self.frame = frame
         self.canvasHeight = self.winfo_height()
         self.canvasWidth = self.winfo_width()

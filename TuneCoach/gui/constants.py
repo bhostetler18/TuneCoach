@@ -3,3 +3,4 @@ class Colors:
 	aux = '#585869'
 	text = '#ffffff'
 	piano_track = '#bdd0df'
+	graph = '#85c9ac'
