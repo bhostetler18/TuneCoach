@@ -8,12 +8,11 @@ import tkinter.ttk as ttk
 class TunerSettingsWindow:
     def input_check(self, new_cents, f_note, f_oct, t_note, t_oct, window):
         keytype = KeySignatureType[self.ktype.get().upper()]
-        if keytype == KeySignatureType.MINOR:
-            from_midi = note_to_midi(self.minor_key_names, f_note, f_oct)
-            to_midi = note_to_midi(self.minor_key_names, t_note, t_oct)
-        else:
-            from_midi = note_to_midi(self.major_key_names, f_note, f_oct)
-            to_midi = note_to_midi(self.major_key_names, t_note, t_oct)
+        low = string_to_pitch_class(f_note)
+        high = string_to_pitch_class(t_note)
+        from_midi = pitch_with_octave(low, int(f_oct))
+        to_midi = pitch_with_octave(high, int(t_oct))
+
         if from_midi >= to_midi:
             error_frame_style = ttk.Style()
             error_frame_style.configure('ErrorFrame.TFrame', background=Colors.background, border=5)
@@ -26,11 +25,10 @@ class TunerSettingsWindow:
             error_label = ttk.Label(error_frame, text="Invalid Note Range!", style='ErrorLabel.TLabel')
             error_label.pack()
         else:
-            self.update_tuner_settings(new_cents, self.current_key_signature, f_note, f_oct, t_note, t_oct, window)
+            self.update_tuner_settings(new_cents, self.current_key_signature, from_midi, to_midi, window)
 
-    def update_tuner_settings(self, cent_threshold, key_signature, f_note, f_oct, t_note, t_oct, oldSettingsView):
-
-        self.mainWindow.controller.update_tuner_settings(cent_threshold, key_signature, f_note, f_oct, t_note, t_oct)
+    def update_tuner_settings(self, cent_threshold, key_signature, from_midi, to_midi, oldSettingsView):
+        self.mainWindow.controller.update_tuner_settings(cent_threshold, key_signature, from_midi, to_midi)
         oldSettingsView.destroy()
 
     def __init__(self, mainWindow):
@@ -98,7 +96,7 @@ class TunerSettingsWindow:
         centsitivity.pack()
 
         v = tk.DoubleVar()
-        v.set(data.threshold)
+        v.set(data.green_thresh)
 
         cent_scale = tk.Scale(middle_frame2, from_=1, to=25, orient=tk.HORIZONTAL, variable=v)
         cent_scale.config(bg=Colors.background, fg="white")
@@ -116,41 +114,47 @@ class TunerSettingsWindow:
         range_label.config(bg=Colors.background, fg="white")
         range_label.pack()
 
-        self.major_key_names = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
+        # TODO: extract into keysignature and allow for better initialization, create circle-of-fifths-based data structure
+        self.major_key_names = ["C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"]
         self.major_accidentals = [Accidental.SHARP, Accidental.FLAT, Accidental.SHARP, Accidental.FLAT,
                                     Accidental.SHARP, Accidental.FLAT, Accidental.SHARP, Accidental.SHARP,
                                         Accidental.FLAT, Accidental.SHARP, Accidental.FLAT, Accidental.SHARP]
-        self.minor_key_names = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"]
+        self.major_numbers = [0, 5, 2, 3, 4, 1, 6, 1, 4, 3, 2, 5] # number of sharps/flats in each key
+        self.minor_key_names = ["C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "G♯", "A", "B♭", "B"]
         self.minor_accidentals = [Accidental.FLAT, Accidental.SHARP, Accidental.FLAT, Accidental.FLAT,
                                     Accidental.SHARP, Accidental.FLAT, Accidental.SHARP, Accidental.FLAT,
                                         Accidental.SHARP, Accidental.SHARP, Accidental.FLAT, Accidental.SHARP]
+        self.minor_numbers = [3, 4, 1, 6, 1, 4, 3, 2, 5, 0, 5, 2]
+
 
         self.current_key_signature = data.key_signature
-        current = self.current_key_signature.name.split()
-        if current[1] == "Minor":
-            index = self.minor_key_names.index(current[0])
-        else:
-            index = self.major_key_names.index(current[0])
-        self.root = tk.IntVar(value=index)
-        self.ktype = tk.StringVar(value=current[1])
+        current_type = data.key_signature.ktype
+        self.root = tk.IntVar(value=self.current_key_signature.raw_value)
+        self.ktype = tk.StringVar(value=current_type.value)
         self.radio_buttons = []
 
         # Grid of key signature buttons
         for i in range(0, 12):
-            name = self.major_key_names[i]
+            name = ""
+            if current_type == KeySignatureType.MINOR:
+                name = self.minor_key_names[i]
+            else:
+                name = self.major_key_names[i]
             button = tk.Radiobutton(bottom_frame2, text=name, indicatoron=0, width=3, variable=self.root, value=i, command=self.selection_changed)
             button.grid(row=i//4 + 1, column=i%4)
             self.radio_buttons.append(button)
 
-        major_button = tk.Radiobutton(bottom_frame3, text="Major", indicatoron=0, width=6, variable=self.ktype, value="Major", command=lambda: self.selection_changed(True))
+        major_button = tk.Radiobutton(bottom_frame3, text="Major", indicatoron=0, width=6, variable=self.ktype, value="Major", command=self.selection_changed)
         major_button.grid(row=1, column=0)
-        minor_button = tk.Radiobutton(bottom_frame3, text="Minor", indicatoron=0, width=6, variable=self.ktype, value="Minor", command=lambda: self.selection_changed(True))
+        minor_button = tk.Radiobutton(bottom_frame3, text="Minor", indicatoron=0, width=6, variable=self.ktype, value="Minor", command=self.selection_changed)
         minor_button.grid(row=2, column=0)
 
-        self.from_note = tk.StringVar(value=data.from_note)
-        from_octave = tk.StringVar(value=data.from_octave)
-        self.to_note = tk.StringVar(value=data.to_note)
-        to_octave = tk.StringVar(value=data.to_octave)
+
+        # MIDI RANGE SELECTION
+        self.from_note = tk.StringVar(value=data.lowest_note)
+        from_octave = tk.IntVar(value=data.lowest_octave)
+        self.to_note = tk.StringVar(value=data.highest_note)
+        to_octave = tk.IntVar(value=data.highest_octave)
 
         self.from_note_menu = tk.OptionMenu(range_frame2, self.from_note, *self.major_key_names)
         self.from_note_menu.grid(row=1, column=0)
@@ -166,6 +170,8 @@ class TunerSettingsWindow:
         to_octave_menu = tk.OptionMenu(range_frame3, to_octave, 2, 3, 4, 5, 6, 7)
         to_octave_menu.grid(row=1, column=1)
 
+        self.refresh_om(self.from_note, self.to_note)
+
         #def input_check(self, new_cents, f_note, f_oct, t_note, t_oct, window):
         #done_button = ttk.Button(done_frame, text="Apply", command=lambda: self.update_tuner_settings(cent_scale.get(), self.current_key_signature, self.from_note.get(), from_octave.get(), self.to_note.get(), to_octave.get(), tuner_settings_window))
         done_button = ttk.Button(done_frame, text="Apply", command=lambda: self.input_check(cent_scale.get(), self.from_note.get(), from_octave.get(), self.to_note.get(), to_octave.get(), tuner_settings_window))
@@ -173,35 +179,36 @@ class TunerSettingsWindow:
         done_button.pack()
         tuner_settings_window.lift(self.mainWindow.master)
 
-    def selection_changed(self, redraw=False):
-        if redraw:
-            names = self.major_key_names
-            self.refresh_om(True, self.from_note, self.to_note)
-            if self.ktype.get() == "Minor":
-                names = self.minor_key_names
-                self.refresh_om(False, self.from_note, self.to_note)
-            for i in range(0, 12):
-                self.radio_buttons[i].config(text=names[i])
-
+    def selection_changed(self, redraw=True):
         index = self.root.get()
         keytype = KeySignatureType[self.ktype.get().upper()]
+        num_accidentals = 0
         if keytype == KeySignatureType.MINOR:
             accidental = self.minor_accidentals[index]
             name = self.minor_key_names[index]
+            num_accidentals = self.minor_numbers[index]
         else:
             accidental = self.major_accidentals[index]
             name = self.major_key_names[index]
+            num_accidentals = self.major_numbers[index]
             
-        self.current_key_signature = KeySignature(name, index, accidental, keytype)
+        self.current_key_signature = KeySignature(name, index, accidental, num_accidentals, keytype)
 
-    def refresh_om(self, major, from_def, to_def):
+        if redraw:
+            self.refresh_om(self.from_note, self.to_note)
+            if self.ktype.get() == "Minor":
+                names = self.minor_key_names
+            else:
+                names = self.major_key_names
+            for i in range(0, 12):
+                self.radio_buttons[i].config(text=names[i])
+
+    def refresh_om(self, from_def, to_def):
         self.from_note_menu['menu'].delete(0, 'end')
         self.to_note_menu['menu'].delete(0, 'end')
-        if major:
-            for key in self.major_key_names:
-                self.from_note_menu['menu'].add_command(label=key, command=tk._setit(from_def, key))
-                self.to_note_menu['menu'].add_command(label=key, command=tk._setit(to_def, key))
-        else:
-            for key in self.minor_key_names:
-                self.from_note_menu['menu'].add_command(label=key, command=tk._setit(from_def, key))
-                self.to_note_menu['menu'].add_command(label=key, command=tk._setit(to_def, key))
+        notes = [self.current_key_signature.get_display_for(n) for n in range(0,12)]
+        start = self.current_key_signature.raw_value
+        notes = notes[start:] + notes[:start] # rotate so current root is first
+        for note in notes:
+            self.from_note_menu['menu'].add_command(label=note, command=tk._setit(from_def, note))
+            self.to_note_menu['menu'].add_command(label=note, command=tk._setit(to_def, note))
