@@ -35,7 +35,7 @@ class SessionDiagnostics:
         graph_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
         settings_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
 
-        title_frame.grid(row=0, sticky="nsew")
+        title_frame.grid(row=0, sticky="nsew", ipady=5)
         graph_frame.grid(row=2, sticky="nsew")
         settings_frame.grid(row=1, sticky="nsew")
 
