@@ -15,10 +15,15 @@ class TunerSettingsWindow:
             from_midi = note_to_midi(self.major_key_names, f_note, f_oct)
             to_midi = note_to_midi(self.major_key_names, t_note, t_oct)
         if from_midi >= to_midi:
-            error_frame = tk.Frame(window, bd=5, bg=Colors.background)
+            error_frame_style = ttk.Style()
+            error_frame_style.configure('ErrorFrame.TFrame', background=Colors.background, border=5)
+
+            error_frame = ttk.Frame(window, style='ErrorFrame.TFrame')
             error_frame.grid(row=4, column=0, columnspan=3, sticky="nsew")
-            error_label = tk.Label(error_frame, text="Invalid Note Range!")
-            error_label.config(bg=background_color, fg="red", font=(None, 12))
+
+            error_label_style = ttk.Style()
+            error_label_style.configure('ErrorLabel.TLabel', background=Colors.background, font=(None, 12), foreground='red')
+            error_label = ttk.Label(error_frame, text="Invalid Note Range!", style='ErrorLabel.TLabel')
             error_label.pack()
         else:
             self.update_tuner_settings(new_cents, self.current_key_signature, f_note, f_oct, t_note, t_oct, window)
