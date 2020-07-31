@@ -14,12 +14,13 @@ class TunerSettingsWindow:
         to_midi = pitch_with_octave(high, int(t_oct))
 
         if from_midi >= to_midi: 
-            if self.invalid: return # don't add invalid text twice
-            self.invalid = True
-            error_label_style = ttk.Style()
-            error_label_style.configure('ErrorLabel.TLabel', background="#F4F4F4", font=(None, 12), foreground='red')
-            error_label = ttk.Label(self.range_frame1, text="Invalid Range!", style='ErrorLabel.TLabel')
-            error_label.pack()
+            self.range_label.pack_forget()
+            style = ttk.Style()
+            style.configure("Red.TLabel", foreground="red")
+            self.range_label = ttk.Label(self.range_frame1, text="Note Range:")
+            self.range_label.configure(style="Red.TLabel")
+            self.range_label.pack(expand=True)
+
         else:
             self.update_tuner_settings(new_cents, self.current_key_signature, from_midi, to_midi, window)
 
@@ -78,9 +79,9 @@ class TunerSettingsWindow:
         #sig_label.config(bg="#F4F4F4", fg="black")
         sig_label.pack(expand=True)
 
-        range_label = ttk.Label(self.range_frame1, text="Note Range:")
+        self.range_label = ttk.Label(self.range_frame1, text="Note Range:")
         #range_label.config(bg="#F4F4F4", fg="black")
-        range_label.pack(expand=True)
+        self.range_label.pack(expand=True)
 
         # TODO: extract into keysignature and allow for better initialization, create circle-of-fifths-based data structure
         self.major_key_names = ["C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"]
