@@ -20,7 +20,7 @@ class SessionDiagnostics:
                                                                                                     data.lowest_octave, 
                                                                                                     data.highest_note, 
                                                                                                     data.highest_octave)
-            updated_display_text = "Overall Score: %.2f" % data.get_overall() + '%\n' + "Average error: %.1f cents" % data.avg_cents
+            updated_display_text = "Average error: %.1f cents" % data.avg_cents
             #self.settings.set_text(display_settings)
             self.score.set_text(updated_display_text)
             data.update_score_history()
@@ -35,16 +35,15 @@ class SessionDiagnostics:
         left_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
         right_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
 
-        title_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
-        left_frame.grid(row=1, column=0, rowspan=3, sticky="nsew")
-        right_frame.grid(row=1, column=1, rowspan=3, sticky="nsew")
+        title_frame.grid(row=0, sticky="nsew")
+        left_frame.grid(row=2, sticky="nsew")
+        right_frame.grid(row=1, sticky="nsew")
 
-        workingFrame.grid_rowconfigure(0, weight=0)
+        workingFrame.grid_rowconfigure(0, weight=1)
         workingFrame.grid_rowconfigure(1, weight=1)
         workingFrame.grid_rowconfigure(2, weight=1)
-        workingFrame.grid_rowconfigure(3, weight=1)
         workingFrame.grid_columnconfigure(0, weight=1, uniform="col")
-        workingFrame.grid_columnconfigure(1, weight=1, uniform="col")
+        #workingFrame.grid_columnconfigure(1, weight=1, uniform="col")
 
         self.myGraph = Graph(right_frame)
         self.myGraph.pack(side=tk.BOTTOM, anchor=tk.CENTER)
@@ -58,7 +57,6 @@ class SessionDiagnostics:
         self.session_name = ttk.Label(title_frame, text=mainWindow.controller.session.name, style="SessionName.TLabel")
         self.session_name.pack()
 
-        v = "Overall Score: N/A"
         c = "Average error: 0.0 cents"
 
         display_settings = "Settings:\n" \
@@ -68,7 +66,7 @@ class SessionDiagnostics:
                            "Range: C2 to B7"
 
 
-        self.score = RoundedLabel(title_frame, v+'\n'+c, Colors.piano_track, width=250, height=75)
+        self.score = RoundedLabel(title_frame, c, Colors.piano_track, width=250, height=45)
         self.score.pack(anchor=tk.CENTER)
 
         style = ttk.Style()
