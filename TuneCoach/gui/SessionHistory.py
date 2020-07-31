@@ -117,11 +117,11 @@ class SessionHistory:
         self.current_pos = pos
         notes = self.buffer[pos : pos + self.display_size]
         for i, note in enumerate(notes):
-            color = "red"
+            color = Colors.red
             if abs(note.cents) <= self.mainWindow.controller.threshold:
-                color = "green"
+                color = Colors.green
             elif abs(note.cents) <= self.mainWindow.controller.yellow_threshold:
-                color = "yellow"
+                color = Colors.yellow
 
             circle = self.circle_list[i]
             x = self.circle_start + self.circle_size + 2*self.circle_size*i

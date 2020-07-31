@@ -43,8 +43,8 @@ class SessionDiagnostics:
         workingFrame.grid_rowconfigure(1, weight=1)
         workingFrame.grid_rowconfigure(2, weight=1)
         workingFrame.grid_rowconfigure(3, weight=1)
-        workingFrame.grid_columnconfigure(0, weight=1)
-        workingFrame.grid_columnconfigure(1, weight=1)
+        workingFrame.grid_columnconfigure(0, weight=1, uniform="col")
+        workingFrame.grid_columnconfigure(1, weight=1, uniform="col")
 
         self.myGraph = Graph(right_frame)
         self.myGraph.pack(side=tk.BOTTOM, anchor=tk.CENTER)

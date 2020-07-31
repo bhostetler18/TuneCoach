@@ -159,6 +159,7 @@ class MainWindow:
 
     def update_diagnostics(self, data):
         self.diagnostics.update_plot(data)
+        self.pitch_display.display_score(data.get_overall())
 
     def update_history(self, data):
         self.history.update(data)

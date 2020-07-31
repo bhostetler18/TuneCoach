@@ -3,11 +3,11 @@ from TuneCoach.gui.constants import *
 
 
 class RoundedLabel(tk.Canvas):
-    def __init__(self, parent, text, color, **kwargs):
+    def __init__(self, parent, text, color, transparentColor=Colors.aux, **kwargs):
         self.current_text = text
         self._text = None
         self.color = color
-        super().__init__(parent, kwargs, bg=Colors.aux, bd=0, highlightthickness=0) # bg=parent["background"]
+        super().__init__(parent, kwargs, bg=transparentColor, bd=0, highlightthickness=0) # bg=parent["background"]
         self.draw()
         self.bind("<Configure>", self.draw)
 
@@ -20,7 +20,7 @@ class RoundedLabel(tk.Canvas):
         self.delete("all")
         width = self.winfo_width()
         height = self.winfo_height()
-        self.backdrop = self.round_rectangle(0, 0, width, height, radius=40, fill=self.color)
+        self.backdrop = self.round_rectangle(0, 0, width, height, radius=30, fill=self.color)
         self._text = self.create_text(width/2, height/2, fill='#424651')
         self.itemconfig(self._text, text=self.current_text, font=(None, 10, 'bold'))
 
