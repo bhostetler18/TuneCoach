@@ -1,5 +1,6 @@
 import tkinter as tk
 from TuneCoach.python_bridge.pitch_utilities import *
+from TuneCoach.gui.constants import *
 
 # set_score uses session.data.key_signature.accidental
 class Piano(tk.Canvas):
@@ -49,11 +50,11 @@ class Piano(tk.Canvas):
             x = coords[2] / 2
             y = (coords[3] + coords[1]) / 2
             if round(scores[i]) > 70:
-                textColor = "green"
+                textColor = Colors.green
             elif round(scores[i]) > 50:
-                textColor = "gold"
+                textColor = Colors.yellow
             else:
-                textColor = "red"        
+                textColor = Colors.red     
             textID = self.create_text(x, y, text=f"{key_signature.get_display_for(i)}: {round(scores[i])}%", fill=textColor, tag="text")
         for i in [1,3,6,8,10]:
             key = self.keys[i]
@@ -61,9 +62,9 @@ class Piano(tk.Canvas):
             x = coords[2] / 2
             y = (coords[3] + coords[1]) / 2
             if round(scores[i]) > 70:
-                textColor = "green"
+                textColor = Colors.green
             elif round(scores[i]) > 50:
-                textColor = "gold"
+                textColor = Colors.yellow
             else:
-                textColor = "red"  
+                textColor = Colors.red
             textID = self.create_text(x, y, text=f"{key_signature.get_display_for(i)}: {round(scores[i])}%", fill=textColor, tag="text")

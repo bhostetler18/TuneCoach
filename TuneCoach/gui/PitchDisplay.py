@@ -6,6 +6,7 @@ from math import sin, cos, radians
 import time
 from TuneCoach.gui.IndicatorLight import *
 from TuneCoach.gui.constants import *
+from TuneCoach.gui.RoundedLabel import *
 
 
 class PitchDisplay:
@@ -29,15 +30,23 @@ class PitchDisplay:
         self.canvas.pack(fill=BOTH, expand=True)
         self.canvas.bind("<Configure>", self.configure)
 
-        self.rec_frame = Frame(self.canvas, width=80, height=35, bg=Colors.background, bd=0, highlightthickness=0)
-        self.rec_frame.pack(anchor='w', side='top')
+        self.top_frame = Frame(self.canvas, height=35, bg=Colors.background, bd=0, highlightthickness=0)
+        #self.top_frame.pack_propagate(0)
+        self.top_frame.pack(side='top', fill=tk.X, anchor=tk.N)
+
+        self.rec_frame = Frame(self.top_frame, width=80, height=35, bg=Colors.background, bd=0, highlightthickness=0)
         self.rec_frame.pack_propagate(0)
+        self.rec_frame.pack(anchor='w', side=tk.LEFT)
 
         self.light = IndicatorLight(self.rec_frame, 35)
         self.light.pack(anchor='w', side='left')
 
         self.time_label = Label(self.rec_frame, text='00:00', anchor='e', justify=RIGHT, fg=Colors.text, bg=Colors.background)
         self.time_label.pack(side='right')
+
+        self.score_label = RoundedLabel(self.top_frame, "Score: 0%", Colors.score_label, Colors.background, height=35, width=110)
+        self.score_label.pack(side='right')
+        #self.score_label.set_text("adfasdf")
 
         self.showsHertz = BooleanVar()
 
@@ -72,6 +81,9 @@ class PitchDisplay:
     def configure(self, event):
         self.display_default_gui()
 
+    def display_score(self, score):
+        self.score_label.set_text(f"Score: {round(score)}%")
+
     def display_current_gui(self):
         pitch_and_octave = self._pitchValue + self._octaveValue
         self.canvas.itemconfig(self.current_pitch_display, text=pitch_and_octave)
@@ -79,7 +91,7 @@ class PitchDisplay:
             self.canvas.itemconfig(self.hertzDisplay, text=self._hertzValue)
         self.update_line(self._centsValue)
         if not self._clearing and abs(self._centsValue) <= self.threshold:
-            self.canvas.itemconfig(self.green_arc, fill="green")
+            self.canvas.itemconfig(self.green_arc, fill=Colors.green)
         else:
             self.canvas.itemconfig(self.green_arc, fill="#ccffbf")
 
@@ -90,11 +102,11 @@ class PitchDisplay:
         min_dimension = min(self.width, self.height)
         self.radius = 0.4 * min_dimension
         self.centerX = self.width/2
-        self.centerY = self.height/2
+        self.centerY = self.height/2 + 15
 
-        self.current_pitch_display = self.canvas.create_text(self.width/2, self.height/2 + self.pitchOffset, font=self.font, text='---', fill=Colors.text)
+        self.current_pitch_display = self.canvas.create_text(self.centerX, self.centerY + self.pitchOffset, font=self.font, text='---', fill=Colors.text)
         if self.showsHertz.get():
-            self.hertzDisplay = self.canvas.create_text(self.width/2, self.height/2 + 2*self.pitchOffset, font="Ubuntu 14", text='', fill=Colors.text)
+            self.hertzDisplay = self.canvas.create_text(self.centerX, self.centerY + 2*self.pitchOffset, font="Ubuntu 14", text='', fill=Colors.text)
 
         self.help_text = self.canvas.create_text(self.width/2, self.height-35, text='Press \'space\' to accept audio input', fill=Colors.text)
 
@@ -121,7 +133,7 @@ class PitchDisplay:
         self.green_arc = self.canvas.create_arc(x0, y0, x1, y1)
         self.canvas.itemconfig(self.green_arc, start=gStart, fill="#ccffbf", extent=gSpan, outline='')
 
-        self.line = self.canvas.create_line(0, 0, 0, 0, fill="#452A23", width=4, 
+        self.line = self.canvas.create_line(0, 0, 0, 0, fill=Colors.tuner_needle, width=4, 
                                             arrow=FIRST, arrowshape=(self.radius,10,5))
         self.update_line(-50)
 

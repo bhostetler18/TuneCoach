@@ -38,7 +38,7 @@ class MainWindow:
         master.deiconify()
         master.title("TuneCoach")
         master.geometry(f'{self.screen_width}x{self.screen_height}')
-        master.minsize(width=int(self.screen_width/2), height=int(self.screen_height/2))
+        master.minsize(width=int(self.screen_width * 0.6), height=int(self.screen_height*0.7))
         master.maxsize(width=self.screen_width, height=self.screen_height)
 
         master.bind('<space>', lambda ev: self.controller.toggle_pause())
@@ -159,6 +159,7 @@ class MainWindow:
 
     def update_diagnostics(self, data):
         self.diagnostics.update_plot(data)
+        self.pitch_display.display_score(data.get_overall())
 
     def update_history(self, data):
         self.history.update(data)

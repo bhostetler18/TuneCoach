@@ -49,6 +49,7 @@ class SessionData:
         self.timer.pause()
 
         self._score_history = []
+        self.score_history_size = 15
 
     def get_overall(self):
         if self._overall_count == 0:
@@ -89,7 +90,7 @@ class SessionData:
     def update_score_history(self):
         new_score = self.get_overall()
         self._score_history.append(new_score)
-        if len(self._score_history) > 10:
+        if len(self._score_history) > self.score_history_size:
                 self._score_history.pop(0)
 
     def set_thresholds(self, green_thresh, yellow_thresh):

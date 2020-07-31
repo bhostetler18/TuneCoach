@@ -20,11 +20,9 @@ class SessionDiagnostics:
                                                                                                     data.lowest_octave, 
                                                                                                     data.highest_note, 
                                                                                                     data.highest_octave)
-            updated_display_text = "Overall Score: %.2f" % data.get_overall() + '\n'\
-                + "You are off by an average of %.2f cents." % data.avg_cents + '\n' \
-                + display_settings
-
-            self.summary.set_text(updated_display_text)
+            updated_display_text = "Average error: %.1f cents" % data.avg_cents
+            #self.settings.set_text(display_settings)
+            self.score.set_text(updated_display_text)
             data.update_score_history()
 
     def __init__(self, mainWindow):
@@ -34,25 +32,24 @@ class SessionDiagnostics:
         frames_style = ttk.Style()
         frames_style.configure('DiagnosticsFrame.TFrame', background=Colors.aux)
         title_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
-        left_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
-        right_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
+        graph_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
+        settings_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
 
-        title_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
-        left_frame.grid(row=1, column=0, rowspan=3, sticky="nsew")
-        right_frame.grid(row=1, column=1, rowspan=3, sticky="nsew")
+        title_frame.grid(row=0, sticky="nsew", ipady=5)
+        graph_frame.grid(row=2, sticky="nsew")
+        settings_frame.grid(row=1, sticky="nsew")
 
-        workingFrame.grid_rowconfigure(0, weight=0)
+        workingFrame.grid_rowconfigure(0, weight=1)
         workingFrame.grid_rowconfigure(1, weight=1)
         workingFrame.grid_rowconfigure(2, weight=1)
-        workingFrame.grid_rowconfigure(3, weight=1)
-        workingFrame.grid_columnconfigure(0, weight=1)
-        workingFrame.grid_columnconfigure(1, weight=1)
+        workingFrame.grid_columnconfigure(0, weight=1, uniform="col")
+        #workingFrame.grid_columnconfigure(1, weight=1, uniform="col")
 
-        self.myGraph = Graph(right_frame)
-        self.myGraph.pack(expand=True, anchor=tk.CENTER, fill=tk.BOTH)
+        self.myGraph = Graph(settings_frame)
+        self.myGraph.pack(side=tk.BOTTOM, anchor=tk.CENTER)
         title_label_style = ttk.Style()
         title_label_style.configure("TitleLabel.TLabel", font="Ubuntu 20", side=tk.TOP, foreground=Colors.text, background=Colors.aux)
-        title_label = ttk.Label(title_frame, text="Session Diagnostics", style="TitleLabel.TLabel")
+        title_label = ttk.Label(title_frame, text="Current Session", style="TitleLabel.TLabel")
         title_label.pack()
 
         session_name_label_style = ttk.Style()
@@ -60,8 +57,7 @@ class SessionDiagnostics:
         self.session_name = ttk.Label(title_frame, text=mainWindow.controller.session.name, style="SessionName.TLabel")
         self.session_name.pack()
 
-        v = "Overall Score: N/A"
-        c = "You are off by an average of N/A cents"
+        c = "Average error: 0.0 cents"
 
         display_settings = "Settings:\n" \
                            "-------------------\n" \
@@ -69,6 +65,13 @@ class SessionDiagnostics:
                            "Key Signature: C Major\n" \
                            "Range: C2 to B7"
 
-        self.summary = RoundedLabel(left_frame, v + '\n' + c + '\n' + display_settings, 300, 130)
-        self.summary.pack()
+
+        self.score = RoundedLabel(graph_frame, c, Colors.piano_track, width=250, height=45)
+        self.score.pack(anchor=tk.CENTER)
+
+        style = ttk.Style()
+        style.configure("Score.TLabel", foreground=Colors.text, background=Colors.aux)
+        self.settings = ttk.Label(graph_frame, text=display_settings, style="Score.TLabel")
+        self.settings.pack(side=tk.LEFT, )
+
 
