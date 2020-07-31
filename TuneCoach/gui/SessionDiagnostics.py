@@ -32,12 +32,12 @@ class SessionDiagnostics:
         frames_style = ttk.Style()
         frames_style.configure('DiagnosticsFrame.TFrame', background=Colors.aux)
         title_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
-        left_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
-        right_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
+        graph_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
+        settings_frame = ttk.Frame(workingFrame, style='DiagnosticsFrame.TFrame')
 
         title_frame.grid(row=0, sticky="nsew")
-        left_frame.grid(row=2, sticky="nsew")
-        right_frame.grid(row=1, sticky="nsew")
+        graph_frame.grid(row=2, sticky="nsew")
+        settings_frame.grid(row=1, sticky="nsew")
 
         workingFrame.grid_rowconfigure(0, weight=1)
         workingFrame.grid_rowconfigure(1, weight=1)
@@ -45,7 +45,7 @@ class SessionDiagnostics:
         workingFrame.grid_columnconfigure(0, weight=1, uniform="col")
         #workingFrame.grid_columnconfigure(1, weight=1, uniform="col")
 
-        self.myGraph = Graph(right_frame)
+        self.myGraph = Graph(settings_frame)
         self.myGraph.pack(side=tk.BOTTOM, anchor=tk.CENTER)
         title_label_style = ttk.Style()
         title_label_style.configure("TitleLabel.TLabel", font="Ubuntu 20", side=tk.TOP, foreground=Colors.text, background=Colors.aux)
@@ -66,12 +66,12 @@ class SessionDiagnostics:
                            "Range: C2 to B7"
 
 
-        self.score = RoundedLabel(title_frame, c, Colors.piano_track, width=250, height=45)
+        self.score = RoundedLabel(graph_frame, c, Colors.piano_track, width=250, height=45)
         self.score.pack(anchor=tk.CENTER)
 
         style = ttk.Style()
         style.configure("Score.TLabel", foreground=Colors.text, background=Colors.aux)
-        self.settings = ttk.Label(left_frame, text=display_settings, style="Score.TLabel")
+        self.settings = ttk.Label(graph_frame, text=display_settings, style="Score.TLabel")
         self.settings.pack(side=tk.LEFT, )
 
 

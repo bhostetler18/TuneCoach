@@ -4,6 +4,7 @@ class Colors:
 	text = '#ffffff'
 	piano_track = '#bdd0df'
 	graph_background = aux #'#85c9ac'
+	scroll_trough = 'lightgray' #'#daebe3'
 	graph_foreground = 'white'
 	score_label = '#60e0a9'
 	red = '#ab1302'

@@ -27,7 +27,7 @@ class SessionHistory:
         self.scrollbar = tk.Scrollbar(workingFrame, orient=tk.HORIZONTAL)
         self.scrollbar.pack(side='bottom', fill='x')
         self.scrollbar.config(command=self.scroll)
-        self.scrollbar.config(bg=Colors.aux, activebackground="darkgrey")
+        self.scrollbar.config(bg=Colors.aux, activebackground=Colors.tuner_needle, troughcolor=Colors.scroll_trough)
         self.scrollbar_width = 1
         self.scrollbar.set(1 - self.scrollbar_width, 1)
 
