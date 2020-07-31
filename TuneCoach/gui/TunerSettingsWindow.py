@@ -13,16 +13,12 @@ class TunerSettingsWindow:
         from_midi = pitch_with_octave(low, int(f_oct))
         to_midi = pitch_with_octave(high, int(t_oct))
 
-        if from_midi >= to_midi:
-            error_frame_style = ttk.Style()
-            error_frame_style.configure('ErrorFrame.TFrame', background="#F4F4F4", border=5)
-
-            error_frame = ttk.Frame(window, style='ErrorFrame.TFrame')
-            error_frame.grid(row=3, column=0, columnspan=3, sticky="nsew")
-
+        if from_midi >= to_midi: 
+            if self.invalid: return # don't add invalid text twice
+            self.invalid = True
             error_label_style = ttk.Style()
             error_label_style.configure('ErrorLabel.TLabel', background="#F4F4F4", font=(None, 12), foreground='red')
-            error_label = ttk.Label(error_frame, text="Invalid Note Range!", style='ErrorLabel.TLabel')
+            error_label = ttk.Label(self.range_frame1, text="Invalid Range!", style='ErrorLabel.TLabel')
             error_label.pack()
         else:
             self.update_tuner_settings(new_cents, self.current_key_signature, from_midi, to_midi, window)
@@ -44,7 +40,7 @@ class TunerSettingsWindow:
         key_sig_frame = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
         radio_button_frame = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
         key_type_frame = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
-        range_frame1 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        self.range_frame1 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
         range_frame2 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
         done_frame = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
 
@@ -53,16 +49,16 @@ class TunerSettingsWindow:
         key_sig_frame.grid(row=1, column=0, sticky="nsew")
         radio_button_frame.grid(row=1, column=1, sticky="nsew")
         key_type_frame.grid(row=1, column=2, sticky="nsew")
-        range_frame1.grid(row=2, column=0, sticky="nsew")
+        self.range_frame1.grid(row=2, column=0, sticky="nsew")
         range_frame2.grid(row=2, column=1, columnspan=2, sticky="nsew")
-        done_frame.grid(row=4, column=0, columnspan=3, sticky="nsew")
+        self.invalid = False
+        done_frame.grid(row=3, column=0, columnspan=3, sticky="nsew")
 
         # setting up grid weights.
 
         tuner_settings_window.grid_rowconfigure(0, weight=1)
         tuner_settings_window.grid_rowconfigure(1, weight=1)
         tuner_settings_window.grid_rowconfigure(2, weight=1)
-        tuner_settings_window.grid_rowconfigure(3, weight=1)
         tuner_settings_window.grid_columnconfigure(0, weight=1, uniform='c')
         tuner_settings_window.grid_columnconfigure(1, weight=1, uniform='c')
         tuner_settings_window.grid_columnconfigure(2, weight=1, uniform='c')
@@ -82,7 +78,7 @@ class TunerSettingsWindow:
         #sig_label.config(bg="#F4F4F4", fg="black")
         sig_label.pack(expand=True)
 
-        range_label = ttk.Label(range_frame1, text="Note Range:")
+        range_label = ttk.Label(self.range_frame1, text="Note Range:")
         #range_label.config(bg="#F4F4F4", fg="black")
         range_label.pack(expand=True)
 
@@ -137,14 +133,17 @@ class TunerSettingsWindow:
         to_octave = tk.IntVar()
 
         self.from_note_menu = ttk.OptionMenu(range_frame2, self.from_note, self.major_key_names[0], *self.major_key_names)
+        self.from_note_menu.config(width=2)
         self.from_note_menu.pack(side=tk.LEFT)
         from_octave_menu = ttk.OptionMenu(range_frame2, from_octave, 2, 2, 3, 4, 5, 6, 7)
         from_octave_menu.pack(side=tk.LEFT)
 
-        to_text = ttk.Label(range_frame2, text="to")
-        #to_text.config(bg="#F4F4F4", fg="black")
-        to_text.pack(side=tk.LEFT, expand=True)
+        to_text = ttk.Label(range_frame2, text="to", width=4)
+        to_text.configure(anchor="center")
+        to_text.pack(side=tk.LEFT)
+
         self.to_note_menu = ttk.OptionMenu(range_frame2, self.to_note, *self.major_key_names)
+        self.to_note_menu.config(width=2)
         self.to_note_menu.pack(side=tk.LEFT)
         to_octave_menu = ttk.OptionMenu(range_frame2, to_octave, 2, 2, 3, 4, 5, 6, 7)
         to_octave_menu.pack(side=tk.LEFT)
@@ -154,12 +153,11 @@ class TunerSettingsWindow:
         from_octave.set(data.lowest_octave)
         to_octave.set(data.highest_octave)
 
-        self.refresh_om(self.from_note, self.to_note)
+        self.refresh_om()
 
         #def input_check(self, new_cents, f_note, f_oct, t_note, t_oct, window):
         #done_button = ttk.Button(done_frame, text="Apply", command=lambda: self.update_tuner_settings(cent_scale.get(), self.current_key_signature, self.from_note.get(), from_octave.get(), self.to_note.get(), to_octave.get(), tuner_settings_window))
         done_button = ttk.Button(done_frame, text="Apply", command=lambda: self.input_check(cent_scale.get(), self.from_note.get(), from_octave.get(), self.to_note.get(), to_octave.get(), tuner_settings_window))
-
         done_button.pack()
         tuner_settings_window.lift(self.mainWindow.master)
 
@@ -179,7 +177,7 @@ class TunerSettingsWindow:
         self.current_key_signature = KeySignature(name, index, accidental, num_accidentals, keytype)
 
         if redraw:
-            self.refresh_om(self.from_note, self.to_note)
+            self.refresh_om()
             if self.ktype.get() == "Minor":
                 names = self.minor_key_names
             else:
@@ -187,18 +185,21 @@ class TunerSettingsWindow:
             for i in range(0, 12):
                 self.radio_buttons[i].config(text=names[i])
 
-    def refresh_om(self, from_def, to_def):
+    def refresh_om(self):
+        low = string_to_pitch_class(self.from_note.get())
+        high = string_to_pitch_class(self.to_note.get())
+
         self.from_note_menu['menu'].delete(0, 'end')
         self.to_note_menu['menu'].delete(0, 'end')
+
         notes = [self.current_key_signature.get_display_for(n) for n in range(0,12)]
         start = self.current_key_signature.raw_value
         notes = notes[start:] + notes[:start] # rotate so current root is first
-        for note in notes:
-            self.from_note_menu['menu'].add_command(label=note, command=tk._setit(from_def, note))
-            self.to_note_menu['menu'].add_command(label=note, command=tk._setit(to_def, note))
 
-        low = string_to_pitch_class(self.from_note.get())
-        high = string_to_pitch_class(self.to_note.get())
+        for note in notes:
+            self.from_note_menu['menu'].add_command(label=note, command=tk._setit(self.from_note, note))
+            self.to_note_menu['menu'].add_command(label=note, command=tk._setit(self.to_note, note))
+
 
         self.from_note.set(self.current_key_signature.get_display_for(low))
         self.to_note.set(self.current_key_signature.get_display_for(high))
