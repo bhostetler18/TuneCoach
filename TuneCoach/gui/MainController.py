@@ -119,7 +119,8 @@ class MainController:
         path, cancel = self.view.perform_save_as(newSession)
         if cancel:
             return False
-
+        #if not path:
+        #    return False
         self.session = self.session.with_path(path)
         # notify session name change
         self.view.update_session_name(self.session.name)
@@ -143,12 +144,17 @@ class MainController:
         return True
 
     def new_session(self):
-        if self.should_save and self.view.ask_should_save():
-            self.save(True)
-        self.view.success("New Session Successfully Created.")
-        data = SessionData(self.threshold, self.yellow_threshold)
-        self.session = Session(data)
-        self.setup_session()
+        path = False
+        if self.should_save:
+            path = self.view.ask_should_save()
+        print(path)
+        if path is not None:
+            if self.should_save and path:
+                self.save(True)
+            self.view.success("New Session Successfully Created.")
+            data = SessionData(self.threshold, self.yellow_threshold)
+            self.session = Session(data)
+            self.setup_session()
 
     def load_from(self):
         # if current sesion isn't saved, ask if we should save. If we should
