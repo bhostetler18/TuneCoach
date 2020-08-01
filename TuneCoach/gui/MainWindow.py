@@ -38,7 +38,7 @@ class MainWindow:
         master.deiconify()
         master.title("TuneCoach")
         master.geometry(f'{self.screen_width}x{self.screen_height}')
-        master.minsize(width=int(self.screen_width/2), height=int(self.screen_height/2))
+        master.minsize(width=int(self.screen_width * 0.6), height=int(self.screen_height*0.7))
         master.maxsize(width=self.screen_width, height=self.screen_height)
 
         master.bind('<space>', lambda ev: self.controller.toggle_pause())
@@ -69,7 +69,7 @@ class MainWindow:
     # Creating frames to organize the screen.
     def layout_frames(self, screen_width, screen_height):
         frames_style = ttk.Style()
-        frames_style.configure('MainFrames.TFrame', background='white')
+        frames_style.configure('MainFrames.TFrame', background=Colors.background)
         self.bottom_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
         self.left_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
         self.right_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
@@ -90,14 +90,17 @@ class MainWindow:
         self.diagnostics = SessionDiagnostics(self)
         self.pitch_display = PitchDisplay(self, self.controller.threshold)
     
-    def perform_save_as(self):
+    def perform_save_as(self, newSession = False):
         # self.toggle_pause(True)
-        path = tk.filedialog.asksaveasfilename(initialdir = './', title="Save session as...", filetypes = [('session files', '*.session')])
+        if newSession:
+            path = tk.filedialog.asksaveasfilename(initialdir = './', title = "Would you like to save your current session?", filetypes = [('session files', '*.session')])
+        else:
+            path = tk.filedialog.asksaveasfilename(initialdir = './', title="Save session as...", filetypes = [('session files', '*.session')])
         if invalid_path(path): # if the user cancels the dialog, don't do anything
             return (None, True) # this tuple means the user canceled
 
         return (path, False) # we did save
-    
+
     def perform_load(self):
         path = tk.filedialog.askopenfilename(initialdir = './', title="Select a session", filetypes = [('session files', '*.session')])
         if invalid_path(path): # if the user cancels the dialog, don't do anything
@@ -132,10 +135,10 @@ class MainWindow:
         # File menubar
         menubar.add_cascade(label="File", menu=file_menu)
         commands = ( 
-            ("New Practice Session", self.controller.new_session), \
-            ("Save Current Session", self.controller.save), \
-            ("Save Current Session As...", self.controller.save_as), \
-            ("Load Existing Session", self.controller.load_from) )
+            ("New Practice Session (n)", self.controller.new_session), \
+            ("Save Current Session (s)", self.controller.save), \
+            ("Save Current Session As... (F12)", self.controller.save_as), \
+            ("Load Existing Session (l)", self.controller.load_from) )
         
         for label, fn in commands:
             file_menu.add_command(label=label, command=session_menu_item(fn), background='white')
@@ -147,18 +150,19 @@ class MainWindow:
         # Settings menubar
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
-        settings_menu.add_command(label="Tuner Settings", command=lambda: TunerSettingsWindow(self), background='white')
+        settings_menu.add_command(label="Tuner Settings (o)", command=lambda: TunerSettingsWindow(self), background='white')
 
         # Help menubar
         help_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Help", menu=help_menu)
-        help_menu.add_command(label="FAQ", command=lambda: FAQWindow(self), background='white')
-        help_menu.add_command(label="Tutorial", command=lambda: TutorialWindow(self), background='white')
+        help_menu.add_command(label="FAQ (F2)", command=lambda: FAQWindow(self), background='white')
+        help_menu.add_command(label="Tutorial (F1)", command=lambda: TutorialWindow(self), background='white')
 
    ### METHODS IMPLEMENTED FOR CONTROLLER ### 
 
     def update_diagnostics(self, data):
         self.diagnostics.update_plot(data)
+        self.pitch_display.display_score(data.get_overall())
 
     def update_history(self, data):
         self.history.update(data)

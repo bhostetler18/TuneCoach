@@ -27,7 +27,7 @@ class SessionHistory:
         self.scrollbar = tk.Scrollbar(workingFrame, orient=tk.HORIZONTAL)
         self.scrollbar.pack(side='bottom', fill='x')
         self.scrollbar.config(command=self.scroll)
-        self.scrollbar.config(bg=Colors.aux, activebackground="darkgrey")
+        self.scrollbar.config(bg=Colors.aux, activebackground=Colors.tuner_needle, troughcolor=Colors.scroll_trough)
         self.scrollbar_width = 1
         self.scrollbar.set(1 - self.scrollbar_width, 1)
 
@@ -117,11 +117,11 @@ class SessionHistory:
         self.current_pos = pos
         notes = self.buffer[pos : pos + self.display_size]
         for i, note in enumerate(notes):
-            color = "red"
+            color = Colors.red
             if abs(note.cents) <= self.mainWindow.controller.threshold:
-                color = "green"
+                color = Colors.green
             elif abs(note.cents) <= self.mainWindow.controller.yellow_threshold:
-                color = "yellow"
+                color = Colors.yellow
 
             circle = self.circle_list[i]
             x = self.circle_start + self.circle_size + 2*self.circle_size*i
