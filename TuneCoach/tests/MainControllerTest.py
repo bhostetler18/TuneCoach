@@ -1,19 +1,19 @@
 import unittest
+from unittest.mock import Mock
 from tkinter import *
 from collections import deque
 
 from TuneCoach.gui.MainController import MainController
+from TuneCoach.gui.MainWindow import MainWindow
 
-def fun(x):
-    return x+1
+MainWindow = Mock()
 
 class MainControllerTest(unittest.TestCase):
-    def test(self):
-        self.assertEqual(fun(3), 4)
+    def setUp(self):
+        self.root = Tk()
+        self.mainController = MainController(self.root)
 
     def test_init(self):
-        root = Tk()
-        mainController = MainController(root)
         expected_threshold = 15
         expected_yellow_threshold = 35
         expected_is_paused = True
@@ -21,11 +21,11 @@ class MainControllerTest(unittest.TestCase):
         expected_deque = deque([])
 
         expected_list = [expected_threshold, expected_yellow_threshold, expected_is_paused, expected_should_save, expected_deque]
-        actual_list = [mainController.threshold, mainController.yellow_threshold, mainController.paused, mainController.should_save, mainController.queue]
+        actual_list = [self.mainController.threshold, self.mainController.yellow_threshold, self.mainController.paused, self.mainController.should_save, self.mainController.queue]
         self.assertListEqual(expected_list, actual_list)
 
-    def test_(self):
-        return 0
+    def test_load_from(self):
+        self.assertEqual(False, self.mainController.should_save)
 
 
 if __name__ == '__main__':
