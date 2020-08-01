@@ -18,22 +18,30 @@ class Notes:
     SHARP_NOTES = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"]
     NOTE_DICT = {
         "C": 0,
+        "C♮": 0,
         "C♯": 1,
         "D♭": 1,
         "D": 2,
+        "D♮": 2,
         "D♯": 2, 
         "E♭": 3, 
-        "E": 4, 
+        "E": 4,
+        "E♮": 4, 
         "F": 5,
+        "F♮": 5,
         "F♯": 6, 
         "G♭": 6, 
         "G": 7,
+        "G♮": 7,
         "G♯": 8, 
         "A♭": 8, 
-        "A": 9, 
+        "A": 9,
+        "A♮": 9, 
         "A♯": 10,
         "B♭": 10,
-        "B": 11
+        "B": 11,
+        "B♮": 11,
+        "C♭": 11,
     }
 
 @dataclass
@@ -49,7 +57,7 @@ class KeySignature:
         # TODO: don't create these on every function call
         flat_order = [11, 4, 9, 2, 7, 0, 5] # BEADGCF
         sharp_order = list(reversed(flat_order)) # FCGDAEB
-        notes = { 0:"C", 2:"D", 4:"E", 5:"F", 7:"G", 9:"A", 11:"B"}
+        notes = {0: "C", 2: "D", 4: "E", 5: "F", 7: "G", 9: "A", 11: "B"}
 
         relevant_accidentals = []
         if self.accidental == Accidental.SHARP:
@@ -83,14 +91,17 @@ def midi_to_pitch_class(midi):
 def get_octave(midi):
     return int(midi/12) - 1
 
+
 def pitch_with_octave(pitch_class, octave):
     return 12 * (octave + 1) + pitch_class
+
 
 def pitch_class_to_name(pitch, acc):
     if acc == Accidental.FLAT:
         return Notes.FLAT_NOTES[pitch]
     elif acc == Accidental.SHARP:
         return Notes.SHARP_NOTES[pitch]
+
 
 def cents(target, actual):
     return 1200.0 * math.log(actual/target, 2)

@@ -1,17 +1,20 @@
 from TuneCoach.python_bridge.SessionData import load_from_file, save_to_file
 from pathlib import Path
 
+
 def save_session(session):
     if session.path is not None:
         save_to_file(session.data, session.path)
     else:
         raise AttributeError('Cannot save a session without a path')
 
+
 def load_session(path):
     data = load_from_file(path)
     if data is None:
         return None
     return Session(data, path)
+
 
 class Session:
     def __init__(self, data, path = None):

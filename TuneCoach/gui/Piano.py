@@ -2,6 +2,7 @@ import tkinter as tk
 from TuneCoach.python_bridge.pitch_utilities import *
 from TuneCoach.gui.constants import *
 
+
 # set_score uses session.data.key_signature.accidental
 class Piano(tk.Canvas):
     def __init__(self, parent, **kwargs):
@@ -42,7 +43,7 @@ class Piano(tk.Canvas):
         self.cached_key = key_signature
         self.delete("text")
 
-        for i in [0,2,4,5,7,9,11]:
+        for i in [0, 2, 4, 5, 7, 9, 11]:
             key = self.keys[i]
             coords = self.coords(key)
             x = coords[2] - 30

@@ -11,11 +11,11 @@ from collections import namedtuple
 
 Note = collections.namedtuple('Note', 'hz cents pitch_class octave')
 
-# DO WE STILL NEED THIS HERE? we can move it if you want?
-# it doesn't matter but it fits here pretty logically
+
 def save_to_file(session, path):
     with open(path, "wb") as file:
         pickle.dump(session, file)
+
 
 def load_from_file(path):
     try:

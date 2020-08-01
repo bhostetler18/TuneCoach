@@ -4,7 +4,6 @@ from TuneCoach.gui.NewSessionWindow import NewSessionWindow
 from collections import deque
 
 
-
 class MainController:
     def __init__(self, view):
         self.view = view
@@ -37,7 +36,6 @@ class MainController:
                 self.session.data.collect_data(top)
                 self.update_history()
             self.view.after(20, lambda: self.process_queue())
-
 
     def update_diagnostics(self):
         if not self.paused:
@@ -80,7 +78,6 @@ class MainController:
 
     def toggle_pause(self, force=False):
         if self.audio_manager.is_paused() and not force:
-            # print("Resuming")
             self.paused = False
             self.view.resume()
             self.should_save = True
@@ -119,13 +116,15 @@ class MainController:
         self.update_session_name()
         self.view.update_diagnostics(self.session.data)
         self.view.update_history(self.session.data)
+        self.view.refresh_timer(self.session.data)
     
     def save_as(self, newSession = False):
         self.pause()
         path, cancel = self.view.perform_save_as(newSession)
         if cancel:
             return False
-
+        #if not path:
+        #    return False
         self.session = self.session.with_path(path)
         # notify session name change
         self.view.update_session_name(self.session.name)
@@ -154,12 +153,17 @@ class MainController:
         return True
 
     def new_session(self):
-        if self.should_save and self.view.ask_should_save():
-            self.save(True)
-        self.view.success("New Session Successfully Created.")
-        data = SessionData(self.threshold, self.yellow_threshold)
-        self.session = Session(data)
-        self.setup_session()
+        path = False
+        if self.should_save:
+            path = self.view.ask_should_save()
+        print(path)
+        if path is not None:
+            if self.should_save and path:
+                self.save(True)
+            self.view.success("New Session Successfully Created.")
+            data = SessionData(self.threshold, self.yellow_threshold)
+            self.session = Session(data)
+            self.setup_session()
 
     def load_from(self):
         # if current sesion isn't saved, ask if we should save. If we should
@@ -172,7 +176,6 @@ class MainController:
             return False
         
         session = load_session(path)
-
 
         if session is None:
             self.view.error(f'Session located at "{path}" is invalid!', title="Invalid session")
