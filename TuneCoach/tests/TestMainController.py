@@ -15,7 +15,7 @@ from TuneCoach.gui.MainWindow import MainWindow
 
 class TestMainController(unittest.TestCase):
     def setUp(self):
-        self.root = Tk()
+        self.root = Mock()
         self.mainController = MainController(self.root)
 
     def test_init(self):
@@ -30,16 +30,17 @@ class TestMainController(unittest.TestCase):
         self.assertListEqual(expected_list, actual_list)
 
     def test_load_from_when_path_not_valid(self):
-        # with patch.object(MainWindow, 'perform_load', return_value=(None, True)):
-        with patch.object(MainWindow, 'perform_load', return_value=(None, True)):
-        # mock_obj = Mock()
-        # mock_obj.perform_load.return_value = (None, True)
+        # with patch.object(self.root, 'perform_load', return_value=(None, True)):
+        #     actual_return_value = self.mainController.load_from()
+        # # self.assertEqual(3, 3)
+        #     self.assertEqual(False, actual_return_value)
+        with patch.object(self.root, 'perform_load', return_value=(None, True)):
             actual_return_value = self.mainController.load_from()
         # self.assertEqual(3, 3)
             self.assertEqual(False, actual_return_value)
 
 
 if __name__ == '__main__':
-    root = Tk()
-    mainController = MainController(root)
+    # root = Tk()
+    # mainController = MainController(root)
     unittest.main()
