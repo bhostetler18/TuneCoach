@@ -38,7 +38,7 @@ class MainWindow:
         master.deiconify()
         master.title("TuneCoach")
         master.geometry(f'{self.screen_width}x{self.screen_height}')
-        master.minsize(width=int(self.screen_width/2), height=int(self.screen_height/2))
+        master.minsize(width=int(self.screen_width * 0.6), height=int(self.screen_height*0.7))
         master.maxsize(width=self.screen_width, height=self.screen_height)
 
         master.bind('<space>', lambda ev: self.controller.toggle_pause())
@@ -70,7 +70,7 @@ class MainWindow:
     # Creating frames to organize the screen.
     def layout_frames(self, screen_width, screen_height):
         frames_style = ttk.Style()
-        frames_style.configure('MainFrames.TFrame', background='white')
+        frames_style.configure('MainFrames.TFrame', background=Colors.background)
         self.bottom_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
         self.left_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
         self.right_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
@@ -91,14 +91,16 @@ class MainWindow:
         self.diagnostics = SessionDiagnostics(self)
         self.pitch_display = PitchDisplay(self, self.controller.threshold)
     
-    def perform_save_as(self):
-        # self.force_pause()
-        path = tk.filedialog.asksaveasfilename(initialdir = './', title="Save session as...", filetypes = [('session files', '*.session')])
+    def perform_save_as(self, newSession = False):
+        if newSession:
+            path = tk.filedialog.asksaveasfilename(initialdir = './', title = "Would you like to save your current session?", filetypes = [('session files', '*.session')])
+        else:
+            path = tk.filedialog.asksaveasfilename(initialdir = './', title="Save session as...", filetypes = [('session files', '*.session')])
         if invalid_path(path): # if the user cancels the dialog, don't do anything
             return (None, True) # this tuple means the user canceled
 
         return (path, False) # we did save
-    
+
     def perform_load(self):
         path = tk.filedialog.askopenfilename(initialdir = './', title="Select a session", filetypes = [('session files', '*.session')])
         if invalid_path(path): # if the user cancels the dialog, don't do anything
@@ -108,12 +110,9 @@ class MainWindow:
     # Adding menu options to the top of the screen.
     # returns False ONLY IF THE USER CANCELS
     
-    def do_nothing(self):
-        pass
-    
     def disable(self):
-        self.master.protocol("WM_DELETE_WINDOW", self.do_nothing)
-        self.controller.force_pause()
+        self.master.protocol("WM_DELETE_WINDOW", lambda: ...)
+        self.controller.pause()
 
     def enable(self):
         self.master.protocol("WM_DELETE_WINDOW", self.cleanup)
@@ -141,10 +140,6 @@ class MainWindow:
         for label, fn in commands:
             file_menu.add_command(label=label, command=session_menu_item(fn), background='white')
 
-        # TODO: Add functionality to remove sessions
-        # file_menu.add_separator
-        # file_menu.add_command(label = "Remove Practice Session", command = self.remove_practice_session)
-
         # Settings menubar
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
@@ -160,10 +155,11 @@ class MainWindow:
 
     def update_diagnostics(self, data):
         self.diagnostics.update_plot(data)
+        self.pitch_display.display_score(data.get_overall())
 
     def update_history(self, data):
         self.history.update(data)
-    
+
     def update_threshold(self, threshold):
         self.pitch_display.set_threshold(threshold)
 
@@ -186,6 +182,7 @@ class MainWindow:
         self.pitch_display.resume()
         self.history.resume_scrollbar()
 
+
     def error(self, msg, title="Error!"):
         tk.messagebox.showerror(title, msg)
     
@@ -193,6 +190,6 @@ class MainWindow:
         tk.messagebox.showinfo(title, msg)
 
     def ask_should_save(self):
-        return tk.messagebox.askyesno("", "Save current session?")
+        return tk.messagebox.askyesnocancel("", "Save current session?")
 
     def after(self, ms, fn): self.master.after(ms, fn)

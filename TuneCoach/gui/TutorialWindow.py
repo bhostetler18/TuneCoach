@@ -5,8 +5,9 @@ from TuneCoach.gui.constants import *
 
 class TutorialWindow: #TODO: Style Tutorial Window so it's not ugly - Jenny
     def __init__(self, mainWindow):
-        tutorial_window = tk.Toplevel(mainWindow.master)
+        tutorial_window = tk.Toplevel(mainWindow.master, bg = "#F4F4F4")
         tutorial_window.geometry()
+        tutorial_window.minsize(width = 590, height = 480)
 
         message = "                                             Welcome to TuneCoach!\n" \
                   "TuneCoach is convenient PC-based tuning application that records sessions for intonation\n" \

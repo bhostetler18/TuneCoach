@@ -7,6 +7,7 @@ class FAQWindow:
     def __init__(self, mainWindow):
         faq_window = tk.Toplevel(mainWindow.master)
         faq_window.geometry()
+        faq_window.minsize(width = 610, height = 380)
         faq_window.config(background="#f4f4f4")
 
         faq_title_label_style = ttk.Style()

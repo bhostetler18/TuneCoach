@@ -7,6 +7,9 @@ import datetime
 import pickle
 import os
 from pathlib import Path
+from collections import namedtuple
+
+Note = collections.namedtuple('Note', 'hz cents pitch_class octave')
 
 # DO WE STILL NEED THIS HERE? we can move it if you want?
 # it doesn't matter but it fits here pretty logically
@@ -28,14 +31,13 @@ class SessionData:
     def __init__(self, green_thresh, yellow_thresh):
         self._in_tune_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self._pitch_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        self._freq_history = []
+        self.note_history = []
         self._cents = 0.0
         self._overall = 0
         self._overall_count = 0
         self.green_thresh = green_thresh
         self.yellow_thresh = yellow_thresh
         self._timestamp = datetime.date.today()
-        self.display_buffer = collections.deque([])
         self.has_new_data = False
 
         self.key_signature = KeySignature("C", 0, Accidental.SHARP, 0, KeySignatureType.MAJOR)
@@ -47,6 +49,7 @@ class SessionData:
         self.timer.pause()
 
         self._score_history = []
+        self.score_history_size = 15
 
     def get_overall(self):
         if self._overall_count == 0:
@@ -87,7 +90,7 @@ class SessionData:
     def update_score_history(self):
         new_score = self.get_overall()
         self._score_history.append(new_score)
-        if len(self._score_history) > 10:
+        if len(self._score_history) > self.score_history_size:
                 self._score_history.pop(0)
 
     def set_thresholds(self, green_thresh, yellow_thresh):
@@ -101,11 +104,11 @@ class SessionData:
             return
         
         self.has_new_data = True
-        self._freq_history.append(hz)
         index = midi_to_pitch_class(midi)
         desired_hz = closest_in_tune_frequency(hz)
         cent = cents(desired_hz, hz)
         octave = get_octave(midi)
+        self.note_history.append(Note(hz=hz, cents=cent, pitch_class=index, octave=octave))
 
         # Gets counts of everything to calculate accuracy
         if abs(cent) <= self.green_thresh:
@@ -119,8 +122,4 @@ class SessionData:
         self._pitch_count[index] += 1
         self._overall_count += 1
         self._cents += abs(cent)
-
-        self.display_buffer.append((index, cent))
-        if len(self.display_buffer) > 64:
-            self.display_buffer.popleft()
 
