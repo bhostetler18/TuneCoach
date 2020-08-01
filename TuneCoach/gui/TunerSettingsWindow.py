@@ -19,7 +19,7 @@ class TunerSettingsWindow:
             style.configure("Red.TLabel", foreground="red")
             self.range_label = ttk.Label(self.range_frame1, text="Note Range:")
             self.range_label.configure(style="Red.TLabel")
-            self.range_label.pack(expand=True)
+            self.range_label.pack(expand=False, side=tk.LEFT, padx=15)
 
         else:
             self.update_tuner_settings(new_cents, self.current_key_signature, from_midi, to_midi, window)
@@ -33,9 +33,9 @@ class TunerSettingsWindow:
         data = mainWindow.controller.session.data
         tuner_settings_window = tk.Toplevel(self.mainWindow.master)
         tuner_settings_window.title("Tuner Settings")
-        tuner_settings_window.geometry("500x300")
-        tuner_settings_window.minsize(width = 500, height = 300)
-        tuner_settings_window.maxsize(width  = 500, height = 300)
+        tuner_settings_window.geometry("400x300")
+        tuner_settings_window.minsize(width = 400, height = 300)
+        tuner_settings_window.maxsize(width  = 400, height = 300)
 
         cent_frame = ttk.Frame(tuner_settings_window)
         key_sig_frame = ttk.Frame(tuner_settings_window)
@@ -64,19 +64,19 @@ class TunerSettingsWindow:
         tuner_settings_window.grid_columnconfigure(2, weight=1, uniform='c')
 
         centsitivity = ttk.Label(cent_frame, text="Acceptable Error (cents):")
-        centsitivity.pack(expand=True, side=tk.LEFT)
+        centsitivity.pack(anchor=tk.CENTER, pady=15)
 
         v = tk.DoubleVar()
         v.set(data.green_thresh)
         cent_scale = tk.Scale(cent_frame, from_=1, to=25, orient=tk.HORIZONTAL, variable=v)
         cent_scale.config(bg="#F4F4F4", fg="black")
-        cent_scale.pack(expand=True, side=tk.RIGHT)
+        cent_scale.pack(anchor=tk.CENTER)
 
         sig_label = ttk.Label(key_sig_frame, text="Key Signature:")
-        sig_label.pack(expand=True)
+        sig_label.pack(expand=False, side=tk.LEFT, padx=15)
 
         self.range_label = ttk.Label(self.range_frame1, text="Note Range:")
-        self.range_label.pack(expand=True)
+        self.range_label.pack(expand=False, side=tk.LEFT, padx=15)
 
         # TODO: extract into keysignature and allow for better initialization, create circle-of-fifths-based data structure
         self.major_key_names = ["C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"]
@@ -116,9 +116,9 @@ class TunerSettingsWindow:
         radio_button_frame.grid_columnconfigure(3, weight=1, uniform="col")
 
         major_button = tk.Radiobutton(key_type_frame, text="Major", indicatoron=0, width=6, variable=self.ktype, value="Major", command=self.selection_changed)
-        major_button.pack(expand=True, side=tk.LEFT)
+        major_button.pack(expand=True, side=tk.TOP)
         minor_button = tk.Radiobutton(key_type_frame, text="Minor", indicatoron=0, width=6, variable=self.ktype, value="Minor", command=self.selection_changed)
-        minor_button.pack(expand=True, side=tk.LEFT)
+        minor_button.pack(expand=True, side=tk.BOTTOM)
 
 
         # MIDI RANGE SELECTION
