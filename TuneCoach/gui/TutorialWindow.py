@@ -8,7 +8,7 @@ class TutorialWindow: #TODO: Style Tutorial Window so it's not ugly - Jenny
         tutorial_window = tk.Toplevel(mainWindow.master, bg = "#F4F4F4")
         tutorial_window.title("Tutorial")
         tutorial_window.geometry()
-        tutorial_window.minsize(width = 590, height = 480)
+        tutorial_window.minsize(width=590, height=480)
 
         message = "TuneCoach is convenient PC-based tuning application that records sessions for intonation\n" \
                   "and provides detailed feedback for your performance. \n" \
@@ -30,15 +30,14 @@ class TutorialWindow: #TODO: Style Tutorial Window so it's not ugly - Jenny
                   "Keyboard Shortcuts:\n" \
                   "------------------------------------------\n" \
                   "Space: Pause or resume the session.\n" \
-                  "n: Create a new session.\n" \
-                  "s: Save the current session (save as if in Temporary Session).\n" \
-                  "F12: Opens the \"Save as\" menu.\n" \
-                  "l: Opens the menu to load an existing session.\n" \
-                  "o: Opens the tuner options and settings window.\n" \
+                  "CTRL-N: Create a new session.\n" \
+                  "CTRL-S: Save the current session (save as if in Temporary Session).\n" \
+                  "CTRL-SHIFT-S or F12: Opens the \"Save as\" menu.\n" \
+                  "CTRL-O: Opens the menu to load an existing session.\n" \
+                  "CTRL-T: Opens the tuner options and settings window.\n" \
                   "F1: Opens the tutorial.\n" \
                   "F2: Opens the Frequently Asked Questions.\n"
 
-        tutorial_label = ttk.Label(tutorial_window, text=message)#, font=("Calibri", 12), justify=tk.LEFT)
-        # tutorial_label.config(bg=background_color, fg="white")
+        tutorial_label = ttk.Label(tutorial_window, text=message)
         tutorial_label.pack()
         tutorial_window.lift(mainWindow.master)

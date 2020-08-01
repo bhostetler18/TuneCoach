@@ -20,12 +20,12 @@ def invalid_path(path):
     # print(path)
     return path == '' or path == () or path == None
 
+
 # Main GUI
 class MainWindow:
     def __init__(self, master):
         style = ThemedStyle(master)
         style.set_theme("yaru")
-
 
         self.controller = MainController(self)
         self.master = master
@@ -42,14 +42,17 @@ class MainWindow:
         master.maxsize(width=self.screen_width, height=self.screen_height)
 
         master.bind('<space>', lambda ev: self.controller.toggle_pause())
-        master.bind('l', lambda ev: self.controller.load_from())
-        master.bind('o', lambda ev: TunerSettingsWindow(self))
-        master.bind('n', lambda ev: self.controller.new_session())
+        master.bind('<Control-Key-o>', lambda ev: self.controller.load_from())
+        master.bind('<Control-Key-t>', lambda ev: TunerSettingsWindow(self))
+        master.bind('<Control-Key-n>', lambda ev: self.controller.new_session())
         master.bind('<F1>', lambda ev: TutorialWindow(self))
         master.bind('<F2>', lambda ev: FAQWindow(self))
         master.bind('<F12>', lambda ev: self.controller.save_as())
-        master.bind('s', lambda ev: self.controller.save())
-
+        master.bind('<Control-Shift-Key-S>', lambda ev: self.controller.save_as())
+        if self.controller.save:
+            master.bind('<Control-Key-s>', lambda ev: self.controller.save())
+        else:
+            master.bind('<Control-Key-s>', lambda ev: self.controller.save_as())
         
         self.enable()
         self.create_menubar()
@@ -68,9 +71,9 @@ class MainWindow:
     def layout_frames(self, screen_width, screen_height):
         frames_style = ttk.Style()
         frames_style.configure('MainFrames.TFrame', background=Colors.background)
-        self.bottom_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
-        self.left_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
-        self.right_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
+        self.bottom_frame = ttk.Frame(self.master, style='MainFrames.TFrame')
+        self.left_frame = ttk.Frame(self.master, style='MainFrames.TFrame')
+        self.right_frame = ttk.Frame(self.master, style='MainFrames.TFrame')
 
         # Putting the frames into a grid layout
         self.left_frame.grid(row=0, column=0, sticky="nsew")
@@ -90,16 +93,16 @@ class MainWindow:
     
     def perform_save_as(self, newSession = False):
         if newSession:
-            path = tk.filedialog.asksaveasfilename(initialdir = './', title = "Would you like to save your current session?", filetypes = [('session files', '*.session')])
+            path = tk.filedialog.asksaveasfilename(initialdir='./', title="Would you like to save your current session?", filetypes=[('session files', '*.session')])
         else:
-            path = tk.filedialog.asksaveasfilename(initialdir = './', title="Save session as...", filetypes = [('session files', '*.session')])
+            path = tk.filedialog.asksaveasfilename(initialdir='./', title="Save session as...", filetypes=[('session files', '*.session')])
         if invalid_path(path): # if the user cancels the dialog, don't do anything
             return (None, True) # this tuple means the user canceled
 
         return (path, False) # we did save
 
     def perform_load(self):
-        path = tk.filedialog.askopenfilename(initialdir = './', title="Select a session", filetypes = [('session files', '*.session')])
+        path = tk.filedialog.askopenfilename(initialdir='./', title="Select a session", filetypes=[('session files', '*.session')])
         if invalid_path(path): # if the user cancels the dialog, don't do anything
             return (None, True) # cancel
         return (path, False)
@@ -129,10 +132,10 @@ class MainWindow:
         # File menubar
         menubar.add_cascade(label="File", menu=file_menu)
         commands = ( 
-            ("New Practice Session (n)", self.controller.new_session), \
-            ("Save Current Session (s)", self.controller.save), \
-            ("Save Current Session As... (F12)", self.controller.save_as), \
-            ("Load Existing Session (l)", self.controller.load_from) )
+            ("New Practice Session (CTRL-N)", self.controller.new_session),
+            ("Save Current Session (CTRL-S)", self.controller.save),
+            ("Save Current Session As... (CTRL-SHIFT-S)", self.controller.save_as),
+            ("Load Existing Session (CTRL-O)", self.controller.load_from))
         
         for label, fn in commands:
             file_menu.add_command(label=label, command=session_menu_item(fn), background='white')
@@ -140,13 +143,13 @@ class MainWindow:
         # Settings menubar
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
-        settings_menu.add_command(label="Tuner Settings (o)", command=lambda: TunerSettingsWindow(self), background='white')
+        settings_menu.add_command(label="Tuner Settings (CTRL-T)", command=lambda: TunerSettingsWindow(self), background='white')
 
         # Help menubar
         help_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Help", menu=help_menu)
-        help_menu.add_command(label="FAQ (F2)", command=lambda: FAQWindow(self), background='white')
         help_menu.add_command(label="Tutorial (F1)", command=lambda: TutorialWindow(self), background='white')
+        help_menu.add_command(label="FAQ (F2)", command=lambda: FAQWindow(self), background='white')
 
    ### METHODS IMPLEMENTED FOR CONTROLLER ### 
 
@@ -156,6 +159,9 @@ class MainWindow:
 
     def update_history(self, data):
         self.history.update(data)
+
+    def refresh_timer(self, data):
+        self.pitch_display.update_data(0, data)
 
     def update_threshold(self, threshold):
         self.pitch_display.set_threshold(threshold)
@@ -178,7 +184,6 @@ class MainWindow:
     def resume(self):
         self.pitch_display.resume()
         self.history.resume_scrollbar()
-
 
     def error(self, msg, title="Error!"):
         tk.messagebox.showerror(title, msg)

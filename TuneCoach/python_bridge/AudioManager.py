@@ -5,6 +5,7 @@ from TuneCoach.python_bridge.SessionData import *
 from TuneCoach.pitch_detection import TunerStream
 from time import sleep
 
+
 def read(stream, emit):
     while (stream.is_alive()):
         response, success = stream.read()
@@ -12,6 +13,7 @@ def read(stream, emit):
             hz = response
             emit(hz)
         sleep(.01)
+
 
 class AudioManager(TunerStream):
     def __init__(self, emit):

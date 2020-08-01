@@ -134,7 +134,7 @@ class PitchDisplay:
         self.canvas.itemconfig(self.green_arc, start=gStart, fill="#ccffbf", extent=gSpan, outline='')
 
         self.line = self.canvas.create_line(0, 0, 0, 0, fill=Colors.tuner_needle, width=4, 
-                                            arrow=FIRST, arrowshape=(self.radius,10,5))
+                                            arrow=FIRST, arrowshape=(self.radius, 10, 5))
         self.update_line(-50)
 
     def update_line(self, cents):

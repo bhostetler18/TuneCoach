@@ -8,7 +8,7 @@ class FAQWindow:
         faq_window = tk.Toplevel(mainWindow.master)
         faq_window.title("FAQ")
         faq_window.geometry()
-        faq_window.minsize(width = 610, height = 380)
+        faq_window.minsize(width=610, height=380)
         faq_window.config(background="#f4f4f4")
 
         question_answer_list = [

@@ -37,13 +37,13 @@ class TunerSettingsWindow:
         tuner_settings_window.minsize(width = 500, height = 300)
         tuner_settings_window.maxsize(width  = 500, height = 300)
 
-        cent_frame = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
-        key_sig_frame = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
-        radio_button_frame = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
-        key_type_frame = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
-        self.range_frame1 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
-        range_frame2 = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
-        done_frame = ttk.Frame(tuner_settings_window)#, bd=5, bg=background_color)
+        cent_frame = ttk.Frame(tuner_settings_window)
+        key_sig_frame = ttk.Frame(tuner_settings_window)
+        radio_button_frame = ttk.Frame(tuner_settings_window)
+        key_type_frame = ttk.Frame(tuner_settings_window)
+        self.range_frame1 = ttk.Frame(tuner_settings_window)
+        range_frame2 = ttk.Frame(tuner_settings_window)
+        done_frame = ttk.Frame(tuner_settings_window)
 
         # putting the frames into a grid layout
         cent_frame.grid(row=0, column=0, columnspan=3, sticky="nsew")
@@ -56,14 +56,12 @@ class TunerSettingsWindow:
         done_frame.grid(row=3, column=0, columnspan=3, sticky="nsew")
 
         # setting up grid weights.
-
         tuner_settings_window.grid_rowconfigure(0, weight=1)
         tuner_settings_window.grid_rowconfigure(1, weight=1)
         tuner_settings_window.grid_rowconfigure(2, weight=1)
         tuner_settings_window.grid_columnconfigure(0, weight=1, uniform='c')
         tuner_settings_window.grid_columnconfigure(1, weight=1, uniform='c')
         tuner_settings_window.grid_columnconfigure(2, weight=1, uniform='c')
-
 
         centsitivity = ttk.Label(cent_frame, text="Acceptable Error (cents):")
         centsitivity.pack(expand=True, side=tk.LEFT)
@@ -74,13 +72,10 @@ class TunerSettingsWindow:
         cent_scale.config(bg="#F4F4F4", fg="black")
         cent_scale.pack(expand=True, side=tk.RIGHT)
 
-
         sig_label = ttk.Label(key_sig_frame, text="Key Signature:")
-        #sig_label.config(bg="#F4F4F4", fg="black")
         sig_label.pack(expand=True)
 
         self.range_label = ttk.Label(self.range_frame1, text="Note Range:")
-        #range_label.config(bg="#F4F4F4", fg="black")
         self.range_label.pack(expand=True)
 
         # TODO: extract into keysignature and allow for better initialization, create circle-of-fifths-based data structure
@@ -94,7 +89,6 @@ class TunerSettingsWindow:
                                     Accidental.SHARP, Accidental.FLAT, Accidental.SHARP, Accidental.FLAT,
                                         Accidental.SHARP, Accidental.SHARP, Accidental.FLAT, Accidental.SHARP]
         self.minor_numbers = [3, 4, 1, 6, 1, 4, 3, 2, 5, 0, 5, 2]
-
 
         self.current_key_signature = data.key_signature
         current_type = data.key_signature.ktype
@@ -156,8 +150,6 @@ class TunerSettingsWindow:
 
         self.refresh_om()
 
-        #def input_check(self, new_cents, f_note, f_oct, t_note, t_oct, window):
-        #done_button = ttk.Button(done_frame, text="Apply", command=lambda: self.update_tuner_settings(cent_scale.get(), self.current_key_signature, self.from_note.get(), from_octave.get(), self.to_note.get(), to_octave.get(), tuner_settings_window))
         done_button = ttk.Button(done_frame, text="Apply", command=lambda: self.input_check(cent_scale.get(), self.from_note.get(), from_octave.get(), self.to_note.get(), to_octave.get(), tuner_settings_window))
         done_button.pack()
         tuner_settings_window.lift(self.mainWindow.master)
@@ -200,7 +192,6 @@ class TunerSettingsWindow:
         for note in notes:
             self.from_note_menu['menu'].add_command(label=note, command=tk._setit(self.from_note, note))
             self.to_note_menu['menu'].add_command(label=note, command=tk._setit(self.to_note, note))
-
 
         self.from_note.set(self.current_key_signature.get_display_for(low))
         self.to_note.set(self.current_key_signature.get_display_for(high))

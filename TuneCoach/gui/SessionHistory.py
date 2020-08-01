@@ -13,7 +13,6 @@ class SessionHistory:
         y0 = y - r
         x1 = x + r
         y1 = y + r
-        #return canvas.create_oval(x0, y0, x1, y1, fill=fillColor, outline="")
         return canvas.create_rectangle(x0, y0, x1, y1, fill=fillColor, outline="")
 
     def __init__(self, mainWindow, workingFrame):

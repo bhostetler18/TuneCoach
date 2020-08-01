@@ -4,7 +4,6 @@ from TuneCoach.gui.NewSessionWindow import NewSessionWindow
 from collections import deque
 
 
-
 class MainController:
     def __init__(self, view):
         self.view = view
@@ -37,7 +36,6 @@ class MainController:
                 self.session.data.collect_data(top)
                 self.update_history()
             self.view.after(20, lambda: self.process_queue())
-
 
     def update_diagnostics(self):
         if not self.paused:
@@ -80,7 +78,6 @@ class MainController:
     
     def toggle_pause(self, force=False):
         if self.audio_manager.is_paused() and not force:
-            # print("Resuming")
             self.paused = False
             self.view.resume()
             self.audio_manager.resume()
@@ -113,6 +110,7 @@ class MainController:
         self.view.update_session_name(self.session.name)
         self.view.update_diagnostics(self.session.data)
         self.view.update_history(self.session.data)
+        self.view.refresh_timer(self.session.data)
     
     def save_as(self, newSession = False):
         self.toggle_pause(True)
@@ -167,7 +165,6 @@ class MainController:
             return False
         
         session = load_session(path)
-
 
         if session is None:
             self.view.error(f'Session located at "{path}" is invalid!', title="Invalid session")
