@@ -110,6 +110,7 @@ class MainController:
         self.view.update_session_name(self.session.name)
         self.view.update_diagnostics(self.session.data)
         self.view.update_history(self.session.data)
+        self.view.refresh_timer(self.session.data)
     
     def save_as(self, newSession = False):
         self.toggle_pause(True)

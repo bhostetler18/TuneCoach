@@ -20,12 +20,12 @@ def invalid_path(path):
     # print(path)
     return path == '' or path == () or path == None
 
+
 # Main GUI
 class MainWindow:
     def __init__(self, master):
         style = ThemedStyle(master)
         style.set_theme("yaru")
-
 
         self.controller = MainController(self)
         self.master = master
@@ -71,9 +71,9 @@ class MainWindow:
     def layout_frames(self, screen_width, screen_height):
         frames_style = ttk.Style()
         frames_style.configure('MainFrames.TFrame', background=Colors.background)
-        self.bottom_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
-        self.left_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
-        self.right_frame = ttk.Frame(self.master, style='MainFrames.TFrame') #bd=5, relief=tk.RAISED, bg=background_color)
+        self.bottom_frame = ttk.Frame(self.master, style='MainFrames.TFrame')
+        self.left_frame = ttk.Frame(self.master, style='MainFrames.TFrame')
+        self.right_frame = ttk.Frame(self.master, style='MainFrames.TFrame')
 
         # Putting the frames into a grid layout
         self.left_frame.grid(row=0, column=0, sticky="nsew")
@@ -93,16 +93,16 @@ class MainWindow:
     
     def perform_save_as(self, newSession = False):
         if newSession:
-            path = tk.filedialog.asksaveasfilename(initialdir = './', title = "Would you like to save your current session?", filetypes = [('session files', '*.session')])
+            path = tk.filedialog.asksaveasfilename(initialdir='./', title="Would you like to save your current session?", filetypes=[('session files', '*.session')])
         else:
-            path = tk.filedialog.asksaveasfilename(initialdir = './', title="Save session as...", filetypes = [('session files', '*.session')])
+            path = tk.filedialog.asksaveasfilename(initialdir='./', title="Save session as...", filetypes=[('session files', '*.session')])
         if invalid_path(path): # if the user cancels the dialog, don't do anything
             return (None, True) # this tuple means the user canceled
 
         return (path, False) # we did save
 
     def perform_load(self):
-        path = tk.filedialog.askopenfilename(initialdir = './', title="Select a session", filetypes = [('session files', '*.session')])
+        path = tk.filedialog.askopenfilename(initialdir='./', title="Select a session", filetypes=[('session files', '*.session')])
         if invalid_path(path): # if the user cancels the dialog, don't do anything
             return (None, True) # cancel
         return (path, False)
@@ -132,10 +132,10 @@ class MainWindow:
         # File menubar
         menubar.add_cascade(label="File", menu=file_menu)
         commands = ( 
-            ("New Practice Session (CTRL-N)", self.controller.new_session), \
-            ("Save Current Session (CTRL-S)", self.controller.save), \
-            ("Save Current Session As... (CTRL-SHIFT-S)", self.controller.save_as), \
-            ("Load Existing Session (CTRL-O)", self.controller.load_from) )
+            ("New Practice Session (CTRL-N)", self.controller.new_session),
+            ("Save Current Session (CTRL-S)", self.controller.save),
+            ("Save Current Session As... (CTRL-SHIFT-S)", self.controller.save_as),
+            ("Load Existing Session (CTRL-O)", self.controller.load_from))
         
         for label, fn in commands:
             file_menu.add_command(label=label, command=session_menu_item(fn), background='white')
@@ -160,6 +160,9 @@ class MainWindow:
     def update_history(self, data):
         self.history.update(data)
 
+    def refresh_timer(self, data):
+        self.pitch_display.update_data(0, data)
+
     def update_threshold(self, threshold):
         self.pitch_display.set_threshold(threshold)
 
@@ -181,7 +184,6 @@ class MainWindow:
     def resume(self):
         self.pitch_display.resume()
         self.history.resume_scrollbar()
-
 
     def error(self, msg, title="Error!"):
         tk.messagebox.showerror(title, msg)
