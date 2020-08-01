@@ -34,7 +34,6 @@ class RoundedLabel(tk.Canvas):
         size = min(default_size, int(ratio*width*0.95))
         self.font.config(size=size)
 
-
     # thanks https://stackoverflow.com/questions/44099594/how-to-make-a-tkinter-canvas-rectangle-with-rounded-corners
     def round_rectangle(self, x1, y1, x2, y2, radius=25, **kwargs):
         points = [x1+radius, y1,

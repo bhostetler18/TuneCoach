@@ -5,9 +5,9 @@ from TuneCoach.gui.constants import *
 
 class TutorialWindow: #TODO: Style Tutorial Window so it's not ugly - Jenny
     def __init__(self, mainWindow):
-        tutorial_window = tk.Toplevel(mainWindow.master, bg = "#F4F4F4")
+        tutorial_window = tk.Toplevel(mainWindow.master, bg="#F4F4F4")
         tutorial_window.geometry()
-        tutorial_window.minsize(width = 590, height = 480)
+        tutorial_window.minsize(width=590, height=480)
 
         message = "                                             Welcome to TuneCoach!\n" \
                   "TuneCoach is convenient PC-based tuning application that records sessions for intonation\n" \
@@ -38,7 +38,6 @@ class TutorialWindow: #TODO: Style Tutorial Window so it's not ugly - Jenny
                   "F1: Opens the tutorial.\n" \
                   "F2: Opens the Frequently Asked Questions.\n"
 
-        tutorial_label = ttk.Label(tutorial_window, text=message)#, font=("Calibri", 12), justify=tk.LEFT)
-        # tutorial_label.config(bg=background_color, fg="white")
+        tutorial_label = ttk.Label(tutorial_window, text=message)
         tutorial_label.pack()
         tutorial_window.lift(mainWindow.master)

@@ -4,7 +4,6 @@ from TuneCoach.gui.NewSessionWindow import NewSessionWindow
 from collections import deque
 
 
-
 class MainController:
     def __init__(self, view):
         self.view = view
@@ -37,7 +36,6 @@ class MainController:
                 self.session.data.collect_data(top)
                 self.update_history()
             self.view.after(20, lambda: self.process_queue())
-
 
     def update_diagnostics(self):
         if not self.paused:
@@ -80,7 +78,6 @@ class MainController:
     
     def toggle_pause(self, force=False):
         if self.audio_manager.is_paused() and not force:
-            # print("Resuming")
             self.paused = False
             self.view.resume()
             self.audio_manager.resume()
@@ -149,9 +146,6 @@ class MainController:
         data = SessionData(self.threshold, self.yellow_threshold)
         self.session = Session(data)
         self.setup_session()
-        self.toggle_pause()
-        self.toggle_pause()
-
 
     def load_from(self):
         # if current sesion isn't saved, ask if we should save. If we should
