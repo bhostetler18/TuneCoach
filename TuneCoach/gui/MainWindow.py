@@ -48,10 +48,8 @@ class MainWindow:
         master.bind('<F1>', lambda ev: TutorialWindow(self))
         master.bind('<F2>', lambda ev: FAQWindow(self))
         master.bind('<F12>', lambda ev: self.controller.save_as())
-        if self.controller.save:
-            master.bind('s', lambda ev: self.controller.save())
-        else:
-            master.bind('s', lambda ev: self.controller.save_as())
+        master.bind('s', lambda ev: self.controller.save())
+
         
         self.enable()
         self.create_menubar()
@@ -91,7 +89,6 @@ class MainWindow:
         self.pitch_display = PitchDisplay(self, self.controller.threshold)
     
     def perform_save_as(self, newSession = False):
-        # self.toggle_pause(True)
         if newSession:
             path = tk.filedialog.asksaveasfilename(initialdir = './', title = "Would you like to save your current session?", filetypes = [('session files', '*.session')])
         else:
@@ -110,12 +107,9 @@ class MainWindow:
     # Adding menu options to the top of the screen.
     # returns False ONLY IF THE USER CANCELS
     
-    def do_nothing(self):
-        pass
-    
     def disable(self):
-        self.master.protocol("WM_DELETE_WINDOW", self.do_nothing)
-        self.controller.toggle_pause(True)
+        self.master.protocol("WM_DELETE_WINDOW", lambda: ...)
+        self.controller.pause()
 
     def enable(self):
         self.master.protocol("WM_DELETE_WINDOW", self.cleanup)
@@ -143,10 +137,6 @@ class MainWindow:
         for label, fn in commands:
             file_menu.add_command(label=label, command=session_menu_item(fn), background='white')
 
-        # TODO: Add functionality to remove sessions
-        # file_menu.add_separator
-        # file_menu.add_command(label = "Remove Practice Session", command = self.remove_practice_session)
-
         # Settings menubar
         settings_menu = tk.Menu(menubar)
         menubar.add_cascade(label="Settings", menu=settings_menu)
@@ -166,7 +156,7 @@ class MainWindow:
 
     def update_history(self, data):
         self.history.update(data)
-    
+
     def update_threshold(self, threshold):
         self.pitch_display.set_threshold(threshold)
 
@@ -189,6 +179,7 @@ class MainWindow:
         self.pitch_display.resume()
         self.history.resume_scrollbar()
 
+
     def error(self, msg, title="Error!"):
         tk.messagebox.showerror(title, msg)
     
@@ -196,6 +187,6 @@ class MainWindow:
         tk.messagebox.showinfo(title, msg)
 
     def ask_should_save(self):
-        return tk.messagebox.askyesno("", "Save current session?")
+        return tk.messagebox.askyesnocancel("", "Save current session?")
 
     def after(self, ms, fn): self.master.after(ms, fn)

@@ -19,8 +19,12 @@ class MainController:
         self.audio_manager = AudioManager(lambda hz: self.queue.append(hz))
     
     def cleanup(self):
-        if self.should_save and self.view.ask_should_save() and not self.save():
-            return False
+        if self.should_save:
+            v = self.view.ask_should_save()
+            if v == None: # cancel
+                return False
+            elif v == True and not self.save(): # save returns False only if we cancel
+                return False
     
         self.audio_manager.destroy()
         return True
@@ -28,6 +32,7 @@ class MainController:
     def process_queue(self):
         if not self.paused:
             if len(self.queue) != 0:
+                self.should_save = True # we've recieved new data, so we should be ready to save
                 top = self.queue.popleft()
                 self.session.data.collect_data(top)
                 self.update_history()
@@ -42,7 +47,6 @@ class MainController:
     def update_history(self):
         if self.session.data.has_new_data:
             self.session.data.has_new_data = False # TODO lock
-            self.should_save = True
             self.view.update_history(self.session.data)
         # if not self.paused:
         #     self.view.after(20, lambda: self.update_history())
@@ -63,7 +67,17 @@ class MainController:
         self.view.update_threshold(cent_threshold)
         self.refresh_displays()
 
-
+    def pause(self):
+        if self.paused:
+            return # don't need to pause again
+        
+        self.paused = True
+        self.view.pause()
+        self.audio_manager.pause()
+        self.session.data.timer.pause()
+        self.flush_queue()
+        self.refresh_displays() # TODO: try to avoid events coming in after pause
+    
     def toggle_pause(self, force=False):
         if self.audio_manager.is_paused() and not force:
             # print("Resuming")
@@ -75,14 +89,7 @@ class MainController:
             self.update_pitch()
             self.session.data.timer.resume()
         else:
-            # print("Pausing")
-            self.paused = True
-            self.should_save = True # when we pause, we're ready to save new data
-            self.view.pause()
-            self.audio_manager.pause()
-            self.session.data.timer.pause()
-            self.flush_queue()
-            self.refresh_displays() # TODO: try to avoid events coming in after pause
+            self.pause()
 
     def flush_queue(self):
         # add remaining data to session
@@ -136,13 +143,12 @@ class MainController:
         return True
 
     def new_session(self):
-        if self.view.ask_should_save():
+        if self.should_save and self.view.ask_should_save():
             self.save(True)
-        NewSessionWindow(self.view)
+        self.view.success("New Session Successfully Created.")
         data = SessionData(self.threshold, self.yellow_threshold)
         self.session = Session(data)
         self.setup_session()
-        #NewSessionWindow(self.view)
 
     def load_from(self):
         # if current sesion isn't saved, ask if we should save. If we should
