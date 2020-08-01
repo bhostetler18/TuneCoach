@@ -28,9 +28,9 @@ class TestMainController(unittest.TestCase):
             actual_return_value = self.mainController.load_from()
             self.assertEqual(False, actual_return_value)
 
-    def test_load_from_when_session_is_none(self):
+    # def test_load_from_when_session_is_none(self):
         # with patch.object()
-        load_session.
+        # load_session.
 
 if __name__ == '__main__':
     # root = Tk()
