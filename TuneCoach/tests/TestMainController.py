@@ -4,14 +4,8 @@ from unittest.mock import patch
 from tkinter import *
 from collections import deque
 
-import TuneCoach.gui.MainWindow
 from TuneCoach.gui.MainController import MainController
-from TuneCoach.gui.MainWindow import MainWindow
-# from TuneCoach.gui.MainWindow import MainWindow
-# from TuneCoach.gui.MainWindow import invalid_path
-
-
-# mainWindow.sayhi = Mock(return_value="foo")
+from TuneCoach.gui.Session import load_session
 
 class TestMainController(unittest.TestCase):
     def setUp(self):
@@ -30,15 +24,13 @@ class TestMainController(unittest.TestCase):
         self.assertListEqual(expected_list, actual_list)
 
     def test_load_from_when_path_not_valid(self):
-        # with patch.object(self.root, 'perform_load', return_value=(None, True)):
-        #     actual_return_value = self.mainController.load_from()
-        # # self.assertEqual(3, 3)
-        #     self.assertEqual(False, actual_return_value)
         with patch.object(self.root, 'perform_load', return_value=(None, True)):
             actual_return_value = self.mainController.load_from()
-        # self.assertEqual(3, 3)
             self.assertEqual(False, actual_return_value)
 
+    def test_load_from_when_session_is_none(self):
+        # with patch.object()
+        load_session.
 
 if __name__ == '__main__':
     # root = Tk()
