@@ -77,12 +77,14 @@ class MainController:
         self.session.data.timer.pause()
         self.flush_queue()
         self.refresh_displays() # TODO: try to avoid events coming in after pause
-    
+
     def toggle_pause(self, force=False):
         if self.audio_manager.is_paused() and not force:
             # print("Resuming")
             self.paused = False
             self.view.resume()
+            self.should_save = True
+            self.update_session_name()
             self.audio_manager.resume()
             self.process_queue()
             self.update_diagnostics()
@@ -106,16 +108,20 @@ class MainController:
         self.refresh_displays()
     
     def reset_everything(self):
-        self.toggle_pause(True)
+        self.pause()
         self.view.clear()
 
+    def update_session_name(self):
+        c = "*" if self.should_save else ""
+        self.view.update_session_name(self.session.name + c)
+
     def refresh_displays(self):
-        self.view.update_session_name(self.session.name)
+        self.update_session_name()
         self.view.update_diagnostics(self.session.data)
         self.view.update_history(self.session.data)
     
     def save_as(self, newSession = False):
-        self.toggle_pause(True)
+        self.pause()
         path, cancel = self.view.perform_save_as(newSession)
         if cancel:
             return False
@@ -130,15 +136,20 @@ class MainController:
         save_session(self.session)
         self.view.success(f'Session saved to "{self.session.path}" successfully', title="Session Saved")
         self.should_save = False
+        self.view.update_session_name(self.session.name)
 
     def save(self, newSession = False):
         if not self.should_save:
+            if self.session.data.empty:
+                self.view.success("Session is empty!")
+            else:
+                self.view.success("Session already saved!")
             return True
         
         if self.session.path is None:
             return self.save_as(newSession)
         
-        self.toggle_pause(True)
+        self.pause()
         self._save()
         return True
 
