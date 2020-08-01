@@ -107,9 +107,9 @@ class MainController:
         self.view.update_diagnostics(self.session.data)
         self.view.update_history(self.session.data)
     
-    def save_as(self):
+    def save_as(self, newSession = False):
         self.toggle_pause(True)
-        path, cancel = self.view.perform_save_as()
+        path, cancel = self.view.perform_save_as(newSession)
         if cancel:
             return False
 
@@ -124,24 +124,25 @@ class MainController:
         self.view.success(f'Session saved to "{self.session.path}" successfully', title="Session Saved")
         self.should_save = False
 
-    def save(self):
+    def save(self, newSession = False):
         if not self.should_save:
             return True
         
         if self.session.path is None:
-            return self.save_as()
+            return self.save_as(newSession)
         
         self.toggle_pause(True)
         self._save()
         return True
 
     def new_session(self):
-        if self.should_save:
-            self.save()
+        if self.view.ask_should_save():
+            self.save(True)
+        NewSessionWindow(self.view)
         data = SessionData(self.threshold, self.yellow_threshold)
         self.session = Session(data)
         self.setup_session()
-        NewSessionWindow(self.view)
+        #NewSessionWindow(self.view)
 
     def load_from(self):
         # if current sesion isn't saved, ask if we should save. If we should
