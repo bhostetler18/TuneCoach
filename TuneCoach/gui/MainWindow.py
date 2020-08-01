@@ -167,7 +167,7 @@ class MainWindow:
         self.diagnostics.session_name.configure(text=name)
     
     def clear(self):
-        self.history.clear()
+        self.history.reset()
         self.diagnostics.clear_plot()
         self.pitch_display.clear()
 
