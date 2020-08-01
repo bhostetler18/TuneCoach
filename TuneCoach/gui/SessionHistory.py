@@ -3,6 +3,7 @@ import tkinter.ttk as ttk
 import TuneCoach.gui as gui
 from TuneCoach.gui.Piano import Piano
 from TuneCoach.gui.constants import *
+from TuneCoach.python_bridge.pitch_utilities import *
 
 
 # Different classes for pop-up windows.
@@ -136,6 +137,10 @@ class SessionHistory:
         for circle in self.circle_list:
             self.canvas.delete(circle)
         self.circle_list = [None] * self.display_size
+
+    def reset(self):
+        self.clear()
+        self.piano.set_scores([0]*12, KeySignature("C", 0, Accidental.SHARP, 0, KeySignatureType.MAJOR))
 
     def pause_scrollbar(self):
         self.scrollbar.pack(side='bottom', fill='x')

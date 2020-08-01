@@ -6,15 +6,11 @@ from TuneCoach.gui.constants import *
 class FAQWindow:
     def __init__(self, mainWindow):
         faq_window = tk.Toplevel(mainWindow.master)
+        faq_window.title("FAQ")
         faq_window.geometry()
         faq_window.minsize(width=610, height=380)
         faq_window.config(background="#f4f4f4")
 
-        faq_title_label_style = ttk.Style()
-        faq_title_label_style.configure("FAQTitle.TLabel")
-        title = "TuneCoach FAQ"
-        faq_title_label = ttk.Label(faq_window, text=title)
-        faq_title_label.pack()
         message = "Q: How do I use TuneCoach?\n" \
                   "A: Thorough instructions can be found in \"Tutorial\" under the \"Help\" dropdown menu.\n" \
                   "\n" \

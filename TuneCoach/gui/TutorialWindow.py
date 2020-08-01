@@ -5,12 +5,12 @@ from TuneCoach.gui.constants import *
 
 class TutorialWindow: #TODO: Style Tutorial Window so it's not ugly - Jenny
     def __init__(self, mainWindow):
-        tutorial_window = tk.Toplevel(mainWindow.master, bg="#F4F4F4")
+        tutorial_window = tk.Toplevel(mainWindow.master, bg = "#F4F4F4")
+        tutorial_window.title("Tutorial")
         tutorial_window.geometry()
         tutorial_window.minsize(width=590, height=480)
 
-        message = "                                             Welcome to TuneCoach!\n" \
-                  "TuneCoach is convenient PC-based tuning application that records sessions for intonation\n" \
+        message = "TuneCoach is convenient PC-based tuning application that records sessions for intonation\n" \
                   "and provides detailed feedback for your performance. \n" \
                   "\n" \
                   "To get started, click the \"File\" dropdown menu in the top left corner and select \n" \
