@@ -3,7 +3,6 @@ from TuneCoach.gui.Session import Session, load_session, save_session
 from collections import deque
 
 
-
 class MainController:
     def __init__(self, view):
         self.view = view
