@@ -50,9 +50,9 @@ class MainWindow:
         master.bind('<F12>', lambda ev: self.controller.save_as())
         master.bind('<Control-Shift-Key-S>', lambda ev: self.controller.save_as())
         if self.controller.save:
-            master.bind('<Control-Key-s>', lambda ev: self.controller.save_as())
-        else:
             master.bind('<Control-Key-s>', lambda ev: self.controller.save())
+        else:
+            master.bind('<Control-Key-s>', lambda ev: self.controller.save_as())
         
         self.enable()
         self.create_menubar()
