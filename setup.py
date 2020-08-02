@@ -32,7 +32,6 @@ setup(
     ext_modules=[pitch_detection],
     python_requires='>=3.8',
     install_requires = [
-        'matplotlib>=3.3.0rc1',
         'ttkthemes'
     ],
     include_package_data=True,
