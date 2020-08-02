@@ -168,19 +168,23 @@ class MainController:
     def load_from(self):
         # if current sesion isn't saved, ask if we should save. If we should
         # try to save. If the user cancels, don't bother to save
-        if self.should_save and self.view.ask_should_save():
-            self.save()
+        path = False
+        if self.should_save:
+            path = self.view.ask_should_save()
+        if path is not None:
+            if self.should_save and path:
+                self.save()
 
-        path, cancel = self.view.perform_load()
-        if cancel:
-            return False
+            path, cancel = self.view.perform_load()
+            if cancel:
+                return False
         
-        session = load_session(path)
+            session = load_session(path)
 
-        if session is None:
-            self.view.error(f'Session located at "{path}" is invalid!', title="Invalid session")
-        else:
-            self.session = session
-            self.setup_session()
-            self.should_save = False
-        self.refresh_displays()
+            if session is None:
+                self.view.error(f'Session located at "{path}" is invalid!', title="Invalid session")
+            else:
+                self.session = session
+                self.setup_session()
+                self.should_save = False
+            self.refresh_displays()

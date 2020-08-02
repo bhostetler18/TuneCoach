@@ -25,6 +25,7 @@ class TutorialWindow: #TODO: Style Tutorial Window so it's not ugly - Jenny
         tutorial_text_style = ttk.Style()
         tutorial_text_style.configure('TutorialTextLabel.TLabel', padding=10, width=100, anchor=tk.W)
         about_tunecoach_text_label = ttk.Label(tutorial_window, text=about_tunecoach_text, style='TutorialTextLabel.TLabel')
+        about_tunecoach_text_label.configure(wraplength = mainWindow.screen_width - 10)
         about_tunecoach_text_label.pack()
 
 
@@ -34,6 +35,7 @@ class TutorialWindow: #TODO: Style Tutorial Window so it's not ugly - Jenny
         new_to_tunecoach_text_label.pack()
 
         get_started_text_label = ttk.Label(tutorial_window, text=get_started_text, style='TutorialTextLabel.TLabel')
+        get_started_text_label.configure(wraplength = mainWindow.screen_width - 80)
         get_started_text_label.pack()
 
         keyboard_shortcuts_title_label = ttk.Label(tutorial_window, text=keyboard_shortcuts_title, style='TutorialTitleLabel.TLabel', padding=10)
