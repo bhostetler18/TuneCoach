@@ -10,16 +10,15 @@ class TutorialWindow: #TODO: Style Tutorial Window so it's not ugly - Jenny
         tutorial_window.geometry()
         tutorial_window.minsize(width=590, height=480)
 
-        about_tunecoach_text = "TuneCoach is convenient PC-based tuning application that records sessions for intonation and provides detailed \nfeedback for your performance."
+        about_tunecoach_text = "TuneCoach is a convenient PC-based tuning application that records practice sessions and provides detailed \nfeedback for your performance."
         new_to_tunecoach_text = 'New to TuneCoach?'
         get_started_text = 'To get started, click the "File" dropdown menu in the top left corner and select "New Practice Session".\n' \
                            'In the same dropdown menu, there are more options to manage your TuneCoach sessions.\n' \
-                           '(Note: Upon startup of TuneCoach, no data will be saved unless a session is explicitly started.)' \
                            '\n\nThe Pitch Detector continuously shows the note being played, as well as the intonation.\n' \
                            'A Green square means that the note is in tune, a yellow square means that the note is outside set cents threshold,\n and a red square means the note is very out of tune.\n' \
                            '\nThe bottom area shows your recently played notes, represented on a piano octave.\n'\
-                           'The Session Diagnostics area shows your overall score and actively reflected in the graph.\n' \
-                           'You can click on "More Info" button to display how in tune you were for each note the overall score, and how out of tune\nyou were overall in cents.'
+                           'The Session Diagnostics area shows your overall score and how it has changed reflected in the graph.\n' \
+                           'The percentage on each piano key reflects how in tune the corresponding note has been played throughout the session.'
         keyboard_shortcuts_title = 'Keyboard Shortcuts:'
 
         tutorial_text_style = ttk.Style()
