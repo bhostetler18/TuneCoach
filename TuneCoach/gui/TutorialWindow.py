@@ -10,15 +10,15 @@ class TutorialWindow: #TODO: Style Tutorial Window so it's not ugly - Jenny
         tutorial_window.geometry()
         tutorial_window.minsize(width=590, height=480)
 
-        about_tunecoach_text = "TuneCoach is a convenient PC-based tuning application that records practice sessions and provides detailed \nfeedback for your performance."
+        about_tunecoach_text = "TuneCoach is a convenient PC-based tuning application that records practice sessions and provides detailed feedback \nabout your performance."
         new_to_tunecoach_text = 'New to TuneCoach?'
-        get_started_text = 'To get started, click the "File" dropdown menu in the top left corner and select "New Practice Session".\n' \
-                           'In the same dropdown menu, there are more options to manage your TuneCoach sessions.\n' \
-                           '\n\nThe Pitch Detector continuously shows the note being played, as well as the intonation.\n' \
-                           'A Green square means that the note is in tune, a yellow square means that the note is outside set cents threshold,\n and a red square means the note is very out of tune.\n' \
-                           '\nThe bottom area shows your recently played notes, represented on a piano octave.\n'\
-                           'The Session Diagnostics area shows your overall score and how it has changed reflected in the graph.\n' \
-                           'The percentage on each piano key reflects how in tune the corresponding note has been played throughout the session.'
+        get_started_text = 'To get started, press the spacebar to start audio input.\n' \
+                           '\nThe Pitch Detector on the right continuously shows the note being played, as well as the intonation.\n' \
+                           'Green means that the note is in tune, yellow means that the note is outside set cents threshold, and red means the note is \nvery out of tune.\n' \
+                           '\nThe bottom area shows your recently played notes represented on a piano octave. The percentage on each piano key \nreflects how in tune the corresponding note has been played throughout the session. When the session is not recording, \nyou can use the bottom scrollbar to view all the notes you have played.\n\n'\
+                           'The Session Diagnostics area on the left shows how your score has changed over time as well as the current settings.\n' \
+                           'These can be changed by navigating to Settings->Tuner Settings.'
+
         keyboard_shortcuts_title = 'Keyboard Shortcuts:'
 
         tutorial_text_style = ttk.Style()

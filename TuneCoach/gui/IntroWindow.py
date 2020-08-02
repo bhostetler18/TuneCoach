@@ -43,11 +43,9 @@ class IntroWindow:
         introLabel = ttk.Label(topFrame, text="Welcome to Tune Coach!", anchor=tk.CENTER, style="IntroTitle.TLabel")
         introLabel.pack(side=tk.TOP)
 
-        text = "New to TuneCoach? Go to File -> New Session OR checkout Help -> Tutorial.\n\n" \
-               "Click 'Load Session' if you would like to load a previous session from file. \n" \
-               "If you don't load an existing session, a temporary session will be used. You can choose to store this session under a name by clicking the 'Save Temporary Session As...' button.\n" \
-               "\n" \
-               "For more information on using TuneCoach, navigate to the \"Help\" tab and then \"Tutorial\"."
+        text = "New to TuneCoach? Checkout Help -> Tutorial.\n\n" \
+               "Click 'Load Session' if you would like to load a previous session from file. \n\n" \
+               "If you don't load an existing session, a temporary session will be used. You can choose to store this session under a name by clicking the 'Save Temporary Session As...' button.\n"
 
         explain_label_style = ttk.Style()
         explain_label_style.configure("Intro.TLabel", wraplength=375)

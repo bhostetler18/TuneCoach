@@ -13,8 +13,9 @@ class FAQWindow:
 
         question_answer_list = [
             ('How do I use TuneCoach?', 'Detailed instructions can be found in "Tutorial" under the "Help" dropdown menu.\n'),
-            ('Is there any way to change the intonation threshold?', 'Yes! It is located in the "Settings" dropdown menu, under "Tuner Settings".\n' \
-             'If you set this value to 15, for example, notes within ±15 cents of perfectly in tune will count as correct.'),
+            ('Is there any way to change the intonation threshold?', 'Yes! It is located in the "Settings" dropdown menu, under "Tuner Settings" and the "Acceptable Error" slider.\n' \
+             'If you set this value to 15, for example, notes within ±15 cents of perfectly in tune will count as correct.\n'),
+            ('What do the key signature and range settings do?', 'The current key signature affects how notes are displayed. For example, if D Major is selected (which has C# and F#),\naccidentals will be displayed preferring sharps and C and F will be written with natural signs to indicate they are out of\nthe current key. The range setting affects which notes are detected and can be used to prevent unwanted background \nsound interference. No notes outside the range selected will display in the tuner or history.\n'),
             ('What instruments can I use with TuneCoach?', 'Any instrument can be used with TuneCoach! Even your voice!\n'),
             ('Why does the tuner not work?', 'Check your microphone. Ensure that it is fully plugged in and is recognized as audio input.\n' \
                                              'Other apps and programs may be using the microphone, blocking access to TuneCoach.\n' \
