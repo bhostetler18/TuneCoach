@@ -91,11 +91,8 @@ class MainWindow:
         self.diagnostics = SessionDiagnostics(self)
         self.pitch_display = PitchDisplay(self, self.controller.threshold)
     
-    def perform_save_as(self, newSession = False):
-        if newSession:
-            path = tk.filedialog.asksaveasfilename(initialdir='./', title="Would you like to save your current session?", filetypes=[('session files', '*.session')])
-        else:
-            path = tk.filedialog.asksaveasfilename(initialdir='./', title="Save session as...", filetypes=[('session files', '*.session')])
+    def perform_save_as(self):
+        path = tk.filedialog.asksaveasfilename(initialdir='./', title="Save session as...", filetypes=[('session files', '*.session')])
         if invalid_path(path): # if the user cancels the dialog, don't do anything
             return (None, True) # this tuple means the user canceled
 

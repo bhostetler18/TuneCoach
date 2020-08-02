@@ -118,9 +118,9 @@ class MainController:
         self.view.update_history(self.session.data)
         self.view.refresh_timer(self.session.data)
     
-    def save_as(self, newSession = False):
+    def save_as(self):
         self.pause()
-        path, cancel = self.view.perform_save_as(newSession)
+        path, cancel = self.view.perform_save_as()
         if cancel:
             return False
         #if not path:
@@ -137,7 +137,7 @@ class MainController:
         self.should_save = False
         self.view.update_session_name(self.session.name)
 
-    def save(self, newSession = False):
+    def save(self):
         if not self.should_save:
             if self.session.data.empty:
                 self.view.success("Session is empty!")
@@ -146,7 +146,7 @@ class MainController:
             return True
         
         if self.session.path is None:
-            return self.save_as(newSession)
+            return self.save_as()
         
         self.pause()
         self._save()
@@ -159,7 +159,7 @@ class MainController:
         print(path)
         if path is not None:
             if self.should_save and path:
-                self.save(True)
+                self.save()
             self.view.success("New Session Successfully Created.")
             data = SessionData(self.threshold, self.yellow_threshold)
             self.session = Session(data)
