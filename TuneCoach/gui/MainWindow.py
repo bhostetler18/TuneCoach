@@ -102,7 +102,7 @@ class MainWindow:
         return (path, False) # we did save
 
     def perform_load(self):
-        path = tk.filedialog.askopenfilename(initialdir='./', title="Select a session", filetypes=[('session files', '*.session')])
+        path = tk.filedialog.askopenfilename(initialdir='./', title="Select a session to load", filetypes=[('session files', '*.session')])
         if invalid_path(path): # if the user cancels the dialog, don't do anything
             return (None, True) # cancel
         return (path, False)
